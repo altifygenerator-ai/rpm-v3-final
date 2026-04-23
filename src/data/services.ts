@@ -41,4 +41,16 @@ export const services = [
       "Backhoe work, maintenance, repairs, and custom property solutions.",
     slug: "general",
   },
+  {
+    title: "Hauling",
+    description:
+      "Material transport, debris hauling, and reliable delivery for residential and commercial projects.",
+    slug: "hauling",
+  },
+  {
+    title: "Welding & Fabrication",
+    description:
+      "Custom metal fabrication, repairs, gates, brackets, and on‑site welding solutions.",
+    slug: "welding",
+  },
 ];
