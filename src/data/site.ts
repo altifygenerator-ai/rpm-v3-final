@@ -3,7 +3,7 @@ export const siteData = {
   tagline: "Property work done right.",
   phone: "(870) 284-1239",
   email: "trichards85@icloud.com",
-  location: "Central Arkansas",
+  location: "The Greers Ferry Lake area and Central Arkansas",
   address: "Greers Ferry, AR",
 
   description:

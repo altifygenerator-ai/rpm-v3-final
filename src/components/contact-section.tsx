@@ -46,42 +46,75 @@ export default function ContactSection() {
           </motion.div>
 
           {/* Form */}
-          <motion.form
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <motion.input
-              variants={fadeUp}
-              type="text"
-              placeholder="Name"
-              className="w-full p-3 rounded-md bg-[var(--muted)] border border-[var(--border)] text-white"
-            />
+          {/* Form */}
+<motion.form
+  variants={staggerContainer}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="space-y-4"
+  onSubmit={async (e) => {
+    e.preventDefault();
 
-            <motion.input
-              variants={fadeUp}
-              type="tel"
-              placeholder="Phone"
-              className="w-full p-3 rounded-md bg-[var(--muted)] border border-[var(--border)] text-white"
-            />
+    const form = e.currentTarget;
 
-            <motion.textarea
-              variants={fadeUp}
-              placeholder="Tell us about your project"
-              rows={4}
-              className="w-full p-3 rounded-md bg-[var(--muted)] border border-[var(--border)] text-white"
-            />
+    const data = {
+      name: (form.elements.namedItem("name") as HTMLInputElement).value,
+      phone: (form.elements.namedItem("phone") as HTMLInputElement).value,
+      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+    };
 
-            <motion.button
-              variants={fadeUp}
-              type="submit"
-              className="btn-primary w-full"
-            >
-              Request Estimate
-            </motion.button>
-          </motion.form>
+    await fetch("/api/contact", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+
+    alert("Message sent!");
+  }}
+>
+
+  <motion.input
+    variants={fadeUp}
+    name="name"
+    type="text"
+    placeholder="Name"
+    required
+    className="w-full p-3 rounded-md bg-[var(--muted)] border border-[var(--border)] text-white"
+  />
+
+  <motion.input
+    variants={fadeUp}
+    name="phone"
+    type="tel"
+    placeholder="Phone"
+    required
+    className="w-full p-3 rounded-md bg-[var(--muted)] border border-[var(--border)] text-white"
+  />
+
+  <motion.textarea
+    variants={fadeUp}
+    name="message"
+    placeholder="Tell us about your project"
+    rows={4}
+    className="w-full p-3 rounded-md bg-[var(--muted)] border border-[var(--border)] text-white"
+  />
+
+  <motion.button
+    variants={fadeUp}
+    type="submit"
+    className="btn-primary w-full"
+  >
+    Request Estimate
+  </motion.button>
+
+  <a
+    href={`tel:${siteData.phone.replace(/\D/g, "")}`}
+    className="btn-secondary w-full text-center block"
+  >
+    Call Now
+  </a>
+
+</motion.form>
 
         </div>
 

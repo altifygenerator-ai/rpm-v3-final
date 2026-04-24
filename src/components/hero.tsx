@@ -62,9 +62,14 @@ export default function Hero() {
           >
             {heroData.ctaSecondary}
           </a>
+ 
         </motion.div>
-
+              <div className="mt-4 flex items-center gap-2 text-sm text-neutral-400">
+  
+  <span>Proudly serving the Greers Ferry Lake area and Central Arkansas.</span>
+</div>
       </motion.div>
+ 
 
     </section>
   );

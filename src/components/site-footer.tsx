@@ -17,14 +17,15 @@ export default function SiteFooter() {
           initial="hidden"
           whileInView="show"
         >
-
+  
           {/* Brand */}
           <motion.div variants={fadeUp}>
             <h3>{siteData.name}</h3>
             <p className="mt-3 text-neutral-300 max-w-sm">
-              Property work done right. Serving {siteData.location}.
+              Property work done right. Proudly Serving {siteData.location}.
             </p>
           </motion.div>
+   
 
           {/* Nav */}
           <motion.div variants={fadeUp}>
@@ -63,10 +64,21 @@ export default function SiteFooter() {
 
         </motion.div>
 
-        <div className="mt-10 pt-6 border-t border-[var(--border)] text-sm text-neutral-400 flex justify-between">
-          <div>© {new Date().getFullYear()} {siteData.name}</div>
-          <div>Built by Hometown Web</div>
-        </div>
+        <div className="mt-10 pt-6 border-t border-[var(--border)] text-sm text-neutral-400 flex justify-between items-center">
+  
+  <div className="flex items-center gap-2">
+    <span>© {new Date().getFullYear()} {siteData.name}</span>
+
+    <img
+      src="/images/razorback.png"
+      alt="Arkansas Razorback"
+      className="w-8 h-auto opacity-70"
+    />
+  </div>
+
+  <div>Built by Hometown Web</div>
+
+</div>
 
       </div>
     </footer>
