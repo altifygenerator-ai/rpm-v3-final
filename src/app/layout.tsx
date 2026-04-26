@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter, Playfair_Display } from "next/font/google";
-
+import { Analytics } from "@vercel/analytics/react";
 const bodyFont = Inter({
   subsets: ["latin"],
   variable: "--font-body",
@@ -124,7 +124,7 @@ export default function RootLayout({
       <body className={`${bodyFont.variable} ${headingFont.variable} font-sans`}>
         
         <main>{children}</main>
-       
+       <Analytics />
       </body>
     </html>
   );
