@@ -12,11 +12,28 @@ export const services = [
     slug: "land-clearing",
   },
   {
-    title: "Drainage & Erosion Control",
+    title: "Drainage & Erosion Control", // already covers erosion
     description:
       "Fix standing water, install French drains, and prevent erosion issues.",
     slug: "drainage",
   },
+
+  // ✅ ADD THIS
+  {
+    title: "Custom Water Features",
+    description:
+      "Ponds, waterfalls, and natural water features designed to fit your property.",
+    slug: "water-features",
+  },
+
+  // ✅ ADD THIS
+  {
+    title: "Airbnb & Property Maintenance",
+    description:
+      "Routine upkeep, cleanup between guests, and reliable property maintenance.",
+    slug: "airbnb",
+  },
+
   {
     title: "Retaining Walls & Rock Work",
     description:
@@ -50,7 +67,7 @@ export const services = [
   {
     title: "Welding & Fabrication",
     description:
-      "Custom metal fabrication, repairs, gates, brackets, and on‑site welding solutions.",
+      "Custom metal fabrication, repairs, gates, brackets, and on-site welding solutions.",
     slug: "welding",
   },
 ];

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import "./globals.css";
 import { Inter, Playfair_Display } from "next/font/google";
 
@@ -11,34 +12,75 @@ const headingFont = Playfair_Display({
   variable: "--font-heading",
 });
 
-export const metadata = {
-  title: "Richards Property Management | Land Clearing, Drainage, Tree Work, Hauling & Welding in Central Arkansas",
-  description:
-    "Professional land clearing, drainage solutions, tree removal, hauling, welding, and property services across Central Arkansas. Reliable, local, and equipped for residential and commercial projects.",
-  
-  keywords: [
-    "land clearing Arkansas",
-    "tree removal Arkansas",
-    "drainage solutions",
-    "erosion control",
-    "hauling services",
-    "welding services",
-    "property management Arkansas",
-    "outdoor builds",
-    "retaining walls",
-    "Central Arkansas contractors",
-  ],
+const siteUrl = "https://richardslandmanagementllc.com";
 
-  authors: [{ name: "Richards Property Management" }],
-  creator: "Richards Property Management",
-  publisher: "Richards Property Management",
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+
+  title: {
+    default:
+      "Richards Land Management LLC | Land Clearing & Property Services in Central Arkansas",
+    template: "%s | Richards Land Management LLC",
+  },
+
+  description:
+    "Richards Land Management LLC provides land clearing, tree work, drainage, erosion control, retaining walls, hauling, welding, water features, and property maintenance across Central Arkansas.",
+
+ keywords: [
+  // CORE SERVICES
+  "land clearing Central Arkansas",
+  "tree removal Central Arkansas",
+  "drainage solutions Arkansas",
+  "erosion control Arkansas",
+  "retaining walls Arkansas",
+  "hauling services Arkansas",
+  "welding and fabrication Arkansas",
+  "property maintenance Central Arkansas",
+
+  // LOCAL TARGETING (IMPORTANT)
+  "land clearing Greers Ferry Lake",
+  "tree removal Greers Ferry Lake",
+  "excavation Greers Ferry Lake",
+  "drainage contractors Greers Ferry Lake",
+  "property maintenance Greers Ferry Lake",
+  "contractors near Greers Ferry Lake",
+
+  // NEAR ME INTENT
+  "land clearing near me",
+  "tree removal near me",
+  "excavation near me",
+  "drainage contractor near me",
+  "retaining wall builder near me",
+
+  // HIGH INTENT SEARCHES
+  "how much does land clearing cost Arkansas",
+  "yard drainage solutions near me",
+  "fix erosion in yard Arkansas",
+  "gravel driveway repair Arkansas",
+  "property cleanup near me",
+
+  // NICHE SERVICES YOU ADDED
+  "custom water features Arkansas",
+  "pond and waterfall installation Arkansas",
+  "Airbnb property maintenance Arkansas",
+  "short term rental maintenance Arkansas",
+],
+
+  authors: [{ name: "Richards Land Management LLC" }],
+  creator: "Richards Land Management LLC",
+  publisher: "Richards Land Management LLC",
+
+  alternates: {
+    canonical: siteUrl,
+  },
 
   openGraph: {
-    title: "Richards Property Management | Land Services & Property Work in Central Arkansas",
+    title:
+      "Richards Land Management LLC | Land Clearing & Property Services",
     description:
-      "Land clearing, drainage, tree work, hauling, welding, and custom outdoor builds. Serving residential and commercial clients across Central Arkansas.",
-    url: "https://richardspropertymanagement.com",
-    siteName: "Richards Property Management",
+      "Land clearing, tree work, drainage, erosion control, retaining walls, hauling, welding, water features, and property maintenance across Central Arkansas.",
+    url: siteUrl,
+    siteName: "Richards Land Management LLC",
     locale: "en_US",
     type: "website",
     images: [
@@ -46,27 +88,22 @@ export const metadata = {
         url: "/images/og-cover.jpg",
         width: 1200,
         height: 630,
-        alt: "Richards Property Management - Land Services in Arkansas",
+        alt: "Richards Land Management LLC property work in Central Arkansas",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Richards Property Management | Land Clearing & Property Services",
+    title: "Richards Land Management LLC | Central Arkansas Land Services",
     description:
-      "Local experts in land clearing, drainage, tree work, hauling, welding, and outdoor builds in Central Arkansas.",
+      "Local land clearing, tree work, drainage, erosion control, hauling, welding, and property maintenance services.",
     images: ["/images/og-cover.jpg"],
-  },
-
-  alternates: {
-    canonical: "https://richardspropertymanagement.com",
   },
 
   robots: {
     index: true,
     follow: true,
-    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -77,7 +114,6 @@ export const metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: {
@@ -85,10 +121,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${bodyFont.variable} ${headingFont.variable} font-sans`}
-      >
-        {children}
+      <body className={`${bodyFont.variable} ${headingFont.variable} font-sans`}>
+        
+        <main>{children}</main>
+       
       </body>
     </html>
   );
