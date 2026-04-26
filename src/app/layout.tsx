@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "Richards Land Management LLC provides land clearing, tree work, drainage, erosion control, retaining walls, hauling, welding, water features, and property maintenance across Central Arkansas.",
 
  keywords: [
-  // CORE SERVICES
+  
   "land clearing Central Arkansas",
   "tree removal Central Arkansas",
   "drainage solutions Arkansas",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   "welding and fabrication Arkansas",
   "property maintenance Central Arkansas",
 
-  // LOCAL TARGETING (IMPORTANT)
+ 
   "land clearing Greers Ferry Lake",
   "tree removal Greers Ferry Lake",
   "excavation Greers Ferry Lake",
@@ -45,21 +45,21 @@ export const metadata: Metadata = {
   "property maintenance Greers Ferry Lake",
   "contractors near Greers Ferry Lake",
 
-  // NEAR ME INTENT
+  
   "land clearing near me",
   "tree removal near me",
   "excavation near me",
   "drainage contractor near me",
   "retaining wall builder near me",
 
-  // HIGH INTENT SEARCHES
+  
   "how much does land clearing cost Arkansas",
   "yard drainage solutions near me",
   "fix erosion in yard Arkansas",
   "gravel driveway repair Arkansas",
   "property cleanup near me",
 
-  // NICHE SERVICES YOU ADDED
+  
   "custom water features Arkansas",
   "pond and waterfall installation Arkansas",
   "Airbnb property maintenance Arkansas",
