@@ -17,11 +17,11 @@ export default function Testimonials() {
           viewport={{ once: true }}
         >
           <motion.h2 variants={fadeUp}>
-            What Our Clients Say
+            What customers in the Greers Ferry Lake area are saying
           </motion.h2>
 
           <motion.p variants={fadeUp} className="mt-4 max-w-xl">
-            We take pride in our work and it shows. Here’s what people are saying.
+            Real feedback from land clearing, tree work, and drainage jobs across the Greers Ferry Lake area and Central Arkansas.
           </motion.p>
         </motion.div>
 

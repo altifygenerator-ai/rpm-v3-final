@@ -8,23 +8,28 @@ export default function WhyChooseUs() {
   return (
     <section className="section bg-[var(--muted)] border-y border-[var(--border)]">
       <div className="container">
-
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-
-          {/* Left Content */}
+        <div className="grid gap-12 md:grid-cols-2 md:items-center">
           <motion.div
             variants={staggerContainer}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
           >
-            <motion.h2 variants={fadeUp}>
-              Why Choose Us
+            <motion.p
+              variants={fadeUp}
+              className="text-sm uppercase tracking-[0.25em] text-[var(--accent)]"
+            >
+              Local property services
+            </motion.p>
+
+            <motion.h2 variants={fadeUp} className="mt-3">
+              Reliable land clearing, drainage, and tree work in Central Arkansas
             </motion.h2>
 
             <motion.p variants={fadeUp} className="mt-4 max-w-md">
-              We focus on doing the job right the first time. No shortcuts,
-              no guesswork — just reliable work you can count on for your property.
+              We help property owners around the Greers Ferry Lake area with land
+              clearing, erosion control, tree work, hauling, and outdoor property
+              projects done right the first time.
             </motion.p>
 
             <motion.div className="mt-6 space-y-4">
@@ -34,30 +39,27 @@ export default function WhyChooseUs() {
                   variants={fadeUp}
                   className="flex items-start gap-3"
                 >
-                  <span className="text-[var(--accent)] mt-1">•</span>
+                  <span className="mt-1 text-[var(--accent)]">•</span>
                   <span className="text-neutral-200">{item}</span>
                 </motion.div>
               ))}
             </motion.div>
           </motion.div>
 
-          {/* Right Image */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="w-full h-[350px] overflow-hidden rounded-lg"
+            className="h-[350px] w-full overflow-hidden rounded-lg"
           >
             <img
               src="/images/work/work1.jpg"
-              alt="Property work"
-              className="w-full h-full object-cover"
+              alt="Land clearing and property work near Greers Ferry Lake in Central Arkansas"
+              className="h-full w-full object-cover"
             />
           </motion.div>
-
         </div>
-
       </div>
     </section>
   );
