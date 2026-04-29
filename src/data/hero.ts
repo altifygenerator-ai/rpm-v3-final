@@ -1,8 +1,8 @@
 export const heroData = {
-  heading: "Land clearing, tree work, and drainage done right.",
+  heading: "Drainage & Erosion Control Experts in Greers Ferry Lake, AR",
   
   subheading:
-    "Serving the Greers Ferry Lake area and Central Arkansas with land clearing, tree removal, drainage, erosion control, and full property services.",
+    "Fix standing water, stop erosion, and protect your property with drainage systems that actually work.",
   
   ctaPrimary: "Call now",
   ctaSecondary: "Get free estimate",

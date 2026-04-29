@@ -12,11 +12,11 @@ export const services = [
     slug: "land-clearing",
   },
   {
-    title: "Drainage & Erosion Control",
-    description:
-      "Fix standing water, install French drains, and prevent erosion issues around homes, driveways, and properties.",
-    slug: "drainage",
-  },
+  title: "Drainage & Erosion Control",
+  description:
+    "Drainage systems, culvert work, grading, runoff control, and erosion repair built for Arkansas soil, steep land, and heavy rain.",
+  slug: "drainage-erosion",
+},
   {
     title: "Custom Water Features",
     description:

@@ -8,6 +8,8 @@ import Testimonials from "@/components/testimonials";
 import EstimateCTA from "@/components/estimate-cta";
 import ContactSection from "@/components/contact-section";
 import SiteFooter from "@/components/site-footer";
+import SeoFocusSection from "@/components/seo-focus-section";
+import SeasonalWork from "@/components/seasonal-work";
 
 export default function Home() {
   return (
@@ -18,7 +20,9 @@ export default function Home() {
         <Hero />
         <TrustBar />
         <ServicesGrid />
-        <FeaturedWork />
+<SeoFocusSection />
+<SeasonalWork />
+<FeaturedWork />
         <WhyChooseUs />
         <Testimonials />
         <EstimateCTA />
