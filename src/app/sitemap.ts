@@ -1,42 +1,21 @@
-import type { MetadataRoute } from 'next'
+import { MetadataRoute } from "next";
+import { servicePages } from "@/data/service-pages";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = 'https://richardslandmanagementllc.com'
+  const baseUrl = "https://www.richardslandmanagementllc.com";
 
   return [
     {
-      url: `${siteUrl}/`,
+      url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1,
     },
-
     {
-      url: `${siteUrl}/services`,
+      url: `${baseUrl}/gallery`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
     },
-
-    {
-      url: `${siteUrl}/work`,
+    ...servicePages.map((service) => ({
+      url: `${baseUrl}/services/${service.slug}`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-
-    {
-      url: `${siteUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.7,
-    },
-
-    {
-      url: `${siteUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.7,
-    },
-  ]
+    })),
+  ];
 }

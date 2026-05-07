@@ -1,11 +1,12 @@
 export const heroData = {
-  heading: "Drainage & Erosion Control Experts in Greers Ferry Lake, AR",
-  
+  heading:
+    "Property Work Done Right Across Greers Ferry Lake & Central Arkansas",
+
   subheading:
-    "Fix standing water, stop erosion, and protect your property with drainage systems that actually work.",
-  
+    "Land clearing, drainage repair, erosion control, tree work, retaining walls, hauling, and rural property services built for Arkansas land and terrain.",
+
   ctaPrimary: "Call now",
   ctaSecondary: "Get free estimate",
-  
+
   backgroundImage: "/images/hero/hero.jpg",
 };

@@ -1,18 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { navLinks } from "@/data/nav";
 import { siteData } from "@/data/site";
-import { FaFacebookF } from "react-icons/fa";
+import { FaFacebookF, FaChevronDown } from "react-icons/fa";
+
+const serviceLinks = [
+  {
+    label: "Land Clearing",
+    href: "/services/land-clearing",
+  },
+  {
+    label: "Tree Work",
+    href: "/services/tree-work",
+  },
+  {
+    label: "Drainage & Erosion",
+    href: "/services/drainage-erosion",
+  },
+];
 
 export default function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
+
     window.addEventListener("scroll", handleScroll);
     handleScroll();
 
@@ -26,7 +40,7 @@ export default function SiteHeader() {
       transition={{ duration: 0.6 }}
       className={`fixed top-0 left-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-[var(--green)]/95 backdrop-blur border-b border-white/10"
+          ? "border-b border-white/10 bg-[var(--green)]/95 backdrop-blur"
           : "bg-transparent"
       }`}
     >
@@ -36,12 +50,11 @@ export default function SiteHeader() {
           aria-label={`${siteData.name} home`}
           className="flex items-center gap-3"
         >
-       
-
           <div className="leading-tight">
             <span className="block text-base font-semibold text-white md:text-lg">
               {siteData.name}
             </span>
+
             <span className="hidden text-xs uppercase tracking-[0.18em] text-white/60 sm:block">
               Greers Ferry Lake • Central Arkansas
             </span>
@@ -49,18 +62,50 @@ export default function SiteHeader() {
         </Link>
 
         <nav
-          className="hidden gap-8 md:flex"
+          className="hidden items-center gap-8 md:flex"
           aria-label="Main navigation"
         >
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm text-white/75 transition hover:text-white"
-            >
-              {link.label}
-            </Link>
-          ))}
+          <Link
+            href="/"
+            className="text-sm text-white/75 transition hover:text-white"
+          >
+            Home
+          </Link>
+
+          <div className="group relative">
+            <button className="flex items-center gap-2 text-sm text-white/75 transition hover:text-white">
+              Services
+              <FaChevronDown className="text-[10px]" />
+            </button>
+
+            <div className="pointer-events-none absolute left-0 top-full pt-4 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
+              <div className="min-w-[260px] rounded-xl border border-white/10 bg-[#0b1f18] p-3 shadow-2xl">
+                {serviceLinks.map((service) => (
+                  <Link
+                    key={service.href}
+                    href={service.href}
+                    className="block rounded-lg px-4 py-3 text-sm text-white/75 transition hover:bg-white/5 hover:text-white"
+                  >
+                    {service.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <Link
+            href="/gallery"
+            className="text-sm text-white/75 transition hover:text-white"
+          >
+            Gallery
+          </Link>
+
+          <Link
+            href="/#contact"
+            className="text-sm text-white/75 transition hover:text-white"
+          >
+            Contact
+          </Link>
         </nav>
 
         <div className="flex items-center gap-4">
@@ -75,13 +120,16 @@ export default function SiteHeader() {
           </a>
 
           <a
-            href={siteData.phoneHref ?? `tel:${siteData.phone.replace(/\D/g, "")}`}
+            href={
+              siteData.phoneHref ??
+              `tel:${siteData.phone.replace(/\D/g, "")}`
+            }
             className="hidden text-sm text-white/75 transition hover:text-white md:block"
           >
             {siteData.phone}
           </a>
 
-          <a href="#contact" className="btn-primary text-sm">
+          <a href="/#contact" className="btn-primary text-sm">
             Get Free Estimate
           </a>
         </div>
