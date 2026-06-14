@@ -1,101 +1,66 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
-const bodyFont = Inter({
-  subsets: ["latin"],
-  variable: "--font-body",
-});
+import { siteData } from "@/data/site";
 
-const headingFont = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-heading",
-});
-
-const siteUrl = "https://richardslandmanagementllc.com";
+const siteUrl = "https://www.richardslandmanagementllc.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-
   title: {
     default:
-      "Land Clearing, Drainage & Tree Work in Greers Ferry, AR | Richards Land Management LLC",
-    template: "%s | Richards Land Management LLC",
+      "Land Clearing, Drainage & Tree Work in Greers Ferry, AR | Richards Property Management, LLC",
+    template: "%s | Richards Property Management, LLC",
   },
-
   description:
-    "Land clearing, tree work, drainage solutions, erosion control, retaining walls, hauling, and rural property services across Greers Ferry Lake and Central Arkansas.",
-
+    "Land clearing, tree work, drainage solutions, erosion control, retaining walls, hauling, welding, water features, and property maintenance around Greers Ferry Lake and Central Arkansas.",
   keywords: [
-    // Primary SEO focus
-    "land clearing Arkansas",
-    "land clearing Greers Ferry",
-    "tree work Arkansas",
-    "tree removal Greers Ferry",
-    "drainage contractor Arkansas",
-    "erosion control Arkansas",
-    "retaining walls Arkansas",
-
-    // Local intent
-    "land clearing Greers Ferry Lake",
+    "land clearing Greers Ferry AR",
+    "tree work Greers Ferry AR",
     "tree removal Greers Ferry Lake",
-    "drainage solutions Greers Ferry Lake",
-    "property services Central Arkansas",
-    "contractors near Greers Ferry Lake",
-
-    // Long tail
-    "how much does land clearing cost Arkansas",
-    "yard drainage solutions Arkansas",
-    "erosion repair Arkansas",
-    "rural property cleanup Arkansas",
+    "drainage contractor Greers Ferry AR",
+    "erosion control Central Arkansas",
+    "retaining walls Greers Ferry Lake",
+    "property services Greers Ferry Lake",
+    "brush clearing Heber Springs AR",
+    "property cleanup Fairfield Bay AR",
+    "hauling services Central Arkansas",
     "driveway washout repair Arkansas",
-
-    // Secondary services
-    "hauling services Arkansas",
-    "welding and fabrication Arkansas",
-    "property maintenance Arkansas",
+    "Airbnb property maintenance Greers Ferry",
   ],
-
-  authors: [{ name: "Richards Land Management LLC" }],
-  creator: "Richards Land Management LLC",
-  publisher: "Richards Land Management LLC",
-
+  authors: [{ name: siteData.name }],
+  creator: siteData.name,
+  publisher: siteData.name,
   alternates: {
     canonical: siteUrl,
   },
-
   openGraph: {
-    title:
-      "Land Clearing & Drainage Services in Central Arkansas",
+    title: "Land Clearing & Property Services in Greers Ferry Lake, AR",
     description:
-      "Land clearing, drainage solutions, erosion control, tree work, retaining walls, hauling, and rural property services across Greers Ferry Lake and Central Arkansas.",
+      "Land clearing, drainage repair, erosion control, tree work, retaining walls, hauling, welding, and rural property services across the Greers Ferry Lake area.",
     url: siteUrl,
-    siteName: "Richards Land Management LLC",
+    siteName: siteData.name,
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/images/og-cover.jpg",
+        url: "/images/og-cover.png",
         width: 1200,
         height: 630,
-        alt: "Land clearing and property services in Central Arkansas",
+        alt: "Richards Property Management land clearing and property work in Central Arkansas",
       },
     ],
   },
-
   twitter: {
     card: "summary_large_image",
-    title:
-      "Land Clearing & Property Services in Central Arkansas",
+    title: "Land Clearing & Property Services in Greers Ferry Lake, AR",
     description:
-      "Land clearing, tree work, drainage, erosion control, and rural property services across Greers Ferry Lake and Central Arkansas.",
-    images: ["/images/og-cover.jpg"],
+      "Land clearing, tree work, drainage, erosion control, and property services around Greers Ferry Lake and Central Arkansas.",
+    images: ["/images/og-cover.png"],
   },
-
   robots: {
     index: true,
     follow: true,
-
     googleBot: {
       index: true,
       follow: true,
@@ -113,10 +78,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${bodyFont.variable} ${headingFont.variable} font-sans`}>
-        
-        <main>{children}</main>
-       <Analytics />
+      <body>
+        {children}
+        <Analytics />
       </body>
     </html>
   );

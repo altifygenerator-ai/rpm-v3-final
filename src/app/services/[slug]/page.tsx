@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -17,13 +18,15 @@ type PageProps = {
 
 const baseUrl = "https://www.richardslandmanagementllc.com";
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return servicePages.map((service) => ({
     slug: service.slug,
   }));
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const page = servicePages.find((service) => service.slug === slug);
 
@@ -39,6 +42,20 @@ export async function generateMetadata({ params }: PageProps) {
       title: page.metaTitle,
       description: page.metaDescription,
       url: `${baseUrl}/services/${page.slug}`,
+      type: "website",
+      images: [
+        {
+          url: page.image,
+          width: 1200,
+          height: 630,
+          alt: `${page.shortTitle} near Greers Ferry Arkansas`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: page.metaTitle,
+      description: page.metaDescription,
       images: [page.image],
     },
   };
@@ -49,13 +66,10 @@ export default async function ServicePage({ params }: PageProps) {
   const page = servicePages.find((service) => service.slug === slug);
 
   if (!page) notFound();
-  
 
   const relatedServices = page.related
-    .map((relatedSlug) =>
-      services.find((service) => service.slug === relatedSlug)
-    )
-    .filter(Boolean);
+    .map((relatedSlug) => services.find((service) => service.slug === relatedSlug))
+    .filter((service): service is (typeof services)[number] => Boolean(service));
 
   const schema = [
     {
@@ -64,6 +78,8 @@ export default async function ServicePage({ params }: PageProps) {
       name: page.title,
       serviceType: page.shortTitle,
       description: page.metaDescription,
+      image: `${baseUrl}${page.image}`,
+      url: `${baseUrl}/services/${page.slug}`,
       provider: {
         "@type": "LocalBusiness",
         name: siteData.name,
@@ -79,7 +95,7 @@ export default async function ServicePage({ params }: PageProps) {
       },
       areaServed: siteData.serviceArea.map((area) => ({
         "@type": "Place",
-        name: `${area}, Arkansas`,
+        name: area,
       })),
     },
     {
@@ -136,19 +152,18 @@ export default async function ServicePage({ params }: PageProps) {
             alt={`${page.shortTitle} near Greers Ferry Arkansas`}
             fill
             priority
+            sizes="100vw"
             className="object-cover"
           />
-
           <div className="absolute inset-0 bg-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#081812] via-transparent to-black/20" />
 
           <div className="container relative z-10 py-24">
-            <p className="text-sm uppercase tracking-[0.25em] text-[var(--accent)]">
+            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[var(--accent)]">
               {page.eyebrow}
             </p>
 
-            <h1 className="mt-4 max-w-5xl text-4xl font-bold text-white md:text-6xl">
-              {page.title}
-            </h1>
+            <h1 className="mt-4 max-w-5xl text-white">{page.title}</h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/80">
               {page.intro}
@@ -172,7 +187,7 @@ export default async function ServicePage({ params }: PageProps) {
               {page.sections.map((section) => (
                 <div key={section.heading} className="card">
                   {section.eyebrow && (
-                    <p className="text-sm uppercase tracking-[0.2em] text-[var(--accent)]">
+                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
                       {section.eyebrow}
                     </p>
                   )}
@@ -199,6 +214,7 @@ export default async function ServicePage({ params }: PageProps) {
                       src={image}
                       alt={`${page.shortTitle} project in Central Arkansas`}
                       fill
+                      sizes="(min-width: 768px) 45vw, 100vw"
                       className="object-cover"
                     />
                   </div>
@@ -209,7 +225,7 @@ export default async function ServicePage({ params }: PageProps) {
                 {page.sections.map((section) => (
                   <div key={section.heading} className="mb-10">
                     {section.eyebrow && (
-                      <p className="text-sm uppercase tracking-[0.2em] text-[var(--accent)]">
+                      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
                         {section.eyebrow}
                       </p>
                     )}
@@ -229,7 +245,7 @@ export default async function ServicePage({ params }: PageProps) {
                 {page.sections.map((section) => (
                   <div key={section.heading} className="mb-10">
                     {section.eyebrow && (
-                      <p className="text-sm uppercase tracking-[0.2em] text-[var(--accent)]">
+                      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
                         {section.eyebrow}
                       </p>
                     )}
@@ -286,14 +302,12 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="container">
             <div className="grid gap-4 md:grid-cols-3">
               {page.galleryImages.map((image) => (
-                <div
-                  key={image}
-                  className="relative h-[260px] overflow-hidden rounded-lg"
-                >
+                <div key={image} className="relative h-[260px] overflow-hidden rounded-lg">
                   <Image
                     src={image}
                     alt={`${page.shortTitle} work near Greers Ferry Arkansas`}
                     fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
                     className="object-cover transition duration-300 hover:scale-105"
                   />
                 </div>
@@ -345,16 +359,14 @@ export default async function ServicePage({ params }: PageProps) {
               <h2>Related Property Services</h2>
 
               <div className="mt-8 grid gap-6 md:grid-cols-3">
-                {relatedServices.map((service: any) => (
+                {relatedServices.map((service) => (
                   <Link
                     key={service.slug}
                     href={`/services/${service.slug}`}
                     className="card group block"
                   >
                     <h3>{service.title}</h3>
-                    <p className="mt-2 text-neutral-300">
-                      {service.description}
-                    </p>
+                    <p className="mt-2 text-neutral-300">{service.description}</p>
                     <div className="mt-4 text-sm text-[var(--accent)]">
                       View service →
                     </div>

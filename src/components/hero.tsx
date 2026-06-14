@@ -7,70 +7,55 @@ import { siteData } from "@/data/site";
 
 export default function Hero() {
   return (
-    <section className="relative h-[90vh] w-full overflow-hidden">
-
-      {/* Background Image */}
+    <section className="relative flex min-h-[92vh] w-full items-center overflow-hidden pt-24">
       <div className="absolute inset-0">
         <img
           src={heroData.backgroundImage}
-          alt="Property work"
-          className="w-full h-full object-cover object-[center_30%] scale-[1.05]"
+          alt="Land clearing and property work near Greers Ferry Arkansas"
+          className="h-full w-full scale-[1.04] object-cover object-[center_30%]"
         />
-
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#081812] via-transparent to-black/25" />
       </div>
 
-      {/* Content */}
       <motion.div
-        className="container relative z-10 pt-20"
+        className="container relative z-10 pb-16 pt-10"
         variants={staggerContainer}
         initial="hidden"
         animate="show"
       >
-        {/* Headline */}
-        <motion.h1
+        <motion.p
           variants={fadeUp}
-          className="max-w-2xl text-white"
+          className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-[var(--accent)]"
         >
+          Greers Ferry Lake • Central Arkansas
+        </motion.p>
+
+        <motion.h1 variants={fadeUp} className="max-w-3xl text-white">
           {heroData.heading}
         </motion.h1>
 
-        {/* Subheading */}
-        <motion.p
-          variants={fadeUp}
-          className="mt-4 max-w-xl text-neutral-200"
-        >
+        <motion.p variants={fadeUp} className="mt-5 max-w-2xl text-neutral-200">
           {heroData.subheading}
         </motion.p>
 
-        {/* CTA Buttons */}
-        <motion.div
-          variants={fadeUp}
-          className="mt-6 flex flex-wrap gap-4"
-        >
-          <a
-            href={`tel:${siteData.phone.replace(/\D/g, "")}`}
-            className="btn-primary"
-          >
+        <motion.div variants={fadeUp} className="mt-7 flex flex-wrap gap-4">
+          <a href={siteData.phoneHref} className="btn-primary">
             {heroData.ctaPrimary}
           </a>
-
-          <a
-            href="#contact"
-            className="btn-secondary"
-          >
+          <a href="#contact" className="btn-secondary">
             {heroData.ctaSecondary}
           </a>
- 
         </motion.div>
-              <div className="mt-4 flex items-center gap-2 text-sm text-neutral-400">
-  
-  <span>Proudly serving the Greers Ferry Lake area and Central Arkansas.</span>
-</div>
-      </motion.div>
- 
 
+        <motion.div
+          variants={fadeUp}
+          className="mt-5 max-w-2xl text-sm text-neutral-300"
+        >
+          Free estimates for land clearing, drainage, erosion control, tree work,
+          retaining walls, hauling, and property maintenance.
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

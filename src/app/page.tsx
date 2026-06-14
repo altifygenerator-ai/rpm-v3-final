@@ -11,111 +11,88 @@ import SiteFooter from "@/components/site-footer";
 import SeoFocusSection from "@/components/seo-focus-section";
 import SeasonalWork from "@/components/seasonal-work";
 import FAQSection from "@/components/FAQSection";
+import { siteData } from "@/data/site";
+
+const baseUrl = "https://www.richardslandmanagementllc.com";
+
 export default function Home() {
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: siteData.name,
+      url: baseUrl,
+      telephone: siteData.phone,
+      email: siteData.email,
+      image: `${baseUrl}/images/og-cover.png`,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Greers Ferry",
+        addressRegion: "AR",
+        addressCountry: "US",
+      },
+      areaServed: siteData.serviceArea.map((area) => ({
+        "@type": "Place",
+        name: area,
+      })),
+      description: siteData.description,
+      sameAs: [siteData.socials.facebook],
+      makesOffer: siteData.primaryServices.map((service) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: service,
+          areaServed: "Greers Ferry Lake and Central Arkansas",
+        },
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "What property services do you offer around Greers Ferry Lake?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Richards Property Management, LLC offers land clearing, tree work, drainage solutions, erosion control, retaining walls, hauling, welding, water features, Airbnb maintenance, and general property services around Greers Ferry Lake and Central Arkansas.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Do you help with drainage and driveway washouts?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. Richards Property Management, LLC helps with drainage correction, runoff control, culvert work, erosion repair, grading, and driveway washout issues.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Do you offer free estimates?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. Property owners can call or send a message to request a free estimate for land clearing, tree work, drainage, hauling, cleanup, retaining walls, and other property services.",
+          },
+        },
+      ],
+    },
+  ];
+
   return (
     <>
       <SiteHeader />
 
       <main>
         <script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify([
-      {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        name: "Richards Land Management LLC",
-        url: "https://www.richardslandmanagementllc.com/",
-        areaServed: [
-          "Greers Ferry, Arkansas",
-          "Heber Springs, Arkansas",
-          "Fairfield Bay, Arkansas",
-          "Quitman, Arkansas",
-          "Clinton, Arkansas",
-          "Cleburne County, Arkansas",
-        ],
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Greers Ferry",
-          addressRegion: "AR",
-          addressCountry: "US",
-        },
-        description:
-          "Land management, forestry mulching, land clearing, brush clearing, trail clearing, and property cleanup services near Greers Ferry, Arkansas.",
-        serviceType: [
-          "Forestry Mulching",
-          "Land Clearing",
-          "Brush Clearing",
-          "Underbrush Removal",
-          "Trail Clearing",
-          "Property Cleanup",
-          "Hunting Property Clearing",
-          "Skid Steer Services",
-        ],
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "Service",
-        name: "Forestry Mulching and Land Clearing in Greers Ferry, Arkansas",
-        provider: {
-          "@type": "LocalBusiness",
-          name: "Richards Land Management LLC",
-          url: "https://www.richardslandmanagementllc.com/",
-        },
-        areaServed: {
-          "@type": "Place",
-          name: "Greers Ferry, Arkansas and surrounding areas",
-        },
-        serviceType: [
-          "Forestry Mulching",
-          "Land Clearing",
-          "Brush Clearing",
-          "Trail Clearing",
-          "Underbrush Removal",
-          "Hunting Property Clearing",
-        ],
-        description:
-          "Forestry mulching, brush clearing, underbrush removal, trail clearing, and land clearing services for rural properties, hunting land, overgrown lots, and acreage near Greers Ferry, Arkansas.",
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: [
-          {
-            "@type": "Question",
-            name: "What is forestry mulching?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Forestry mulching uses specialized equipment to grind brush, small trees, and overgrowth into mulch, helping clear land without hauling away large amounts of debris.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "Do you clear overgrown land near Greers Ferry?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Richards Land Management LLC provides land clearing, brush clearing, underbrush removal, and property cleanup services near Greers Ferry, Arkansas and surrounding areas.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "Can forestry mulching help hunting property?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Yes. Forestry mulching can help open trails, clear shooting lanes, reduce thick underbrush, improve access, and make hunting property easier to use and maintain.",
-            },
-          },
-        ],
-      },
-    ]),
-  }}
-/>
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
         <Hero />
         <TrustBar />
         <ServicesGrid />
-<SeoFocusSection />
-<SeasonalWork />
-<FeaturedWork />
+        <SeoFocusSection />
+        <SeasonalWork />
+        <FeaturedWork />
         <WhyChooseUs />
         <Testimonials />
         <EstimateCTA />

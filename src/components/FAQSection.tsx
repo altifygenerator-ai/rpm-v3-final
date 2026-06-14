@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 
 const faqs = [
   {
-    question: "What is forestry mulching?",
+    question: "Do you handle land clearing and brush cleanup?",
     answer:
-      "Forestry mulching uses specialized equipment to clear brush, small trees, thick undergrowth, and overgrown areas by grinding vegetation into mulch directly on the property.",
+      "Yes. We help clear brush, small trees, thick undergrowth, overgrown areas, trails, lake lots, and rural property access areas around the Greers Ferry Lake area.",
   },
   {
     question: "Do you clear hunting property and trails?",
@@ -16,7 +16,7 @@ const faqs = [
   {
     question: "What areas do you serve?",
     answer:
-      "Richards Land Management LLC serves Greers Ferry, Heber Springs, Fairfield Bay, Quitman, Clinton, and surrounding Arkansas communities.",
+      "Richards Property Management, LLC serves Greers Ferry, Heber Springs, Fairfield Bay, Quitman, Clinton, and surrounding Arkansas communities.",
   },
   {
     question: "Can you clear heavily overgrown land?",
@@ -40,7 +40,7 @@ export default function FAQSection() {
           </p>
 
           <h2 className="text-3xl md:text-5xl leading-tight">
-            Forestry mulching and land clearing questions
+            Land clearing and property service questions
           </h2>
         </motion.div>
 

@@ -6,31 +6,26 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 
 export default function TrustBar() {
   return (
-    <section className="relative w-full bg-[var(--muted)] border-t border-[var(--border)]">
-      <div className="container py-8">
-
+    <section className="relative z-10 w-full border-y border-[var(--border)] bg-[var(--muted)]/95">
+      <div className="container py-7 md:py-8">
         <motion.div
-          className="flex flex-wrap items-center justify-between gap-6"
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
           variants={staggerContainer}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
         >
-          {siteData.highlights.map((item, i) => (
+          {siteData.highlights.map((item) => (
             <motion.div
-              key={i}
+              key={item}
               variants={fadeUp}
-              className="flex items-center gap-3 text-sm md:text-base text-neutral-200"
+              className="flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.025] px-4 py-3 text-sm text-neutral-200 md:text-base"
             >
-              {/* Accent Dot */}
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)]" />
-
-              {/* Text */}
+              <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--accent)]" />
               <span>{item}</span>
             </motion.div>
           ))}
         </motion.div>
-
       </div>
     </section>
   );
