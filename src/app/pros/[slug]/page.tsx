@@ -31,7 +31,7 @@ export default async function PublicProPage({ params }: Props) {
   const admin = createAdminClient();
   const { data: pro } = await admin
     .from("contractor_profiles")
-    .select("id,business_name,slug,contact_name,phone,website_url,facebook_url,description,city,state,zip,insurance_verified,license_verified")
+    .select("id,business_name,slug,contact_name,phone,website_url,facebook_url,description,logo_url,city,state,zip,insurance_verified,license_verified")
     .eq("slug", slug)
     .eq("status", "active")
     .eq("public_profile_enabled", true)
@@ -48,10 +48,29 @@ export default async function PublicProPage({ params }: Props) {
       <SiteHeader />
       <main>
         <section className="pro-public-hero">
-          <div>
-            <p className="field-label field-label-light">ARKANSAS LAND PRO</p>
-            <h1>{pro.business_name}</h1>
-            <p>{pro.city ? `${pro.city}, ${pro.state}` : pro.state}</p>
+          <div className="pro-public-title">
+            {pro.logo_url ? (
+              // Contractor-provided HTTPS logo; server validation restricts the URL scheme.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={pro.logo_url}
+                alt={`${pro.business_name} logo`}
+                className="pro-public-logo"
+                loading="lazy"
+                referrerPolicy="no-referrer"
+              />
+            ) : null}
+            <div>
+              <p className="field-label field-label-light">ARKANSAS LAND PRO</p>
+              <h1>{pro.business_name}</h1>
+              <p>{pro.city ? `${pro.city}, ${pro.state}` : pro.state}</p>
+              {pro.insurance_verified || pro.license_verified ? (
+                <div className="pro-verification-badges">
+                  {pro.insurance_verified ? <span>Insurance verified</span> : null}
+                  {pro.license_verified ? <span>License verified</span> : null}
+                </div>
+              ) : null}
+            </div>
           </div>
           <div className="pro-public-contact">
             {pro.phone ? <a href={`tel:${pro.phone}`}>Call {pro.phone}</a> : null}

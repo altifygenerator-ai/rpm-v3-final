@@ -3441,3 +3441,48 @@ p {
     grid-template-columns: 1fr;
   }
 }
+
+
+.pro-public-title {
+  align-items: center;
+  display: flex;
+  gap: 1.2rem;
+}
+
+.pro-public-logo {
+  background: white;
+  border: 1px solid #5c666d;
+  height: 92px;
+  object-fit: contain;
+  padding: .45rem;
+  width: 92px;
+}
+
+.pro-verification-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin-top: .75rem;
+}
+
+.pro-verification-badges span {
+  border: 1px solid #69747a;
+  color: #e7ecef;
+  font-family: var(--font-heading);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  padding: .3rem .45rem;
+  text-transform: uppercase;
+}
+
+@media (max-width: 620px) {
+  .pro-public-title {
+    align-items: flex-start;
+  }
+
+  .pro-public-logo {
+    height: 70px;
+    width: 70px;
+  }
+}
