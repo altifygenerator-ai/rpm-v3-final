@@ -2775,3 +2775,76 @@ p {
     padding: 3rem 1rem;
   }
 }
+
+
+.purchase-list {
+  border-top: 3px solid var(--iron);
+}
+
+.purchase-list > a {
+  align-items: center;
+  border-bottom: 1px solid #b8c1c6;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.purchase-list > a > div {
+  display: grid;
+  gap: .2rem;
+}
+
+.purchase-list span {
+  color: var(--steel);
+  font-size: .72rem;
+  text-transform: uppercase;
+}
+
+.purchase-list strong {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  text-transform: uppercase;
+}
+
+.lead-dispute {
+  border-top: 1px solid #ccd3d7;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.lead-dispute > button {
+  background: transparent;
+  border: 0;
+  color: var(--clay-dark);
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.lead-dispute form {
+  display: grid;
+  gap: .7rem;
+  margin-top: .8rem;
+}
+
+.lead-dispute label {
+  display: grid;
+  gap: .3rem;
+}
+
+.lead-dispute label > span {
+  font-family: var(--font-heading);
+  font-size: .75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.lead-dispute select,
+.lead-dispute textarea {
+  background: #f8f9fa;
+  border: 1px solid #aeb7bd;
+  border-radius: 0;
+  padding: .65rem;
+}

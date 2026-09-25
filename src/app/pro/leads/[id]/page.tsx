@@ -2,6 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import ProDashboardShell from "@/components/pro-dashboard-shell";
 import LeadPurchaseButton from "@/components/lead-purchase-button";
 import LeadOutcomeActions from "@/components/lead-outcome-actions";
+import LeadDisputeForm from "@/components/lead-dispute-form";
 import HouseLeadControls from "@/components/house-lead-controls";
 import { getContractorContext } from "@/lib/contractor-auth";
 import { canBuyLead, getLeadForContractor } from "@/lib/marketplace-queries";
@@ -61,7 +62,14 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
               </div>
               <h2>Full project notes</h2>
               <p>{lead.description}</p>
-              {!lead.is_test ? <LeadOutcomeActions leadId={lead.id} /> : <div className="test-warning"><strong>TEST ONLY</strong><p>Do not contact the test customer. This lead exists only to test Stripe checkout and webhook fulfillment.</p></div>}
+              {!lead.is_test ? (
+                <>
+                  <LeadOutcomeActions leadId={lead.id} />
+                  {context.profile.access_role === "normal" && latestPaid ? (
+                    <LeadDisputeForm leadId={lead.id} purchaseId={latestPaid.id} />
+                  ) : null}
+                </>
+              ) : <div className="test-warning"><strong>TEST ONLY</strong><p>Do not contact the test customer. This lead exists only to test Stripe checkout and webhook fulfillment.</p></div>}
             </div>
           ) : (
             <div className="locked-lead">

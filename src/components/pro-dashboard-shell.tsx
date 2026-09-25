@@ -16,6 +16,7 @@ export default function ProDashboardShell({
         <nav>
           <Link href="/pro/dashboard">Dashboard</Link>
           <Link href="/pro/leads">Lead marketplace</Link>
+          <Link href="/pro/purchases">Purchases</Link>
           <Link href="/pro/profile">Public profile</Link>
           <Link href={`/pros/${context.profile.slug}`}>View listing</Link>
           {context.profile.access_role === "house_owner" ? (
