@@ -31,7 +31,7 @@ Copy `.env.example` into the environment configuration and set:
 - `TURNSTILE_SECRET_KEY`
 - `OPENAI_API_KEY`
 - `OPENAI_CHAT_MODEL` (defaults to `gpt-6-luna`)
-- `NEXT_PUBLIC_SITE_URL` when a final/staging canonical URL is known
+- `NEXT_PUBLIC_SITE_URL=https://www.arkansaslandpros.com`
 
 ## SEO migration
 
@@ -49,7 +49,7 @@ The rebuild intentionally preserves the existing high-value service slugs where 
 - `/services/general`
 - `/services/welding`
 
-When the new domain is selected, set `NEXT_PUBLIC_SITE_URL`. The old Richards domain can then be pointed to the same deployment and page-for-page redirects/canonical migration can be finalized without changing the core content architecture.
+The production canonical domain is `https://www.arkansaslandpros.com`. Keep `NEXT_PUBLIC_SITE_URL` set to that exact value in Vercel production. The old Richards domain can later be pointed to the migration setup and page-for-page redirects can be finalized without changing the core content architecture.
 
 
 ## Conversational project assistant
