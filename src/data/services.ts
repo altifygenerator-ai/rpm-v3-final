@@ -24,7 +24,7 @@ export const services: Service[] = [
     shortTitle: "Land Clearing",
     summary: "Clear overgrown, wooded, or neglected ground so the property can be used again.",
     description:
-      "Arkansas Land Pros accepts land-clearing requests for rural property, lake lots, homesites, trails, fence lines, acreage, and other projects where brush, small trees, debris, or overgrowth are in the way.",
+      "Need land cleared? Arkansas Land Pros helps property owners get help with rural property, lake lots, homesites, trails, fence lines, acreage, and other projects where brush, small trees, debris, or overgrowth are in the way.",
     image: stockImages.landClearing.src,
     requests: ["Acreage clearing", "Homesite preparation", "Fence-line clearing", "Trail and access clearing", "Overgrown lot cleanup"],
     related: ["forestry-mulching", "brush-clearing", "site-prep", "hauling"],
@@ -36,12 +36,12 @@ export const services: Service[] = [
   },
   {
     slug: "forestry-mulching",
-    title: "Forestry Mulching Requests Across Arkansas",
+    title: "Forestry Mulching Across Arkansas",
     shortTitle: "Forestry Mulching",
     summary: "A practical option for knocking back brush, saplings, undergrowth, and wooded edges.",
     description:
-      "Use Arkansas Land Pros to request forestry mulching for overgrown acreage, trails, fence lines, hunting property, lake lots, and other land where vegetation needs to be brought back under control.",
-    image: stockImages.landClearing.src,
+      "Forestry mulching can be a good fit for overgrown acreage, trails, fence lines, hunting property, lake lots, and other land where vegetation needs to be brought back under control.",
+    image: stockImages.forestryMulching.src,
     requests: ["Undergrowth removal", "Trail opening", "Fence-line clearing", "Hunting property access", "Wooded-edge cleanup"],
     related: ["land-clearing", "brush-clearing", "rural-property-prep"],
     faqs: [
@@ -56,8 +56,8 @@ export const services: Service[] = [
     shortTitle: "Brush Clearing",
     summary: "Open up property edges, lots, fields, trails, and areas that have grown in.",
     description:
-      "Brush-clearing requests can cover thick weeds, vines, saplings, briars, overgrown fence lines, trail edges, neglected lots, and rural property that needs to be made usable again.",
-    image: stockImages.landClearing.src,
+      "Brush clearing can cover thick weeds, vines, saplings, briars, overgrown fence lines, trail edges, neglected lots, and rural property that needs to be made usable again.",
+    image: stockImages.brushClearing.src,
     requests: ["Briar and vine removal", "Fence-line cleanup", "Field-edge clearing", "Trail clearing", "Overgrown yard or lot cleanup"],
     related: ["land-clearing", "forestry-mulching", "cleanup"],
     faqs: [
@@ -72,8 +72,8 @@ export const services: Service[] = [
     shortTitle: "Lot Clearing",
     summary: "Get a residential, cabin, or rural lot ready for the next use.",
     description:
-      "Submit a lot-clearing request when a property needs brush, small trees, debris, or overgrowth removed before a build, sale, driveway project, cleanup, or general property improvement.",
-    image: stockImages.landClearing.src,
+      "Lot clearing can help when a property needs brush, small trees, debris, or overgrowth removed before a build, sale, driveway project, cleanup, or general property improvement.",
+    image: stockImages.lotClearing.src,
     requests: ["Residential lots", "Cabin lots", "Lake lots", "Future homesites", "Property-sale cleanup"],
     related: ["land-clearing", "site-prep", "cleanup", "grading-leveling"],
     faqs: [
@@ -84,12 +84,12 @@ export const services: Service[] = [
   },
   {
     slug: "dirt-work",
-    title: "Dirt Work & Small Excavation Requests in Arkansas",
+    title: "Dirt Work & Small Excavation in Arkansas",
     shortTitle: "Dirt Work",
     summary: "For rough grading, drainage cuts, driveway work, pads, access, and practical earthwork.",
     description:
-      "Arkansas Land Pros accepts dirt-work requests involving rough grading, washouts, driveway shaping, ditches, culvert areas, small excavation, property access, and other projects where moving or shaping soil is part of the job.",
-    image: stockImages.grading.src,
+      "Dirt work can include rough grading, washouts, driveway shaping, ditches, culvert areas, small excavation, property access, and other projects where moving or shaping soil is part of the job.",
+    image: stockImages.dirtWork.src,
     requests: ["Rough grading", "Small excavation", "Driveway shaping", "Ditch work", "Pad and access preparation"],
     related: ["grading-leveling", "driveway-repair", "culvert-installation", "drainage-erosion"],
     faqs: [
@@ -100,11 +100,11 @@ export const services: Service[] = [
   },
   {
     slug: "grading-leveling",
-    title: "Grading & Leveling Requests in Arkansas",
+    title: "Grading & Leveling in Arkansas",
     shortTitle: "Grading & Leveling",
     summary: "Shape rough ground, improve runoff, prepare access, or get an area closer to usable grade.",
     description:
-      "Submit grading and leveling requests for rough property areas, driveways, building approaches, drainage corrections, low spots, and other projects where slope and surface shape matter.",
+      "Grading and leveling can help with rough property areas, driveways, building approaches, drainage corrections, low spots, and other projects where slope and surface shape matter.",
     image: stockImages.grading.src,
     requests: ["Rough leveling", "Slope correction", "Driveway grading", "Low-spot correction", "Pad preparation"],
     related: ["dirt-work", "drainage-erosion", "driveway-repair", "site-prep"],
@@ -120,8 +120,8 @@ export const services: Service[] = [
     shortTitle: "Driveway Repair",
     summary: "Fix rough spots, washouts, ruts, soft areas, drainage trouble, and gravel access problems.",
     description:
-      "Driveway requests can include regrading, smoothing, washout repair, ditch cleanup, low spots, gravel refresh, entrance work, and drainage-related problems on rural Arkansas property.",
-    image: stockImages.drainage.src,
+      "Driveway work can include regrading, smoothing, washout repair, ditch cleanup, low spots, gravel refresh, entrance work, and drainage-related problems on rural Arkansas property.",
+    image: stockImages.drivewayRepair.src,
     requests: ["Washout repair", "Ruts and potholes", "Regrading", "Drainage along driveways", "Gravel refresh"],
     related: ["gravel-driveways", "dirt-work", "culvert-installation", "drainage-erosion"],
     faqs: [
@@ -136,8 +136,8 @@ export const services: Service[] = [
     shortTitle: "Gravel Driveways",
     summary: "New gravel access, resurfacing, spreading, shaping, and rural driveway improvements.",
     description:
-      "Request gravel driveway help for existing access roads, cabin drives, rural homes, property entrances, parking areas, and other places that need stone placed and shaped for practical access.",
-    image: stockImages.gravelRoad.src,
+      "Get help with gravel driveways for existing access roads, cabin drives, rural homes, property entrances, parking areas, and other places that need stone placed and shaped for practical access.",
+    image: stockImages.gravelDriveways.src,
     requests: ["Gravel refresh", "New rural access", "Driveway shaping", "Parking areas", "Cabin and lake-property drives"],
     related: ["driveway-repair", "grading-leveling", "culvert-installation", "hauling"],
     faqs: [
@@ -148,12 +148,12 @@ export const services: Service[] = [
   },
   {
     slug: "culvert-installation",
-    title: "Culvert Installation & Replacement Requests in Arkansas",
+    title: "Culvert Installation & Replacement in Arkansas",
     shortTitle: "Culvert Work",
     summary: "For driveway entrances, drainage crossings, washed areas, and water moving under access routes.",
     description:
-      "Use the request form for culvert installation, replacement, reset, ditch tie-ins, entrance drainage, and related grading around rural driveways and property access.",
-    image: stockImages.drainage.src,
+      "Culvert work can include installation, replacement, resets, ditch tie-ins, entrance drainage, and the grading needed around rural driveways and property access.",
+    image: stockImages.culvert.src,
     requests: ["New culvert installation", "Culvert replacement", "Driveway entrance drainage", "Ditch tie-ins", "Washout repair around culverts"],
     related: ["drainage-erosion", "driveway-repair", "dirt-work"],
     faqs: [
@@ -164,11 +164,11 @@ export const services: Service[] = [
   },
   {
     slug: "drainage-erosion",
-    title: "Drainage & Erosion Control Requests in Arkansas",
+    title: "Drainage & Erosion Control in Arkansas",
     shortTitle: "Drainage & Erosion",
     summary: "Get help with runoff, standing water, washouts, ditches, slopes, and water moving where it should not.",
     description:
-      "Drainage requests can cover standing water, driveway washouts, ditch problems, slope erosion, runoff near buildings, soft access areas, culverts, and other water-related property issues.",
+      "Drainage and erosion work can address standing water, driveway washouts, ditch problems, slope erosion, runoff near buildings, soft access areas, culverts, and other water-related property issues.",
     image: stockImages.drainage.src,
     requests: ["Runoff correction", "Standing-water problems", "Ditch shaping", "Erosion repair", "Driveway drainage"],
     related: ["culvert-installation", "grading-leveling", "driveway-repair", "retaining-walls"],
@@ -180,12 +180,12 @@ export const services: Service[] = [
   },
   {
     slug: "tree-work",
-    title: "Tree & Brush Work Requests in Arkansas",
+    title: "Tree & Brush Work in Arkansas",
     shortTitle: "Tree & Brush Work",
     summary: "For brush, small-tree clearing, limbs, storm debris, property edges, and access cleanup.",
     description:
-      "Arkansas Land Pros accepts requests for tree and brush work that fits land management, cleanup, access, storm recovery, and rural property improvement.",
-    image: stockImages.landClearing.src,
+      "Tree and brush work can help with land management, cleanup, access, storm recovery, and rural property improvement.",
+    image: stockImages.treeWork.src,
     requests: ["Small-tree clearing", "Limb cleanup", "Storm debris", "Wooded-edge cleanup", "Access clearing"],
     related: ["brush-clearing", "storm-cleanup", "land-clearing", "cleanup"],
     faqs: [
@@ -196,12 +196,12 @@ export const services: Service[] = [
   },
   {
     slug: "storm-cleanup",
-    title: "Storm Cleanup & Property Debris Requests",
+    title: "Storm Cleanup & Property Debris Removal in Arkansas",
     shortTitle: "Storm Cleanup",
     summary: "Clean up limbs, brush, scattered debris, blocked access, and rough property areas after bad weather.",
     description:
-      "Storm-cleanup requests can include downed limbs, brush piles, access cleanup, scattered debris, rural property mess, and hauling after Arkansas weather moves through.",
-    image: stockImages.cleanup.src,
+      "Storm cleanup can include downed limbs, brush piles, access cleanup, scattered debris, rural property mess, and hauling after Arkansas weather moves through.",
+    image: stockImages.stormCleanup.src,
     requests: ["Limb and brush cleanup", "Blocked-access cleanup", "Storm debris hauling", "Property cleanup after wind", "Rural cleanup"],
     related: ["tree-work", "cleanup", "hauling"],
     faqs: [
@@ -216,7 +216,7 @@ export const services: Service[] = [
     shortTitle: "Property Cleanup",
     summary: "For neglected lots, brush piles, debris, old material, rural cleanup, and properties that need to be brought back under control.",
     description:
-      "Property-cleanup requests can combine brush, debris, hauling, light tear-out, old material, storm mess, rental or cabin cleanup, and general outdoor property work.",
+      "Property cleanup can combine brush, debris, hauling, light tear-out, old material, storm mess, rental or cabin cleanup, and general outdoor property work.",
     image: stockImages.cleanup.src,
     requests: ["Rural property cleanup", "Brush piles", "Old materials", "Cabin and rental exterior cleanup", "Neglected lots"],
     related: ["hauling", "brush-clearing", "storm-cleanup", "light-demolition"],
@@ -228,12 +228,12 @@ export const services: Service[] = [
   },
   {
     slug: "hauling",
-    title: "Debris & Material Hauling Requests in Arkansas",
+    title: "Debris & Material Hauling in Arkansas",
     shortTitle: "Hauling",
     summary: "Move debris, brush, rock, gravel, old material, and project loads tied to property work.",
     description:
-      "Hauling requests can be submitted as a stand-alone need or as part of land clearing, cleanup, driveway, dirt, drainage, and property-improvement work.",
-    image: stockImages.cleanup.src,
+      "Hauling can be handled on its own or as part of land clearing, cleanup, driveway, dirt, drainage, and property-improvement work.",
+    image: stockImages.hauling.src,
     requests: ["Debris haul-off", "Brush hauling", "Material delivery", "Rock and gravel hauling", "Jobsite cleanup"],
     related: ["cleanup", "gravel-driveways", "land-clearing", "dirt-work"],
     faqs: [
@@ -248,8 +248,8 @@ export const services: Service[] = [
     shortTitle: "Rural Property Prep",
     summary: "Coordinate clearing, access, cleanup, grading, and practical site work before the next use.",
     description:
-      "Use one request for rural property that needs a combination of clearing, access work, cleanup, rough grading, drainage attention, or other practical preparation.",
-    image: stockImages.hero.src,
+      "Rural property prep can combine clearing, access work, cleanup, rough grading, drainage attention, or other practical preparation.",
+    image: stockImages.ruralPropertyPrep.src,
     requests: ["Cabin-property preparation", "Hunting land access", "Rural homesite cleanup", "Acreage access", "Mixed-scope property work"],
     related: ["land-clearing", "site-prep", "dirt-work", "cleanup"],
     faqs: [
@@ -260,11 +260,11 @@ export const services: Service[] = [
   },
   {
     slug: "retaining-walls",
-    title: "Retaining Wall & Slope Work Requests in Arkansas",
+    title: "Retaining Walls & Slope Work in Arkansas",
     shortTitle: "Retaining Walls",
     summary: "For slopes, grade changes, erosion trouble, rock work, and property areas that need support.",
     description:
-      "Retaining-wall requests can involve slope support, grade transitions, erosion trouble, rock placement, drainage around walls, and outdoor areas on uneven Arkansas property.",
+      "Retaining-wall and slope work can involve slope support, grade transitions, erosion trouble, rock placement, drainage around walls, and outdoor areas on uneven Arkansas property.",
     image: stockImages.retaining.src,
     requests: ["Slope support", "Retaining walls", "Rock work", "Grade transitions", "Drainage around retaining areas"],
     related: ["drainage-erosion", "grading-leveling", "outdoor-builds"],
@@ -276,12 +276,12 @@ export const services: Service[] = [
   },
   {
     slug: "site-prep",
-    title: "Site Preparation Requests Across Arkansas",
+    title: "Site Preparation Across Arkansas",
     shortTitle: "Site Preparation",
     summary: "Start a project with clearing, rough grade, access, drainage, and a cleaner working area.",
     description:
-      "Site-prep requests can cover clearing, rough grading, access, debris removal, initial drainage work, and other early property tasks before a home, shop, cabin, driveway, or outdoor project.",
-    image: stockImages.landClearing.src,
+      "Site preparation can cover clearing, rough grading, access, debris removal, initial drainage work, and other early property tasks before a home, shop, cabin, driveway, or outdoor project.",
+    image: stockImages.sitePrep.src,
     requests: ["Homesite preparation", "Cabin-site preparation", "Shop-site cleanup", "Access preparation", "Pre-construction clearing"],
     related: ["land-clearing", "grading-leveling", "dirt-work", "drainage-erosion"],
     faqs: [
@@ -292,12 +292,12 @@ export const services: Service[] = [
   },
   {
     slug: "light-demolition",
-    title: "Light Demolition & Tear-Out Requests in Arkansas",
+    title: "Light Demolition & Tear-Out in Arkansas",
     shortTitle: "Light Demolition",
     summary: "Small structures, sheds, decks, fencing, and outdoor tear-out tied to property cleanup.",
     description:
-      "Use Arkansas Land Pros for light-demolition requests involving small sheds, damaged outdoor structures, old fencing, small decks, and tear-out where cleanup and haul-off are part of the project.",
-    image: stockImages.cleanup.src,
+      "Light demolition can include small sheds, damaged outdoor structures, old fencing, small decks, and tear-out where cleanup and haul-off are part of the project.",
+    image: stockImages.lightDemolition.src,
     requests: ["Small shed removal", "Fence tear-out", "Small deck removal", "Outdoor structure cleanup", "Demolition debris hauling"],
     related: ["cleanup", "hauling", "rural-property-prep"],
     faqs: [
@@ -308,12 +308,12 @@ export const services: Service[] = [
   },
   {
     slug: "airbnb",
-    title: "Cabin & Short-Term Rental Exterior Property Requests",
+    title: "Cabin & Short-Term Rental Exterior Work",
     shortTitle: "Cabin & Rental Property",
     summary: "Exterior cleanup, access, drainage, brush, hauling, and practical property work for rentals and cabins.",
     description:
-      "Cabin and short-term-rental owners can request exterior property help with access, cleanup, drainage, brush, storm debris, driveway issues, and related outdoor work.",
-    image: stockImages.ruralRoad.src,
+      "Cabin and short-term-rental owners can get exterior property help with access, cleanup, drainage, brush, storm debris, driveway issues, and related outdoor work.",
+    image: stockImages.cabinProperty.src,
     requests: ["Exterior cleanup", "Driveway and access issues", "Storm cleanup", "Brush work", "Drainage concerns"],
     related: ["cleanup", "driveway-repair", "drainage-erosion", "tree-work"],
     faqs: [
@@ -324,12 +324,12 @@ export const services: Service[] = [
   },
   {
     slug: "water-features",
-    title: "Pond, Water Feature & Property Water-Work Requests",
+    title: "Pond, Water Feature & Property Water Work",
     shortTitle: "Pond & Water Features",
     summary: "For property projects involving ponds, rock, water movement, and outdoor water features.",
     description:
-      "Property owners can request help with small ponds, outdoor water features, rock placement, drainage-aware water projects, and related site work.",
-    image: stockImages.pondWall.src,
+      "Property work can include small ponds, outdoor water features, rock placement, drainage-aware water projects, and related site work.",
+    image: stockImages.waterFeatures.src,
     requests: ["Small pond concepts", "Outdoor water features", "Rock placement", "Water-flow improvements", "Site preparation around water features"],
     related: ["drainage-erosion", "retaining-walls", "dirt-work"],
     faqs: [
@@ -340,12 +340,12 @@ export const services: Service[] = [
   },
   {
     slug: "outdoor-builds",
-    title: "Outdoor Property Project Requests in Arkansas",
+    title: "Outdoor Property Projects in Arkansas",
     shortTitle: "Outdoor Property Projects",
     summary: "For practical outdoor builds tied to land, access, grade, rock, steps, and rural property use.",
     description:
-      "Request practical outdoor property work that may combine grade, rock, steps, small gathering areas, access improvements, or other land-related outdoor projects.",
-    image: stockImages.ruralRoad.src,
+      "Outdoor property projects may combine grade, rock, steps, small gathering areas, access improvements, or other land-related outdoor projects.",
+    image: stockImages.outdoorBuilds.src,
     requests: ["Outdoor steps", "Rock features", "Property access improvements", "Small gathering areas", "Terrain-based outdoor work"],
     related: ["retaining-walls", "rural-property-prep", "grading-leveling"],
     faqs: [
@@ -356,12 +356,12 @@ export const services: Service[] = [
   },
   {
     slug: "general",
-    title: "General Land & Property Work Requests",
+    title: "General Land & Property Work",
     shortTitle: "General Property Work",
     summary: "For the Arkansas property job that does not fit neatly into one service label.",
     description:
-      "Use this request category for mixed-scope rural property work involving cleanup, dirt, access, brush, hauling, repairs, drainage, or other practical outdoor needs.",
-    image: stockImages.hero.src,
+      "For mixed rural-property jobs, help may include cleanup, dirt, access, brush, hauling, repairs, drainage, or other practical outdoor needs.",
+    image: stockImages.generalProperty.src,
     requests: ["Mixed-scope rural work", "Access improvement", "Cleanup plus dirt work", "Property problem solving", "Small equipment work"],
     related: ["rural-property-prep", "dirt-work", "cleanup", "hauling"],
     faqs: [
@@ -372,11 +372,11 @@ export const services: Service[] = [
   },
   {
     slug: "welding",
-    title: "Property Welding & Fabrication Requests",
+    title: "Property Welding & Fabrication in Arkansas",
     shortTitle: "Property Welding",
     summary: "For gates, brackets, repairs, and property-related metal work.",
     description:
-      "Submit property-related welding and fabrication requests for review when metal repair, gates, brackets, small fabrication, or similar work is part of a land or outdoor property project.",
+      "Property-related welding and fabrication can help when metal repair, gates, brackets, small fabrication, or similar work is part of a land or outdoor property project.",
     image: stockImages.welding.src,
     requests: ["Gate repair", "Property brackets", "Small fabrication", "Outdoor metal repair", "Project support welding"],
     related: ["general", "outdoor-builds", "rural-property-prep"],

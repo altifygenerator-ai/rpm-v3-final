@@ -12,7 +12,7 @@ export default function SiteHeader() {
   return (
     <header className="site-header">
       <div className="route-strip">
-        <span>ARKANSAS LAND SERVICE REQUESTS</span>
+        <span>LAND CLEARING • DIRT WORK • DRAINAGE • DRIVEWAYS</span>
         <span className="route-strip-wide">
           SOUTHWEST ARKANSAS / HOT SPRINGS / OUACHITAS / GREERS FERRY LAKE
         </span>
@@ -42,7 +42,7 @@ export default function SiteHeader() {
           eventName="CTA Click"
           eventDetail="header-request"
         >
-          START A JOB REQUEST
+          GET PROJECT HELP
         </TrackedLink>
 
         <details className="mobile-menu">
@@ -53,7 +53,7 @@ export default function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <Link href="/contact">Start a job request</Link>
+            <Link href="/contact">Get project help</Link>
           </div>
         </details>
       </div>

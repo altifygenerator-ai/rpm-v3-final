@@ -1,11 +1,11 @@
 export const siteData = {
   name: "Arkansas Land Pros",
   shortName: "ALP",
-  tagline: "Arkansas land work starts here.",
+  tagline: "Land clearing, dirt work, drainage & more across Arkansas.",
   description:
-    "Arkansas Land Pros helps property owners request land clearing, dirt work, drainage, driveway, cleanup, and related land-service work across Arkansas.",
+    "Arkansas Land Pros helps Arkansas property owners connect with land-service professionals for clearing, dirt work, grading, drainage, driveways, cleanup, hauling, and more.",
   coverageLine:
-    "Priority coverage across Southwest Arkansas, the Hot Springs area, the Ouachitas, Greers Ferry Lake, and Central Arkansas.",
+    "Serving property owners across Arkansas, with detailed coverage around Southwest Arkansas, Hot Springs, the Ouachitas, Greers Ferry Lake, and Central Arkansas.",
   disclosure:
     "Arkansas Land Pros is a lead and referral service. Requests may be shared with an independent service provider that may be able to help with the project. The contractor performing the work is responsible for estimates, licensing, insurance, scheduling, and completed work.",
   primaryServices: [
