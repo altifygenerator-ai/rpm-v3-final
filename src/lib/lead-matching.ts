@@ -131,3 +131,152 @@ export async function createMatchesAndNotify(lead: Lead) {
 
   return matches;
 }
+
+
+export async function refreshMatchesForContractor(contractorId: string) {
+  const admin = createAdminClient();
+
+  const [{ data: profile }, { data: serviceRows }, { data: territories }, { data: preferences }] =
+    await Promise.all([
+      admin
+        .from("contractor_profiles")
+        .select("id,email,business_name,status,access_role")
+        .eq("id", contractorId)
+        .maybeSingle(),
+      admin
+        .from("contractor_services")
+        .select("service_slug")
+        .eq("contractor_id", contractorId)
+        .eq("enabled", true),
+      admin
+        .from("contractor_territories")
+        .select("city,county,zip")
+        .eq("contractor_id", contractorId),
+      admin
+        .from("contractor_preferences")
+        .select("max_lead_price_cents,email_notifications")
+        .eq("contractor_id", contractorId)
+        .maybeSingle(),
+    ]);
+
+  if (!profile || profile.status !== "active" || profile.access_role !== "normal") {
+    return { matched: 0, newlyMatched: 0 };
+  }
+
+  const serviceSlugs = (serviceRows || []).map((row) => row.service_slug);
+  if (!serviceSlugs.length) return { matched: 0, newlyMatched: 0 };
+
+  const { data: leads } = await admin
+    .from("leads")
+    .select("id,area,city,county,service_slug,lead_price_cents,marketplace_status,marketplace_enabled,expires_at,is_test,test_enabled")
+    .in("service_slug", serviceSlugs)
+    .eq("marketplace_status", "available")
+    .eq("marketplace_enabled", true)
+    .order("created_at", { ascending: false })
+    .limit(150);
+
+  const now = Date.now();
+  const maxPrice = preferences?.max_lead_price_cents ?? null;
+  const territoryRows = territories || [];
+  const matchedIds: string[] = [];
+
+  for (const lead of leads || []) {
+    if (lead.is_test) continue;
+    if (lead.expires_at && new Date(lead.expires_at).getTime() <= now) continue;
+    if (maxPrice !== null && lead.lead_price_cents > maxPrice) continue;
+
+    const leadArea = [lead.area, lead.city, lead.county]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    const locationMatch =
+      territoryRows.length === 0 ||
+      territoryRows.some((territory) =>
+        [territory.city, territory.county, territory.zip]
+          .filter(Boolean)
+          .map((value) => String(value).toLowerCase())
+          .some((value) => leadArea.includes(value))
+      );
+
+    if (locationMatch) matchedIds.push(lead.id);
+  }
+
+  const { data: existing } = await admin
+    .from("lead_matches")
+    .select("lead_id,notified_at")
+    .eq("contractor_id", contractorId);
+
+  const existingMap = new Map((existing || []).map((row) => [row.lead_id, row]));
+  const newlyMatched = matchedIds.filter((id) => !existingMap.has(id));
+
+  if (matchedIds.length) {
+    await admin.from("lead_matches").upsert(
+      matchedIds.map((leadId) => ({
+        lead_id: leadId,
+        contractor_id: contractorId,
+        match_score: 95,
+        match_reason: "service and service-area match",
+        hidden_at: null,
+      })),
+      { onConflict: "lead_id,contractor_id" }
+    );
+  }
+
+  const matchedSet = new Set(matchedIds);
+  const staleIds = (existing || [])
+    .map((row) => row.lead_id)
+    .filter((leadId) => !matchedSet.has(leadId));
+
+  if (staleIds.length) {
+    const { data: unlocked } = await admin
+      .from("lead_unlocks")
+      .select("lead_id")
+      .eq("contractor_id", contractorId)
+      .in("lead_id", staleIds);
+
+    const unlockedSet = new Set((unlocked || []).map((row) => row.lead_id));
+    const hideIds = staleIds.filter((leadId) => !unlockedSet.has(leadId));
+
+    if (hideIds.length) {
+      await admin
+        .from("lead_matches")
+        .update({ hidden_at: new Date().toISOString() })
+        .eq("contractor_id", contractorId)
+        .in("lead_id", hideIds);
+    }
+  }
+
+  if (
+    newlyMatched.length > 0 &&
+    preferences?.email_notifications !== false &&
+    process.env.RESEND_API_KEY
+  ) {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const from =
+      process.env.MARKETPLACE_FROM_EMAIL ||
+      "Arkansas Land Pros <leads@arkansaslandpros.com>";
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL || "https://www.arkansaslandpros.com";
+
+    await resend.emails.send({
+      from,
+      to: [profile.email],
+      subject: `${newlyMatched.length} matching Arkansas Land Pros ${newlyMatched.length === 1 ? "lead is" : "leads are"} waiting`,
+      html: `
+        <div style="font-family:Arial,sans-serif;max-width:620px;margin:auto;color:#171a1d">
+          <div style="background:#171a1d;color:#fff;padding:22px;border-top:7px solid #c64e32">
+            <div style="font-size:12px;letter-spacing:.12em;color:#f0b4a5">ARKANSAS LAND PROS</div>
+            <h1 style="font-size:24px;margin:6px 0 0">Matching work is waiting</h1>
+          </div>
+          <div style="border:1px solid #d5dadd;border-top:0;padding:22px">
+            <p>We found <strong>${newlyMatched.length}</strong> currently available ${newlyMatched.length === 1 ? "opportunity" : "opportunities"} matching the services and areas on your profile.</p>
+            <p><a href="${baseUrl}/pro/leads" style="background:#c64e32;color:#fff;text-decoration:none;padding:12px 16px;display:inline-block;font-weight:bold">View matching leads</a></p>
+          </div>
+        </div>
+      `,
+    });
+  }
+
+  return { matched: matchedIds.length, newlyMatched: newlyMatched.length };
+}

@@ -1,6 +1,7 @@
 import { getContractorContext } from "@/lib/contractor-auth";
 import { cleanText } from "@/lib/marketplace";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { refreshMatchesForContractor } from "@/lib/lead-matching";
 
 export async function POST(request: Request) {
   const context = await getContractorContext();
@@ -77,6 +78,12 @@ export async function POST(request: Request) {
     email_notifications: true,
     auto_buy_enabled: false,
   });
+
+  try {
+    await refreshMatchesForContractor(profileId);
+  } catch (error) {
+    console.error("Contractor match refresh failed", error);
+  }
 
   return Response.json({ success: true });
 }
