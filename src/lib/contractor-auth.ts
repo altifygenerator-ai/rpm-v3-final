@@ -27,6 +27,8 @@ export type ContractorContext = {
     featured: boolean;
     onboarding_completed: boolean;
     stripe_customer_id: string | null;
+    terms_accepted_at: string | null;
+    terms_version: string | null;
   };
 };
 
@@ -42,7 +44,7 @@ export async function getContractorContext(): Promise<ContractorContext | null> 
   const { data: profile, error } = await admin
     .from("contractor_profiles")
     .select(
-      "id,user_id,email,business_name,slug,contact_name,phone,website_url,facebook_url,description,logo_url,city,state,zip,status,access_role,public_profile_enabled,featured,onboarding_completed,stripe_customer_id"
+      "id,user_id,email,business_name,slug,contact_name,phone,website_url,facebook_url,description,logo_url,city,state,zip,status,access_role,public_profile_enabled,featured,onboarding_completed,stripe_customer_id,terms_accepted_at,terms_version"
     )
     .eq("user_id", user.id)
     .maybeSingle();

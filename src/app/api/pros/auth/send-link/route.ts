@@ -6,6 +6,8 @@ import { verifyTurnstile } from "@/lib/turnstile";
 
 export const runtime = "nodejs";
 
+const MARKETPLACE_TERMS_VERSION = "2026-09-25-marketplace-v1";
+
 const buckets = new Map<string, { count: number; resetAt: number }>();
 
 function clientIp(request: Request) {
@@ -127,6 +129,24 @@ export async function POST(request: Request) {
         if (createError && !/already/i.test(createError.message)) {
           throw createError;
         }
+      }
+    }
+
+    if (mode === "join") {
+      const { error: termsError } = await admin
+        .from("contractor_profiles")
+        .update({
+          terms_accepted_at: new Date().toISOString(),
+          terms_version: MARKETPLACE_TERMS_VERSION,
+        })
+        .eq("email", email);
+
+      if (termsError) {
+        console.error("Contractor terms acceptance could not be recorded", termsError);
+        return Response.json(
+          { success: false, error: "We could not save the marketplace terms acceptance." },
+          { status: 500 }
+        );
       }
     }
 

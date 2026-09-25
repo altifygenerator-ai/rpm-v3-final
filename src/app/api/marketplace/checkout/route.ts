@@ -16,6 +16,19 @@ export async function POST(request: Request) {
       return Response.json({ success: false, error: "Finish your contractor profile before unlocking leads." }, { status: 403 });
     }
 
+    if (
+      context.profile.access_role === "normal" &&
+      !context.profile.terms_accepted_at
+    ) {
+      return Response.json(
+        {
+          success: false,
+          error: "Marketplace terms must be accepted before purchasing leads.",
+        },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const leadId = String(body.leadId || "");
     if (!leadId) {
