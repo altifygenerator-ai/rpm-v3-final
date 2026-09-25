@@ -2848,3 +2848,160 @@ p {
   border-radius: 0;
   padding: .65rem;
 }
+
+
+.customer-project-page {
+  min-height: 65vh;
+}
+
+.customer-project-head {
+  background: var(--iron);
+  color: white;
+  padding: 4.5rem max(1.25rem, calc((100vw - 1260px) / 2 + 1.25rem));
+}
+
+.customer-project-head h1 {
+  font-size: clamp(3.4rem, 6vw, 6rem);
+  margin-top: .55rem;
+}
+
+.customer-project-head > p:last-child {
+  color: #cbd2d6;
+  margin-top: 1rem;
+}
+
+.customer-project-grid {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: 1fr minmax(330px, .7fr);
+  margin: 0 auto;
+  max-width: 1260px;
+  padding: 4rem 1.25rem 6rem;
+}
+
+.customer-project-grid h2 {
+  font-size: 2.8rem;
+}
+
+.customer-project-grid article > p {
+  color: var(--soft-ink);
+  margin-top: .8rem;
+}
+
+.customer-project-grid dl {
+  border-top: 3px solid var(--iron);
+  margin-top: 2rem;
+}
+
+.customer-project-grid dl > div {
+  border-bottom: 1px solid #bcc5ca;
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  padding: .75rem 0;
+}
+
+.customer-project-grid dt {
+  color: var(--steel);
+  font-family: var(--font-heading);
+  font-size: .75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.customer-project-grid dd {
+  margin: 0;
+}
+
+.customer-project-note {
+  border-left: 5px solid var(--clay);
+  margin-top: 2rem !important;
+  padding-left: 1rem;
+}
+
+.project-status-actions {
+  background: white;
+  border-top: 7px solid var(--clay);
+  display: grid;
+  gap: .75rem;
+  padding: 1.2rem;
+}
+
+.project-status-current {
+  border-bottom: 1px solid #ccd3d7;
+  display: grid;
+  gap: .2rem;
+  padding-bottom: .8rem;
+}
+
+.project-status-current span {
+  color: var(--steel);
+  font-family: var(--font-heading);
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.project-status-current strong {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  text-transform: uppercase;
+}
+
+.project-status-actions > button,
+.project-hired-box button {
+  background: #f5f7f8;
+  border: 1px solid #adb7bd;
+  cursor: pointer;
+  font-weight: 700;
+  padding: .75rem;
+  text-align: left;
+}
+
+.project-status-actions > button:hover,
+.project-hired-box button:hover {
+  border-color: var(--clay);
+}
+
+.project-hired-box {
+  border: 1px solid #c4ccd1;
+  display: grid;
+  gap: .55rem;
+  padding: .85rem;
+}
+
+.project-hired-box > strong {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  text-transform: uppercase;
+}
+
+.project-hired-box p {
+  color: var(--soft-ink);
+  font-size: .8rem;
+}
+
+.project-hired-box select {
+  border: 1px solid #aeb7bd;
+  border-radius: 0;
+  padding: .65rem;
+}
+
+.project-cancel-button {
+  color: #8a2f22;
+}
+
+.project-status-message {
+  background: #edf2f4;
+  padding: .65rem;
+}
+
+@media (max-width: 800px) {
+  .customer-project-grid {
+    grid-template-columns: 1fr;
+    padding: 3rem 1rem 5rem;
+  }
+
+  .customer-project-head {
+    padding: 3.5rem 1rem;
+  }
+}
