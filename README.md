@@ -20,18 +20,11 @@ Current fallback destination:
 
 Current fallback sender:
 
-`Arkansas Land Pros <leads@hometownwebservicesar.cc>`
+`Arkansas Land Pros <leads@arkansaslandpros.com>`
 
-## Required staging environment variables
+## Marketplace production environment variables
 
-Copy `.env.example` into the environment configuration and set:
-
-- `RESEND_API_KEY`
-- `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
-- `TURNSTILE_SECRET_KEY`
-- `OPENAI_API_KEY`
-- `OPENAI_CHAT_MODEL` (defaults to `gpt-6-luna`)
-- `NEXT_PUBLIC_SITE_URL=https://www.arkansaslandpros.com`
+The production marketplace uses the ALP Supabase project, Stripe Checkout, Resend, Turnstile, OpenAI lead classification, and Vercel Cron. Copy the exact variable set from `.env.example` into Vercel. Prefer the new Supabase `SUPABASE_SECRET_KEY`; the code also accepts the legacy `SUPABASE_SERVICE_ROLE_KEY` as a fallback.
 
 ## SEO migration
 
@@ -57,3 +50,16 @@ The production canonical domain is `https://www.arkansaslandpros.com`. Keep `NEX
 The floating project assistant uses the OpenAI Responses API to have a natural intake conversation and extract a structured lead draft. It does not submit anything automatically: the visitor reviews the collected details, completes Turnstile verification, and explicitly presses **Send this request** before the existing lead-delivery endpoint is called.
 
 The API route is `/api/chat`. It uses `OPENAI_API_KEY` server-side only and defaults to `gpt-6-luna` unless `OPENAI_CHAT_MODEL` is set.
+
+
+## Contractor marketplace
+
+Contractors can join at `/pros/join`, create a public profile, choose services and service areas, preview matching leads, and unlock selected leads through Stripe Checkout. Full homeowner contact details are revealed only after webhook-confirmed payment.
+
+The Red Dirt account is pre-seeded for `reddirtpropertyservicesar@gmail.com`. Its private `house_owner` permission is attached automatically on the first magic-link sign-in and is never rendered on the public Red Dirt profile. House access to leads does not increment the paid unlock count.
+
+The test lead `ALP-TEST-001` is priced at $1.00, permits unlimited purchases, and can be enabled or disabled from the Red Dirt-only lead control page.
+
+Homeowners who supply an email receive a private project-status link. They can mark the project still looking, on hold, hired, or cancelled; a confirmed hire/cancellation removes the lead from sale.
+
+Standard leads default to two paid unlocks. The hourly Vercel Cron retires leads after their freshness window.

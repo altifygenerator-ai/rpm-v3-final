@@ -6,6 +6,8 @@ const nav = [
   { href: "/areas", label: "Areas" },
   { href: "/guides", label: "Property Guides" },
   { href: "/about", label: "How It Works" },
+  { href: "/pros", label: "For Pros" },
+  { href: "/pros", label: "For Contractors" },
 ];
 
 export default function SiteHeader() {

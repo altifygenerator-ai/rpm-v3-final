@@ -5,6 +5,7 @@ import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import VisualHero from "@/components/visual-hero";
 import JobRequestForm from "@/components/job-request-form";
+import PublicProStrip from "@/components/public-pro-strip";
 import { areaBySlug } from "@/data/areas";
 import { serviceBySlug } from "@/data/services";
 import {
@@ -12,13 +13,14 @@ import {
   localLandingKey,
   localLandingMap,
 } from "@/data/local-landings";
-import { getSiteUrl } from "@/lib/site-url";
+import { getPublicPros } from "@/lib/public-pros";
 
 type PageProps = {
   params: Promise<{ area: string; service: string }>;
 };
 
 export const dynamicParams = false;
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   return localLandings.map((landing) => ({
@@ -55,7 +57,8 @@ export default async function LocalServicePage({ params }: PageProps) {
 
   if (!area || !service || !landing) notFound();
 
-  const baseUrl = getSiteUrl();
+  const pros = await getPublicPros({ serviceSlug: service.slug, areaName: area.name, limit: 6 });
+
   const locationFaq = {
     q: `Can I get help with ${service.shortTitle.toLowerCase()} around ${area.name}?`,
     a: `Yes. Tell us where the property is and what needs done. Availability and the final scope depend on the service provider reviewing the property and project details.`,
@@ -140,6 +143,11 @@ export default async function LocalServicePage({ params }: PageProps) {
             />
           </aside>
         </section>
+
+        <PublicProStrip
+          title={`${service.shortTitle} contractors serving ${area.name}`}
+          pros={pros}
+        />
       </main>
       <SiteFooter />
     </>
