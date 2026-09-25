@@ -95,6 +95,7 @@ export default function RootLayout({
       <body className={`${headingFont.variable} ${bodyFont.variable}`}>
         {children}
         <LeadChat />
+        <GlobalClickTracker />
         <Analytics />
       </body>
     </html>
