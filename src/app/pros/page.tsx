@@ -4,6 +4,8 @@ import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import { createAdminClient } from "@/lib/supabase/admin";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Get Land-Service Leads in Arkansas | Join Arkansas Land Pros",
   description:
