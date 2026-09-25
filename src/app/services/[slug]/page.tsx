@@ -1,137 +1,83 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
-import EstimateCTA from "@/components/estimate-cta";
-import ContactSection from "@/components/contact-section";
-import { servicePages } from "@/data/service-pages";
-import { services } from "@/data/services";
-import { siteData } from "@/data/site";
+import Breadcrumbs from "@/components/breadcrumbs";
+import JobRequestForm from "@/components/job-request-form";
+import { services, serviceBySlug } from "@/data/services";
+import { priorityAreas } from "@/data/areas";
+import { localLandings } from "@/data/local-landings";
+import { getSiteUrl } from "@/lib/site-url";
 
 type PageProps = {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 };
-
-const baseUrl = "https://www.richardslandmanagementllc.com";
 
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return servicePages.map((service) => ({
-    slug: service.slug,
-  }));
+  return services.map((service) => ({ slug: service.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const page = servicePages.find((service) => service.slug === slug);
-
-  if (!page) return {};
+  const service = serviceBySlug.get(slug);
+  if (!service) return {};
 
   return {
-    title: page.metaTitle,
-    description: page.metaDescription,
-    alternates: {
-      canonical: `${baseUrl}/services/${page.slug}`,
-    },
+    title: service.title,
+    description: service.description,
+    alternates: { canonical: `/services/${service.slug}` },
     openGraph: {
-      title: page.metaTitle,
-      description: page.metaDescription,
-      url: `${baseUrl}/services/${page.slug}`,
-      type: "website",
-      images: [
-        {
-          url: page.image,
-          width: 1200,
-          height: 630,
-          alt: `${page.shortTitle} near Greers Ferry Arkansas`,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: page.metaTitle,
-      description: page.metaDescription,
-      images: [page.image],
+      title: service.title,
+      description: service.description,
+      url: `/services/${service.slug}`,
+      images: [{ url: service.image, alt: `${service.shortTitle} property work in Arkansas` }],
     },
   };
 }
 
 export default async function ServicePage({ params }: PageProps) {
   const { slug } = await params;
-  const page = servicePages.find((service) => service.slug === slug);
+  const service = serviceBySlug.get(slug);
+  if (!service) notFound();
 
-  if (!page) notFound();
+  const related = service.related
+    .map((relatedSlug) => serviceBySlug.get(relatedSlug))
+    .filter((item): item is NonNullable<typeof item> => Boolean(item));
 
-  const relatedServices = page.related
-    .map((relatedSlug) => services.find((service) => service.slug === relatedSlug))
-    .filter((service): service is (typeof services)[number] => Boolean(service));
+  const localPages = localLandings
+    .filter((landing) => landing.service === service.slug)
+    .slice(0, 10);
 
+  const baseUrl = getSiteUrl();
   const schema = [
     {
       "@context": "https://schema.org",
-      "@type": "Service",
-      name: page.title,
-      serviceType: page.shortTitle,
-      description: page.metaDescription,
-      image: `${baseUrl}${page.image}`,
-      url: `${baseUrl}/services/${page.slug}`,
-      provider: {
-        "@type": "LocalBusiness",
-        name: siteData.name,
-        url: baseUrl,
-        telephone: siteData.phone,
-        email: siteData.email,
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Greers Ferry",
-          addressRegion: "AR",
-          addressCountry: "US",
-        },
-      },
-      areaServed: siteData.serviceArea.map((area) => ({
-        "@type": "Place",
-        name: area,
-      })),
+      "@type": "WebPage",
+      name: service.title,
+      url: `${baseUrl}/services/${service.slug}`,
+      description: service.description,
+      isPartOf: { "@type": "WebSite", name: "Arkansas Land Pros", url: baseUrl },
     },
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: page.faqs.map((faq) => ({
+      mainEntity: service.faqs.map((faq) => ({
         "@type": "Question",
         name: faq.q,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: faq.a,
-        },
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
       })),
     },
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: `${baseUrl}/`,
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Services",
-          item: `${baseUrl}/#services`,
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: page.shortTitle,
-          item: `${baseUrl}/services/${page.slug}`,
-        },
+        { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
+        { "@type": "ListItem", position: 2, name: "Services", item: `${baseUrl}/services` },
+        { "@type": "ListItem", position: 3, name: service.shortTitle, item: `${baseUrl}/services/${service.slug}` },
       ],
     },
   ];
@@ -139,248 +85,115 @@ export default async function ServicePage({ params }: PageProps) {
   return (
     <>
       <SiteHeader />
-
       <main>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
 
-        <section className="relative min-h-[72vh] overflow-hidden pt-32">
-          <Image
-            src={page.image}
-            alt={`${page.shortTitle} near Greers Ferry Arkansas`}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
+        <section className="inner-hero">
+          <Breadcrumbs
+            items={[
+              { href: "/", label: "Home" },
+              { href: "/services", label: "Services" },
+              { label: service.shortTitle },
+            ]}
           />
-          <div className="absolute inset-0 bg-black/70" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#081812] via-transparent to-black/20" />
+          <p className="field-label field-label-light">ARKANSAS PROPERTY REQUEST</p>
+          <h1>{service.title}</h1>
+          <p>{service.description}</p>
+        </section>
 
-          <div className="container relative z-10 py-24">
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[var(--accent)]">
-              {page.eyebrow}
+        <section className="page-grid">
+          <article className="page-copy">
+            <div className="relative h-[340px] overflow-hidden border-l-[8px] border-[var(--clay)]">
+              <Image
+                src={service.image}
+                alt={`${service.shortTitle} property work in Arkansas`}
+                fill
+                priority
+                sizes="(min-width: 900px) 65vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+
+            <h2>What this request can cover</h2>
+            <p>
+              Start with what the property needs to become. The final scope may
+              change after access, terrain, drainage, material, utilities, and
+              the actual site are reviewed.
+            </p>
+            <ul>
+              {service.requests.map((request) => (
+                <li key={request}>{request}</li>
+              ))}
+            </ul>
+
+            <h2>What helps before someone looks at the job</h2>
+            <p>
+              Property location, approximate size, access, photos, timing, and
+              the end goal are usually more useful than trying to write a
+              contractor-style scope yourself. For water or driveway problems,
+              photos during or shortly after rain can help show what is actually
+              happening.
             </p>
 
-            <h1 className="mt-4 max-w-5xl text-white">{page.title}</h1>
-
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/80">
-              {page.intro}
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-4">
-              <a href="#contact" className="btn-primary">
-                {page.primaryCta}
-              </a>
-
-              <a href={siteData.phoneHref} className="btn-secondary">
-                Call {siteData.phone}
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {page.layoutVariant === "problemSolution" && (
-          <section className="section">
-            <div className="container grid gap-8 md:grid-cols-3">
-              {page.sections.map((section) => (
-                <div key={section.heading} className="card">
-                  {section.eyebrow && (
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-                      {section.eyebrow}
-                    </p>
-                  )}
-                  <h2 className="mt-3 text-2xl">{section.heading}</h2>
-                  <p className="mt-4 text-neutral-300">{section.text}</p>
+            {localPages.length > 0 && (
+              <>
+                <h2>Focused Arkansas pages for this work</h2>
+                <div className="link-board">
+                  {localPages.map((landing) => {
+                    const area = priorityAreas.find((item) => item.slug === landing.area);
+                    return (
+                      <Link
+                        href={`/areas/${landing.area}/${landing.service}`}
+                        key={`${landing.area}-${landing.service}`}
+                      >
+                        <strong>
+                          {service.shortTitle} in {area?.name ?? landing.area}
+                        </strong>
+                        <span>↗</span>
+                      </Link>
+                    );
+                  })}
                 </div>
+              </>
+            )}
+
+            <h2>Questions property owners ask</h2>
+            <div className="faq-list">
+              {service.faqs.map((faq) => (
+                <details key={faq.q}>
+                  <summary>{faq.q}</summary>
+                  <p>{faq.a}</p>
+                </details>
               ))}
             </div>
-          </section>
-        )}
 
-        {page.layoutVariant === "safetyCleanup" && (
-          <section className="section">
-            <div className="container grid items-start gap-12 md:grid-cols-[0.9fr_1.1fr]">
-              <div className="grid gap-4">
-                {page.galleryImages.slice(0, 2).map((image, index) => (
-                  <div
-                    key={image}
-                    className={`relative overflow-hidden rounded-lg ${
-                      index === 0 ? "h-[340px]" : "h-[220px]"
-                    }`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${page.shortTitle} project in Central Arkansas`}
-                      fill
-                      sizes="(min-width: 768px) 45vw, 100vw"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <div>
-                {page.sections.map((section) => (
-                  <div key={section.heading} className="mb-10">
-                    {section.eyebrow && (
-                      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-                        {section.eyebrow}
-                      </p>
-                    )}
-                    <h2 className="mt-3">{section.heading}</h2>
-                    <p className="mt-4 text-neutral-300">{section.text}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {page.layoutVariant === "processTerrain" && (
-          <section className="section">
-            <div className="container grid gap-12 md:grid-cols-[1.1fr_0.9fr]">
-              <div>
-                {page.sections.map((section) => (
-                  <div key={section.heading} className="mb-10">
-                    {section.eyebrow && (
-                      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-                        {section.eyebrow}
-                      </p>
-                    )}
-                    <h2 className="mt-3">{section.heading}</h2>
-                    <p className="mt-4 text-neutral-300">{section.text}</p>
-                  </div>
-                ))}
-              </div>
-
-              {page.process && (
-                <div className="card">
-                  <h3>How we approach the job</h3>
-
-                  <div className="mt-6 grid gap-4">
-                    {page.process.map((step, index) => (
-                      <div key={step} className="flex gap-4">
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-sm font-bold text-black">
-                          {index + 1}
-                        </span>
-                        <p className="text-neutral-300">{step}</p>
-                      </div>
-                    ))}
-                  </div>
+            {related.length > 0 && (
+              <>
+                <h2>Related property work</h2>
+                <div className="link-board">
+                  {related.map((item) => (
+                    <Link href={`/services/${item.slug}`} key={item.slug}>
+                      <strong>{item.shortTitle}</strong>
+                      <span>↗</span>
+                    </Link>
+                  ))}
                 </div>
-              )}
-            </div>
-          </section>
-        )}
+              </>
+            )}
+          </article>
 
-        <section className="section bg-[#071b15]">
-          <div className="container grid gap-10 md:grid-cols-[0.8fr_1.2fr]">
-            <div>
-              <h2>{page.bulletsTitle}</h2>
-              <p className="mt-4 text-neutral-300">
-                Every property is different, but these are some of the common
-                jobs we help with around Greers Ferry Lake and Central Arkansas.
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              {page.bullets.map((item) => (
-                <div
-                  key={item}
-                  className="rounded-lg border border-white/10 bg-white/[0.03] p-4 text-neutral-200"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
+          <aside className="page-aside">
+            <JobRequestForm
+              source={`service:${service.slug}`}
+              serviceDefault={service.shortTitle}
+              heading="Start with the property details."
+            />
+          </aside>
         </section>
-
-        <section className="section">
-          <div className="container">
-            <div className="grid gap-4 md:grid-cols-3">
-              {page.galleryImages.map((image) => (
-                <div key={image} className="relative h-[260px] overflow-hidden rounded-lg">
-                  <Image
-                    src={image}
-                    alt={`${page.shortTitle} work near Greers Ferry Arkansas`}
-                    fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                    className="object-cover transition duration-300 hover:scale-105"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section bg-[#071b15]">
-          <div className="container">
-            <h2>Service Areas</h2>
-
-            <p className="mt-4 max-w-2xl text-neutral-300">
-              We serve property owners around Greers Ferry Lake and Central
-              Arkansas, including:
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              {siteData.serviceArea.map((area) => (
-                <span
-                  key={area}
-                  className="rounded-full border border-white/10 px-4 py-2 text-sm text-white/80"
-                >
-                  {area}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="container">
-            <h2>Frequently Asked Questions</h2>
-
-            <div className="mt-8 grid gap-5">
-              {page.faqs.map((faq) => (
-                <div key={faq.q} className="card">
-                  <h3>{faq.q}</h3>
-                  <p className="mt-3 text-neutral-300">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {relatedServices.length > 0 && (
-          <section className="section bg-[#071b15]">
-            <div className="container">
-              <h2>Related Property Services</h2>
-
-              <div className="mt-8 grid gap-6 md:grid-cols-3">
-                {relatedServices.map((service) => (
-                  <Link
-                    key={service.slug}
-                    href={`/services/${service.slug}`}
-                    className="card group block"
-                  >
-                    <h3>{service.title}</h3>
-                    <p className="mt-2 text-neutral-300">{service.description}</p>
-                    <div className="mt-4 text-sm text-[var(--accent)]">
-                      View service →
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        <EstimateCTA />
-        <ContactSection />
       </main>
-
       <SiteFooter />
     </>
   );
