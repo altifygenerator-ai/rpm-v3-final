@@ -4,6 +4,14 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 
+type FulfillmentRow = {
+  lead_id: string;
+  contractor_id: string;
+  is_test: boolean;
+  counts_toward_limit: boolean;
+  newly_fulfilled: boolean;
+};
+
 export async function POST(request: Request) {
   const secretKey = process.env.STRIPE_SECRET_KEY;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -26,91 +34,73 @@ export async function POST(request: Request) {
 
   const admin = createAdminClient();
 
-  if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
+  if (
+    event.type === "checkout.session.completed" ||
+    event.type === "checkout.session.async_payment_succeeded"
+  ) {
     const session = event.data.object as Stripe.Checkout.Session;
     const purchaseId = session.metadata?.purchase_id;
-    const leadId = session.metadata?.lead_id;
-    const contractorId = session.metadata?.contractor_id;
 
-    if (purchaseId && leadId && contractorId && session.payment_status === "paid") {
-      const { data: purchase } = await admin
-        .from("lead_purchases")
-        .select("id,status,is_test")
-        .eq("id", purchaseId)
-        .maybeSingle();
+    if (purchaseId && session.payment_status === "paid") {
+      const paymentIntentId =
+        typeof session.payment_intent === "string" ? session.payment_intent : "";
 
-      if (purchase && purchase.status !== "paid") {
-        await admin
-          .from("lead_purchases")
-          .update({
-            status: "paid",
-            stripe_checkout_session_id: session.id,
-            stripe_payment_intent_id:
-              typeof session.payment_intent === "string" ? session.payment_intent : null,
-            paid_at: new Date().toISOString(),
-          })
-          .eq("id", purchaseId);
+      const { data, error } = await admin.rpc("fulfill_lead_purchase", {
+        p_purchase_id: purchaseId,
+        p_checkout_session_id: session.id,
+        p_payment_intent_id: paymentIntentId,
+      });
 
-        const { error: unlockError } = await admin.from("lead_unlocks").insert({
-          lead_id: leadId,
-          contractor_id: contractorId,
-          purchase_id: purchaseId,
-          unlock_type: "paid",
-          counts_toward_limit: true,
-        });
+      if (error) {
+        console.error("Marketplace purchase fulfillment failed", error);
+        return new Response("Fulfillment failed", { status: 500 });
+      }
 
-        if (!unlockError) {
-          const { data: lead } = await admin
-            .from("leads")
-            .select("paid_unlock_count,unlimited_unlocks,max_paid_unlocks,is_test")
-            .eq("id", leadId)
-            .single();
+      const fulfillment = (Array.isArray(data) ? data[0] : data) as
+        | FulfillmentRow
+        | undefined;
 
-          const nextCount = (lead?.paid_unlock_count || 0) + 1;
-          const max = lead?.max_paid_unlocks || 2;
-
-          await admin
-            .from("leads")
-            .update({
-              paid_unlock_count: nextCount,
-              ...(lead?.unlimited_unlocks
-                ? {}
-                : nextCount >= max
-                  ? { marketplace_status: "sold_out", marketplace_enabled: false }
-                  : {}),
-            })
-            .eq("id", leadId);
-
-          await admin.from("lead_events").insert({
-            lead_id: leadId,
-            contractor_id: contractorId,
-            event_type: "paid_unlock",
-            metadata: {
-              purchase_id: purchaseId,
-              checkout_session_id: session.id,
-              is_test: Boolean(lead?.is_test),
-            },
-          });
-
-          const { data: contractor } = await admin
+      if (fulfillment?.newly_fulfilled) {
+        const [{ data: contractor }, { data: purchase }] = await Promise.all([
+          admin
             .from("contractor_profiles")
             .select("email,business_name")
-            .eq("id", contractorId)
-            .single();
+            .eq("id", fulfillment.contractor_id)
+            .single(),
+          admin
+            .from("lead_purchases")
+            .select("is_test")
+            .eq("id", purchaseId)
+            .single(),
+        ]);
 
-          if (contractor && process.env.RESEND_API_KEY) {
-            const resend = new Resend(process.env.RESEND_API_KEY);
-            const baseUrl =
-              process.env.NEXT_PUBLIC_SITE_URL || "https://www.arkansaslandpros.com";
-            await resend.emails.send({
-              from:
-                process.env.MARKETPLACE_FROM_EMAIL ||
-                "Arkansas Land Pros <leads@arkansaslandpros.com>",
-              to: [contractor.email],
-              subject: purchase.is_test ? "Test lead unlocked successfully" : "Your Arkansas Land Pros lead is unlocked",
-              html: `<p>Payment succeeded and the full lead is now available in your contractor dashboard.</p><p><a href="${baseUrl}/pro/leads/${leadId}">Open the lead</a></p>`,
-            });
-          }
+        if (contractor && process.env.RESEND_API_KEY) {
+          const resend = new Resend(process.env.RESEND_API_KEY);
+          const baseUrl =
+            process.env.NEXT_PUBLIC_SITE_URL ||
+            "https://www.arkansaslandpros.com";
+
+          await resend.emails.send({
+            from:
+              process.env.MARKETPLACE_FROM_EMAIL ||
+              "Arkansas Land Pros <leads@arkansaslandpros.com>",
+            to: [contractor.email],
+            subject: purchase?.is_test
+              ? "Test lead unlocked successfully"
+              : "Your Arkansas Land Pros lead is unlocked",
+            html: `
+              <div style="font-family:Arial,sans-serif;max-width:620px;margin:auto;color:#171a1d">
+                <div style="background:#171a1d;color:#fff;padding:22px;border-top:7px solid #c64e32">
+                  <div style="font-size:12px;letter-spacing:.12em;color:#f0b4a5">ARKANSAS LAND PROS</div>
+                  <h1 style="font-size:24px;margin:6px 0 0">Lead unlocked</h1>
+                </div>
+                <div style="border:1px solid #d5dadd;border-top:0;padding:22px">
+                  <p>Payment succeeded and the full homeowner/project details are now available in your contractor dashboard.</p>
+                  <p><a href="${baseUrl}/pro/leads/${fulfillment.lead_id}" style="background:#c64e32;color:#fff;text-decoration:none;padding:12px 16px;display:inline-block;font-weight:bold">Open unlocked lead</a></p>
+                </div>
+              </div>
+            `,
+          });
         }
       }
     }

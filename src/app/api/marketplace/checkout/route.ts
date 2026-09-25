@@ -80,27 +80,38 @@ export async function POST(request: Request) {
         .eq("id", context.profile.id);
     }
 
-    const { data: purchase, error: purchaseError } = await admin
-      .from("lead_purchases")
-      .insert({
-        lead_id: lead.id,
-        contractor_id: context.profile.id,
-        amount_cents: lead.lead_price_cents,
-        status: "created",
-        is_test: lead.is_test,
-      })
-      .select("id")
-      .single();
+    const { data: purchaseId, error: reserveError } = await admin.rpc(
+      "reserve_lead_purchase",
+      {
+        p_lead_id: lead.id,
+        p_contractor_id: context.profile.id,
+        p_amount_cents: lead.lead_price_cents,
+      }
+    );
 
-    if (purchaseError || !purchase) throw purchaseError;
+    if (reserveError || !purchaseId) {
+      const reason = reserveError?.message || "This opportunity could not be reserved.";
+      const soldOut = /sold_out|not_available|already_unlocked/i.test(reason);
+      return Response.json(
+        {
+          success: false,
+          error: soldOut
+            ? "This opportunity is no longer available for purchase."
+            : "The lead could not be reserved. Please try again.",
+        },
+        { status: soldOut ? 409 : 500 }
+      );
+    }
 
     const baseUrl = getSiteUrl();
-    const session = await stripe.checkout.sessions.create({
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await stripe.checkout.sessions.create({
       mode: "payment",
       customer: stripeCustomerId,
       success_url: `${baseUrl}/pro/leads/${lead.id}?purchase=success`,
       cancel_url: `${baseUrl}/pro/leads/${lead.id}?purchase=cancelled`,
-      client_reference_id: purchase.id,
+      client_reference_id: purchaseId,
       line_items: [
         {
           quantity: 1,
@@ -118,20 +129,28 @@ export async function POST(request: Request) {
           },
         },
       ],
+      expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
       metadata: {
-        purchase_id: purchase.id,
+        purchase_id: String(purchaseId),
         lead_id: lead.id,
         contractor_id: context.profile.id,
         is_test: lead.is_test ? "true" : "false",
       },
       payment_intent_data: {
         metadata: {
-          purchase_id: purchase.id,
+          purchase_id: String(purchaseId),
           lead_id: lead.id,
           contractor_id: context.profile.id,
         },
       },
     });
+    } catch (stripeError) {
+      await admin
+        .from("lead_purchases")
+        .update({ status: "failed" })
+        .eq("id", purchaseId);
+      throw stripeError;
+    }
 
     await admin
       .from("lead_purchases")
@@ -139,7 +158,7 @@ export async function POST(request: Request) {
         stripe_checkout_session_id: session.id,
         status: "checkout_open",
       })
-      .eq("id", purchase.id);
+      .eq("id", purchaseId);
 
     return Response.json({ success: true, url: session.url });
   } catch (error) {
