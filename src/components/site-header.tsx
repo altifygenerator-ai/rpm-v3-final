@@ -6,7 +6,6 @@ const nav = [
   { href: "/areas", label: "Areas" },
   { href: "/guides", label: "Property Guides" },
   { href: "/about", label: "How It Works" },
-  { href: "/pros", label: "For Pros" },
   { href: "/pros", label: "For Contractors" },
 ];
 
@@ -38,6 +37,15 @@ export default function SiteHeader() {
           ))}
         </nav>
 
+        <div className="header-pro-actions" aria-label="Contractor account">
+          <Link href="/pros/sign-in" className="header-pro-login">
+            PRO LOGIN
+          </Link>
+          <Link href="/pros/join" className="header-pro-join">
+            JOIN FREE
+          </Link>
+        </div>
+
         <TrackedLink
           href="/contact"
           className="header-request"
@@ -55,6 +63,8 @@ export default function SiteHeader() {
                 {item.label}
               </Link>
             ))}
+            <Link href="/pros/join">Join as a contractor — free</Link>
+            <Link href="/pros/sign-in">Contractor login</Link>
             <Link href="/contact">Get project help</Link>
           </div>
         </details>
