@@ -178,16 +178,9 @@ export const stockImages = {
 export type StockImage = (typeof stockImages)[keyof typeof stockImages];
 
 export function imageForRegion(region: string): StockImage {
-  switch (region) {
-    case "Southwest Arkansas":
-      return stockImages.southwestRegion;
-    case "Hot Springs Area":
-      return stockImages.hotSpringsRegion;
-    case "Ouachita Mountains":
-      return stockImages.ouachitaRegion;
-    case "Greers Ferry Lake":
-      return stockImages.greersFerryRegion;
-    default:
-      return stockImages.centralRegion;
-  }
+  if (region.includes("Southwest")) return stockImages.southwestRegion;
+  if (region.includes("Hot Springs")) return stockImages.hotSpringsRegion;
+  if (region.includes("Ouachita")) return stockImages.ouachitaRegion;
+  if (region.includes("Greers Ferry")) return stockImages.greersFerryRegion;
+  return stockImages.centralRegion;
 }

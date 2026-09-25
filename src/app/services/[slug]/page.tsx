@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
-import Breadcrumbs from "@/components/breadcrumbs";
+import VisualHero from "@/components/visual-hero";
 import JobRequestForm from "@/components/job-request-form";
 import { services, serviceBySlug } from "@/data/services";
-import { priorityAreas } from "@/data/areas";
+import { areaBySlug } from "@/data/areas";
 import { localLandings } from "@/data/local-landings";
 import { getSiteUrl } from "@/lib/site-url";
 
@@ -34,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: service.title,
       description: service.description,
       url: `/services/${service.slug}`,
-      images: [{ url: service.image, alt: `${service.shortTitle} property work in Arkansas` }],
+      images: [{ url: service.image, alt: `${service.shortTitle} in Arkansas` }],
     },
   };
 }
@@ -56,11 +55,16 @@ export default async function ServicePage({ params }: PageProps) {
   const schema = [
     {
       "@context": "https://schema.org",
-      "@type": "WebPage",
+      "@type": "Service",
       name: service.title,
-      url: `${baseUrl}/services/${service.slug}`,
       description: service.description,
-      isPartOf: { "@type": "WebSite", name: "Arkansas Land Pros", url: baseUrl },
+      areaServed: { "@type": "State", name: "Arkansas" },
+      provider: {
+        "@type": "Organization",
+        name: "Arkansas Land Pros",
+        url: baseUrl,
+      },
+      url: `${baseUrl}/services/${service.slug}`,
     },
     {
       "@context": "https://schema.org",
@@ -70,15 +74,6 @@ export default async function ServicePage({ params }: PageProps) {
         name: faq.q,
         acceptedAnswer: { "@type": "Answer", text: faq.a },
       })),
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
-        { "@type": "ListItem", position: 2, name: "Services", item: `${baseUrl}/services` },
-        { "@type": "ListItem", position: 3, name: service.shortTitle, item: `${baseUrl}/services/${service.slug}` },
-      ],
     },
   ];
 
@@ -91,59 +86,48 @@ export default async function ServicePage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
 
-        <section className="inner-hero">
-          <Breadcrumbs
-            items={[
-              { href: "/", label: "Home" },
-              { href: "/services", label: "Services" },
-              { label: service.shortTitle },
-            ]}
-          />
-          <p className="field-label field-label-light">ARKANSAS PROPERTY REQUEST</p>
-          <h1>{service.title}</h1>
-          <p>{service.description}</p>
-        </section>
+        <VisualHero
+          breadcrumbs={[
+            { href: "/", label: "Home" },
+            { href: "/services", label: "Services" },
+            { label: service.shortTitle },
+          ]}
+          eyebrow="LAND & PROPERTY SERVICES"
+          title={service.title}
+          description={service.description}
+          image={service.image}
+          imageAlt={`${service.shortTitle} work in Arkansas`}
+          ctaHref="#project-details"
+          ctaLabel="Get help with this project"
+        />
 
         <section className="page-grid">
           <article className="page-copy">
-            <div className="relative h-[340px] overflow-hidden border-l-[8px] border-[var(--clay)]">
-              <Image
-                src={service.image}
-                alt={`${service.shortTitle} property work in Arkansas`}
-                fill
-                priority
-                sizes="(min-width: 900px) 65vw, 100vw"
-                className="object-cover"
-              />
-            </div>
-
-            <h2>What this request can cover</h2>
+            <h2>Common {service.shortTitle.toLowerCase()} jobs</h2>
             <p>
-              Start with what the property needs to become. The final scope may
-              change after access, terrain, drainage, material, utilities, and
-              the actual site are reviewed.
+              Every property is different, but these are some of the jobs that
+              commonly fall under {service.shortTitle.toLowerCase()}.
             </p>
             <ul>
-              {service.requests.map((request) => (
-                <li key={request}>{request}</li>
+              {service.requests.map((item) => (
+                <li key={item}>{item}</li>
               ))}
             </ul>
 
-            <h2>What helps before someone looks at the job</h2>
+            <h2>What helps someone understand the job</h2>
             <p>
-              Property location, approximate size, access, photos, timing, and
-              the end goal are usually more useful than trying to write a
-              contractor-style scope yourself. For water or driveway problems,
-              photos during or shortly after rain can help show what is actually
-              happening.
+              The property location, rough size, access, photos, timing, and what
+              you want the area to be used for afterward can make the first
+              conversation much more useful. For driveway or drainage problems,
+              photos during or just after rain can be especially helpful.
             </p>
 
-            {localPages.length > 0 && (
+            {localPages.length > 0 ? (
               <>
-                <h2>Focused Arkansas pages for this work</h2>
+                <h2>{service.shortTitle} in Arkansas communities</h2>
                 <div className="link-board">
                   {localPages.map((landing) => {
-                    const area = priorityAreas.find((item) => item.slug === landing.area);
+                    const area = areaBySlug.get(landing.area);
                     return (
                       <Link
                         href={`/areas/${landing.area}/${landing.service}`}
@@ -158,7 +142,7 @@ export default async function ServicePage({ params }: PageProps) {
                   })}
                 </div>
               </>
-            )}
+            ) : null}
 
             <h2>Questions property owners ask</h2>
             <div className="faq-list">
@@ -170,9 +154,9 @@ export default async function ServicePage({ params }: PageProps) {
               ))}
             </div>
 
-            {related.length > 0 && (
+            {related.length > 0 ? (
               <>
-                <h2>Related property work</h2>
+                <h2>Related land & property work</h2>
                 <div className="link-board">
                   {related.map((item) => (
                     <Link href={`/services/${item.slug}`} key={item.slug}>
@@ -182,14 +166,14 @@ export default async function ServicePage({ params }: PageProps) {
                   ))}
                 </div>
               </>
-            )}
+            ) : null}
           </article>
 
-          <aside className="page-aside">
+          <aside className="page-aside" id="project-details">
             <JobRequestForm
               source={`service:${service.slug}`}
               serviceDefault={service.shortTitle}
-              heading="Start with the property details."
+              heading={`Tell us about your ${service.shortTitle.toLowerCase()} project.`}
             />
           </aside>
         </section>

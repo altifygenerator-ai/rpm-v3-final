@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
-import Breadcrumbs from "@/components/breadcrumbs";
+import VisualHero from "@/components/visual-hero";
 import JobRequestForm from "@/components/job-request-form";
+import { stockImages } from "@/data/stock-images";
 
 export const metadata: Metadata = {
-  title: "Request Land or Property Work in Arkansas",
+  title: "Get Help With Land & Property Work in Arkansas",
   description:
-    "Send Arkansas Land Pros the property area, work type, timing, and job details for land clearing, dirt work, drainage, driveways, cleanup, hauling, and related property work.",
+    "Tell Arkansas Land Pros what needs done, where the property is, and how to reach you for land clearing, dirt work, drainage, driveways, cleanup, hauling, and related property work.",
   alternates: { canonical: "/contact" },
 };
 
@@ -16,53 +17,44 @@ export default function ContactPage() {
     <>
       <SiteHeader />
       <main>
-        <section className="inner-hero">
-          <Breadcrumbs items={[{ href: "/", label: "Home" }, { label: "Job Request" }]} />
-          <p className="field-label field-label-light">START WITH THE PROPERTY</p>
-          <h1>Send the rough details. No polished scope needed.</h1>
-          <p>
-            Tell us where the property is, what is getting in the way, and what
-            you want changed. That is enough to start the lead.
-          </p>
-        </section>
+        <VisualHero
+          breadcrumbs={[{ href: "/", label: "Home" }, { label: "Get Project Help" }]}
+          eyebrow="TELL US ABOUT THE PROPERTY"
+          title="Need work done? Send the basics and we’ll take it from there."
+          description="Where is the property? What needs changed? How soon are you hoping to get it handled? You do not need a polished scope or contractor terminology."
+          image={stockImages.generalProperty.src}
+          imageAlt={stockImages.generalProperty.alt}
+        />
 
         <section className="page-grid">
           <article className="page-copy">
-            <h2>What makes a useful request</h2>
-            <p>
-              Land jobs are easier to sort when the basics are clear. A short
-              description in normal language is better than guessing at
-              contractor terminology.
-            </p>
+            <h2>A few details make the first conversation easier</h2>
             <ul>
-              <li>Town or property area.</li>
-              <li>The closest work category.</li>
-              <li>What the property looks like now.</li>
-              <li>What you want it to look like or do afterward.</li>
+              <li>The town, property address, or nearest community.</li>
+              <li>What the property looks like now and what you want changed.</li>
               <li>Approximate acreage, driveway length, or project size if known.</li>
-              <li>Any slope, access, wet-ground, rock, utility, or disposal issue you already know about.</li>
+              <li>Photos of the work area, access, slope, drainage, or driveway if available.</li>
+              <li>Any timing, access, utility, wet-ground, rock, or haul-off concerns you already know about.</li>
             </ul>
 
-            <h2>What happens after it is sent</h2>
+            <h2>What happens next</h2>
             <p>
-              The request is delivered for review with its source and page
-              information attached. It may be shared with an independent
-              service provider that may be able to help with the project.
-              Estimates, scheduling, licensing, insurance, and the completed
-              work remain the responsibility of the contractor that accepts the
-              job.
+              Your project details are reviewed and may be shared with an
+              independent service provider that can take a closer look. The
+              provider handles its own estimate, scheduling, licensing,
+              insurance, permits, and completed work.
             </p>
 
-            <h2>Not an emergency line</h2>
+            <h2>For emergencies, call the right service first</h2>
             <p>
-              Do not use this form for downed power lines, active flooding that
-              threatens life or safety, gas leaks, fire, or other emergencies.
-              Contact the appropriate utility or emergency service first.
+              Do not use this form for downed power lines, gas leaks, fire,
+              immediate flood danger, or another emergency. Contact the
+              appropriate utility or emergency service first.
             </p>
           </article>
 
           <aside className="page-aside">
-            <JobRequestForm source="contact-page" heading="Send the job details." />
+            <JobRequestForm source="contact-page" heading="Tell us what needs done." />
           </aside>
         </section>
       </main>
