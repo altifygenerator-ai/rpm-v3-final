@@ -46,6 +46,10 @@ export async function POST(request: Request) {
       return Response.json({ success: false, error: "This opportunity is no longer available." }, { status: 409 });
     }
 
+    if (lead.is_test && context.profile.access_role !== "house_owner") {
+      return Response.json({ success: false, error: "Lead not found." }, { status: 404 });
+    }
+
     if (!lead.is_test && context.profile.access_role === "normal") {
       const { data: match } = await admin
         .from("lead_matches")

@@ -90,7 +90,7 @@ export async function getMarketplaceLeads(context: ContractorContext) {
     return data || [];
   }
 
-  const [{ data: matches }, { data: unlocks }, { data: testLeads }] = await Promise.all([
+  const [{ data: matches }, { data: unlocks }] = await Promise.all([
     admin
       .from("lead_matches")
       .select("lead_id")
@@ -100,21 +100,20 @@ export async function getMarketplaceLeads(context: ContractorContext) {
       .from("lead_unlocks")
       .select("lead_id")
       .eq("contractor_id", context.profile.id),
-    admin
-      .from("leads")
-      .select("*")
-      .eq("is_test", true)
-      .eq("test_enabled", true)
-      .eq("marketplace_enabled", true),
   ]);
 
   const ids = [...new Set([...(matches || []).map((r) => r.lead_id), ...(unlocks || []).map((r) => r.lead_id)])];
   const { data: matchedLeads } = ids.length
-    ? await admin.from("leads").select("*").in("id", ids).order("created_at", { ascending: false })
+    ? await admin
+        .from("leads")
+        .select("*")
+        .in("id", ids)
+        .eq("is_test", false)
+        .order("created_at", { ascending: false })
     : { data: [] as Record<string, unknown>[] };
 
   const byId = new Map<string, LeadRecord>();
-  [...((matchedLeads || []) as LeadRecord[]), ...((testLeads || []) as LeadRecord[])].forEach((lead) => byId.set(lead.id, lead));
+  ((matchedLeads || []) as LeadRecord[]).forEach((lead) => byId.set(lead.id, lead));
   return [...byId.values()].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
@@ -174,8 +173,10 @@ export async function getLeadForContractor(context: ContractorContext, leadId: s
       .maybeSingle(),
   ]);
 
+  if (lead.is_test) return null;
+
   const unlocked = Boolean(unlocks?.length);
-  const matched = Boolean(match) || (lead.is_test && lead.test_enabled);
+  const matched = Boolean(match);
   if (!unlocked && !matched) return null;
 
   return {
