@@ -6,8 +6,9 @@ import { localLandings } from "@/data/local-landings";
 import { areaBySlug } from "@/data/areas";
 import { serviceBySlug } from "@/data/services";
 import { imageForRegion, stockImages } from "@/data/stock-images";
+import { createAdminClient } from "@/lib/supabase/admin";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 const ORIGIN = "https://www.arkansaslandpros.com";
 
@@ -29,6 +30,25 @@ type SitemapEntry = {
 };
 
 export async function GET() {
+  let proEntries: SitemapEntry[] = [];
+  try {
+    const admin = createAdminClient();
+    const { data: pros } = await admin
+      .from("contractor_profiles")
+      .select("slug")
+      .eq("status", "active")
+      .eq("public_profile_enabled", true)
+      .order("business_name");
+
+    proEntries = (pros || []).map((pro) => ({
+      path: `/pros/${pro.slug}`,
+      priority: 0.66,
+      changefreq: "weekly" as const,
+    }));
+  } catch (error) {
+    console.error("Sitemap contractor lookup unavailable", error);
+  }
+
   const entries: SitemapEntry[] = [
     { path: "", priority: 1, changefreq: "weekly", image: stockImages.hero.src, imageTitle: "Arkansas land and property work" },
     { path: "/services", priority: 0.9, changefreq: "monthly", image: stockImages.generalProperty.src, imageTitle: "Land and property services in Arkansas" },
@@ -37,6 +57,8 @@ export async function GET() {
     { path: "/about", priority: 0.65, changefreq: "monthly", image: stockImages.cabinProperty.src, imageTitle: "How Arkansas Land Pros works" },
     { path: "/contact", priority: 0.92, changefreq: "monthly", image: stockImages.generalProperty.src, imageTitle: "Get help with Arkansas property work" },
     { path: "/gallery", priority: 0.72, changefreq: "monthly", image: stockImages.outdoorBuilds.src, imageTitle: "Arkansas land and property project types" },
+    { path: "/pros", priority: 0.78, changefreq: "weekly" },
+    { path: "/pros/join", priority: 0.58, changefreq: "monthly" },
     { path: "/privacy", priority: 0.3, changefreq: "monthly" },
     { path: "/terms", priority: 0.3, changefreq: "monthly" },
     ...services.map((service) => ({
@@ -80,6 +102,7 @@ export async function GET() {
             : "Arkansas land services",
       };
     }),
+    ...proEntries,
     ...guides.map((guide) => ({
       path: `/guides/${guide.slug}`,
       priority: 0.7,
