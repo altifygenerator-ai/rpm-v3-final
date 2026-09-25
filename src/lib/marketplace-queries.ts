@@ -108,10 +108,28 @@ export async function getLeadForContractor(context: ContractorContext, leadId: s
   if (!lead) return null;
 
   if (context.profile.access_role === "house_owner") {
-    return { lead: lead as LeadRecord, unlocked: true, matched: true, purchases: [] as PurchaseRecord[] };
+    const { data: contractorOutcome } = await admin
+      .from("contractor_lead_outcomes")
+      .select("status")
+      .eq("lead_id", leadId)
+      .eq("contractor_id", context.profile.id)
+      .maybeSingle();
+
+    return {
+      lead: lead as LeadRecord,
+      unlocked: true,
+      matched: true,
+      purchases: [] as PurchaseRecord[],
+      contractorOutcome: contractorOutcome?.status || null,
+    };
   }
 
-  const [{ data: unlocks }, { data: match }, { data: purchases }] = await Promise.all([
+  const [
+    { data: unlocks },
+    { data: match },
+    { data: purchases },
+    { data: contractorOutcome },
+  ] = await Promise.all([
     admin
       .from("lead_unlocks")
       .select("id,purchase_id,created_at")
@@ -130,13 +148,25 @@ export async function getLeadForContractor(context: ContractorContext, leadId: s
       .eq("lead_id", leadId)
       .eq("contractor_id", context.profile.id)
       .order("created_at", { ascending: false }),
+    admin
+      .from("contractor_lead_outcomes")
+      .select("status")
+      .eq("lead_id", leadId)
+      .eq("contractor_id", context.profile.id)
+      .maybeSingle(),
   ]);
 
   const unlocked = Boolean(unlocks?.length);
   const matched = Boolean(match) || (lead.is_test && lead.test_enabled);
   if (!unlocked && !matched) return null;
 
-  return { lead: lead as LeadRecord, unlocked, matched, purchases: (purchases || []) as PurchaseRecord[] };
+  return {
+    lead: lead as LeadRecord,
+    unlocked,
+    matched,
+    purchases: (purchases || []) as PurchaseRecord[],
+    contractorOutcome: contractorOutcome?.status || null,
+  };
 }
 
 export function canBuyLead(lead: LeadRecord, unlocked: boolean) {

@@ -19,7 +19,7 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
   const result = await getLeadForContractor(context, id);
   if (!result) notFound();
 
-  const { lead, unlocked, purchases } = result;
+  const { lead, unlocked, purchases, contractorOutcome } = result;
   const house = context.profile.access_role === "house_owner";
   const showFull = unlocked || house;
   const canBuy = canBuyLead(lead, unlocked);
@@ -65,7 +65,10 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
               <p>{lead.description}</p>
               {!lead.is_test ? (
                 <>
-                  <LeadOutcomeActions leadId={lead.id} />
+                  <LeadOutcomeActions
+                    leadId={lead.id}
+                    initialStatus={contractorOutcome || undefined}
+                  />
                   {context.profile.access_role === "normal" && latestPaid ? (
                     <LeadDisputeForm leadId={lead.id} purchaseId={latestPaid.id} />
                   ) : null}

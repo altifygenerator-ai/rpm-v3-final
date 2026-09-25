@@ -29,14 +29,25 @@ export async function POST(request: Request) {
     if (!unlock) return Response.json({ success: false, error: "Lead is not unlocked for your account." }, { status: 403 });
   }
 
-  await admin.from("lead_outcomes").upsert({
-    lead_id: leadId,
-    status,
-    contractor_reported_by: context.profile.id,
-    hired_contractor_id: status === "hired" ? context.profile.id : null,
-    customer_confirmed: false,
-    notes: notes || null,
-  });
+  const { error: outcomeError } = await admin
+    .from("contractor_lead_outcomes")
+    .upsert(
+      {
+        lead_id: leadId,
+        contractor_id: context.profile.id,
+        status,
+        notes: notes || null,
+      },
+      { onConflict: "lead_id,contractor_id" }
+    );
+
+  if (outcomeError) {
+    console.error("Contractor lead outcome update failed", outcomeError);
+    return Response.json(
+      { success: false, error: "Lead status could not be updated." },
+      { status: 500 }
+    );
+  }
 
   await admin.from("lead_events").insert({
     lead_id: leadId,

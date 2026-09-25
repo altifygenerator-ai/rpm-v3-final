@@ -10,8 +10,15 @@ const options = [
   ["completed", "Job completed"],
 ] as const;
 
-export default function LeadOutcomeActions({ leadId }: { leadId: string }) {
+export default function LeadOutcomeActions({
+  leadId,
+  initialStatus,
+}: {
+  leadId: string;
+  initialStatus?: string;
+}) {
   const [status, setStatus] = useState("");
+  const [savedStatus, setSavedStatus] = useState(initialStatus || "");
   const [message, setMessage] = useState("");
 
   async function update(value: string) {
@@ -23,13 +30,25 @@ export default function LeadOutcomeActions({ leadId }: { leadId: string }) {
       body: JSON.stringify({ leadId, status: value }),
     });
     const result = await response.json();
-    setMessage(result.success ? "Lead status updated." : result.error || "Could not update.");
+    if (result.success) {
+      setSavedStatus(value);
+      setMessage(
+        value === "hired"
+          ? "Marked as got the job. The project is only closed when the homeowner confirms it."
+          : "Lead status updated."
+      );
+    } else {
+      setMessage(result.error || "Could not update.");
+    }
     setStatus("");
   }
 
   return (
     <div className="outcome-actions">
       <strong>How did this lead go?</strong>
+      {savedStatus ? (
+        <small>Current status: {savedStatus.replace(/_/g, " ")}</small>
+      ) : null}
       <div>
         {options.map(([value, label]) => (
           <button key={value} type="button" onClick={() => update(value)} disabled={Boolean(status)}>
