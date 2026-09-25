@@ -18,16 +18,24 @@ export default function HouseLeadControls({
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState("");
+  const [error, setError] = useState("");
 
   async function action(value: string) {
     setBusy(value);
+    setError("");
     try {
-      await fetch(`/api/house/leads/${leadId}`, {
+      const response = await fetch(`/api/house/leads/${leadId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: value }),
       });
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "Could not update the lead.");
+      }
       router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not update the lead.");
     } finally {
       setBusy("");
     }
@@ -55,6 +63,7 @@ export default function HouseLeadControls({
           {testEnabled ? "Turn $1 test lead off" : "Turn $1 test lead on"}
         </button>
       ) : null}
+      {error ? <small className="house-control-error">{error}</small> : null}
     </div>
   );
 }

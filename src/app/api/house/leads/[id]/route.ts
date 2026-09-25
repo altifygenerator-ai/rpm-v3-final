@@ -60,7 +60,47 @@ export async function POST(request: Request, { params }: Props) {
     await expireOpenCheckouts(id, admin);
     await admin.from("leads").update({ marketplace_enabled: false, marketplace_status: "paused" }).eq("id", id);
   } else if (action === "resume") {
-    await admin.from("leads").update({ marketplace_enabled: true, marketplace_status: "available" }).eq("id", id);
+    const { data: lead } = await admin
+      .from("leads")
+      .select("paid_unlock_count,max_paid_unlocks,unlimited_unlocks,is_test,test_enabled,expires_at")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (!lead) {
+      return Response.json({ success: false, error: "Lead not found." }, { status: 404 });
+    }
+
+    if (lead.is_test && !lead.test_enabled) {
+      return Response.json(
+        { success: false, error: "Turn the test lead on before returning it to the marketplace." },
+        { status: 409 }
+      );
+    }
+
+    const max = lead.max_paid_unlocks ?? 2;
+    if (!lead.unlimited_unlocks && lead.paid_unlock_count >= max) {
+      return Response.json(
+        {
+          success: false,
+          error: "This lead has reached its paid unlock limit. Increase the limit or enable unlimited unlocks first.",
+        },
+        { status: 409 }
+      );
+    }
+
+    const expiresAt =
+      !lead.expires_at || new Date(lead.expires_at).getTime() <= Date.now()
+        ? new Date(Date.now() + 7 * 86400000).toISOString()
+        : lead.expires_at;
+
+    await admin
+      .from("leads")
+      .update({
+        marketplace_enabled: true,
+        marketplace_status: "available",
+        expires_at: expiresAt,
+      })
+      .eq("id", id);
   } else if (action === "cancel") {
     await expireOpenCheckouts(id, admin);
     await admin.from("leads").update({ marketplace_enabled: false, marketplace_status: "cancelled" }).eq("id", id);

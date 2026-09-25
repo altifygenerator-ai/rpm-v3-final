@@ -3486,3 +3486,14 @@ p {
     width: 70px;
   }
 }
+
+
+.house-control-error {
+  background: #fff2ee;
+  border-left: 4px solid var(--clay);
+  color: #812f22;
+  display: block;
+  font-size: .72rem;
+  line-height: 1.35;
+  padding: .6rem;
+}
