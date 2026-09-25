@@ -15,6 +15,7 @@ export async function POST(request: Request) {
   const websiteUrl = cleanText(body.websiteUrl, 240);
   const facebookUrl = cleanText(body.facebookUrl, 240);
   const description = cleanText(body.description, 1200);
+  const logoUrl = cleanText(body.logoUrl, 500);
   const city = cleanText(body.city, 100);
   const zip = cleanText(body.zip, 20);
   const services = Array.isArray(body.services)
@@ -43,6 +44,7 @@ export async function POST(request: Request) {
       website_url: websiteUrl || null,
       facebook_url: facebookUrl || null,
       description,
+      logo_url: logoUrl || null,
       city: city || null,
       zip: zip || null,
       status: "active",

@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import TurnstileWidget from "@/components/turnstile-widget";
 import { getAttribution, trackEvent } from "@/lib/tracking";
 
@@ -35,6 +36,7 @@ const welcome =
   "Hey — tell me a little about the property and what you're trying to get done. If you're not sure what to call the job, that's fine.";
 
 export default function LeadChat() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: welcome },
@@ -197,6 +199,8 @@ export default function LeadChat() {
     ["Timing", draft.timeline],
     ["Rough size", draft.propertySize],
   ].filter(([, value]) => value);
+
+  if (pathname.startsWith("/pro")) return null;
 
   return (
     <div className="lead-chat-shell">

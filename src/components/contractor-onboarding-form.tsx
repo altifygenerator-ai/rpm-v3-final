@@ -12,6 +12,7 @@ type Props = {
     websiteUrl?: string;
     facebookUrl?: string;
     description?: string;
+    logoUrl?: string;
     city?: string;
     zip?: string;
     services?: string[];
@@ -46,6 +47,7 @@ export default function ContractorOnboardingForm({ initial = {} }: Props) {
           phone: data.get("phone"),
           websiteUrl: data.get("websiteUrl"),
           facebookUrl: data.get("facebookUrl"),
+          logoUrl: data.get("logoUrl"),
           description: data.get("description"),
           city: data.get("city"),
           zip: data.get("zip"),
@@ -90,7 +92,11 @@ export default function ContractorOnboardingForm({ initial = {} }: Props) {
           <span>Website</span>
           <input name="websiteUrl" type="url" defaultValue={initial.websiteUrl} placeholder="https://" />
         </label>
-        <label className="pro-span">
+        <label>
+          <span>Logo image URL <small>optional</small></span>
+          <input name="logoUrl" type="url" defaultValue={initial.logoUrl} placeholder="https://..." />
+        </label>
+        <label>
           <span>Facebook page <small>optional</small></span>
           <input name="facebookUrl" type="url" defaultValue={initial.facebookUrl} placeholder="https://facebook.com/..." />
         </label>
