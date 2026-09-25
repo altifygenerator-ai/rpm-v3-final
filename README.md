@@ -29,6 +29,8 @@ Copy `.env.example` into the environment configuration and set:
 - `RESEND_API_KEY`
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
 - `TURNSTILE_SECRET_KEY`
+- `OPENAI_API_KEY`
+- `OPENAI_CHAT_MODEL` (defaults to `gpt-6-luna`)
 - `NEXT_PUBLIC_SITE_URL` when a final/staging canonical URL is known
 
 ## SEO migration
@@ -48,3 +50,10 @@ The rebuild intentionally preserves the existing high-value service slugs where 
 - `/services/welding`
 
 When the new domain is selected, set `NEXT_PUBLIC_SITE_URL`. The old Richards domain can then be pointed to the same deployment and page-for-page redirects/canonical migration can be finalized without changing the core content architecture.
+
+
+## Conversational project assistant
+
+The floating project assistant uses the OpenAI Responses API to have a natural intake conversation and extract a structured lead draft. It does not submit anything automatically: the visitor reviews the collected details, completes Turnstile verification, and explicitly presses **Send this request** before the existing lead-delivery endpoint is called.
+
+The API route is `/api/chat`. It uses `OPENAI_API_KEY` server-side only and defaults to `gpt-6-luna` unless `OPENAI_CHAT_MODEL` is set.
