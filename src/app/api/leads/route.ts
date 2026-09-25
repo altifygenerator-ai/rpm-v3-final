@@ -4,6 +4,8 @@ import { analyzeLead } from "@/lib/lead-intelligence";
 import { createMatchesAndNotify } from "@/lib/lead-matching";
 import { cleanText, DEFAULT_MAX_UNLOCKS } from "@/lib/marketplace";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getSiteUrl } from "@/lib/site-url";
+import { hashProjectToken, makeProjectToken } from "@/lib/customer-project";
 import { verifyTurnstile } from "@/lib/turnstile";
 
 export const runtime = "nodejs";
@@ -218,6 +220,28 @@ export async function POST(request: Request) {
       },
     });
 
+    let customerProjectUrl: string | null = null;
+
+    if (email) {
+      const projectToken = makeProjectToken();
+      const projectTokenHash = hashProjectToken(projectToken);
+
+      const { error: accessError } = await admin
+        .from("lead_customer_access")
+        .upsert({
+          lead_id: lead.id,
+          token_hash: projectTokenHash,
+          customer_email: email,
+          expires_at: new Date(Date.now() + 180 * 86400000).toISOString(),
+        });
+
+      if (accessError) {
+        console.error("Customer project access token could not be stored", accessError);
+      } else {
+        customerProjectUrl = `${getSiteUrl()}/project/${projectToken}`;
+      }
+    }
+
     const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
     if (resend) {
       const attributionRows = [
@@ -281,8 +305,48 @@ export async function POST(request: Request) {
       } else {
         console.error("Red Dirt lead email failed", emailResult.error);
       }
+
+      if (email && customerProjectUrl) {
+        const customerEmail = await resend.emails.send({
+          from:
+            process.env.PROJECT_FROM_EMAIL ||
+            process.env.RESEND_FROM_EMAIL ||
+            "Arkansas Land Pros <leads@arkansaslandpros.com>",
+          to: [email],
+          subject: `We received your Arkansas Land Pros project — ${publicCode}`,
+          html: `
+            <div style="font-family:Arial,sans-serif;color:#171a1d;max-width:660px;margin:0 auto">
+              <div style="background:#171a1d;color:#fff;padding:22px 26px;border-top:7px solid #c64e32">
+                <div style="font-size:12px;letter-spacing:.14em;color:#f0b4a5">ARKANSAS LAND PROS</div>
+                <h1 style="font-size:24px;margin:7px 0 0">We got your project details</h1>
+              </div>
+              <div style="border:1px solid #d7dce0;border-top:0;padding:26px">
+                <p><strong>Reference:</strong> ${escapeHtml(publicCode)}</p>
+                <p><strong>Project:</strong> ${escapeHtml(intelligence.summary)}</p>
+                <p><strong>Area:</strong> ${escapeHtml(area)}</p>
+                <p>We may share the project with independent service providers that fit the work and location so they can decide whether to follow up.</p>
+                <p style="margin:24px 0">
+                  <a href="${customerProjectUrl}" style="background:#c64e32;color:#fff;text-decoration:none;padding:12px 16px;display:inline-block;font-weight:bold">
+                    View or update my project
+                  </a>
+                </p>
+                <p style="font-size:13px;color:#68737a">Use that private link later to tell us you are still looking, put the project on hold, confirm who you hired, or close the project.</p>
+              </div>
+            </div>
+          `,
+        });
+
+        if (customerEmail.error) {
+          console.error("Customer project confirmation email failed", customerEmail.error);
+        } else {
+          await admin.from("lead_events").insert({
+            lead_id: lead.id,
+            event_type: "customer_project_link_sent",
+          });
+        }
+      }
     } else {
-      console.error("RESEND_API_KEY missing; lead stored but Red Dirt copy not emailed.");
+      console.error("RESEND_API_KEY missing; lead stored but notification emails were not sent.");
     }
 
     try {
