@@ -1,4 +1,3 @@
-import { createHash, randomBytes } from "node:crypto";
 import { Resend } from "resend";
 import { leadDestinationEmail, resendFrom } from "@/data/site";
 import { analyzeLead } from "@/lib/lead-intelligence";
@@ -221,29 +220,6 @@ export async function POST(request: Request) {
       },
     });
 
-    let customerStatusUrl = "";
-    if (email) {
-      const rawProjectToken = randomBytes(32).toString("base64url");
-      const tokenHash = createHash("sha256").update(rawProjectToken).digest("hex");
-      const { error: accessError } = await admin
-        .from("customer_project_access")
-        .upsert(
-          {
-            lead_id: lead.id,
-            token_hash: tokenHash,
-          },
-          { onConflict: "lead_id" }
-        );
-
-      if (!accessError) {
-        const baseUrl =
-          process.env.NEXT_PUBLIC_SITE_URL || "https://www.arkansaslandpros.com";
-        customerStatusUrl = `${baseUrl}/project/${rawProjectToken}`;
-      } else {
-        console.error("Customer project access token failed", accessError);
-      }
-    }
-
     let customerProjectUrl: string | null = null;
 
     if (email) {
@@ -317,38 +293,6 @@ export async function POST(request: Request) {
         headers: { "X-Entity-Ref-ID": publicCode },
       });
 
-      if (email && customerStatusUrl) {
-        const customerEmailResult = await resend.emails.send({
-          from: resendFrom,
-          to: [email],
-          subject: `We received your Arkansas Land Pros project — ${publicCode}`,
-          html: `
-            <div style="font-family:Arial,sans-serif;color:#171a1d;max-width:680px;margin:0 auto">
-              <div style="background:#171a1d;color:#fff;padding:22px 26px;border-top:7px solid #c64e32">
-                <div style="font-size:12px;letter-spacing:.14em;color:#f0b4a5">ARKANSAS LAND PROS</div>
-                <h1 style="font-size:24px;margin:7px 0 0">We got your project details.</h1>
-              </div>
-              <div style="border:1px solid #d7dce0;border-top:0;padding:26px">
-                <p><strong>Reference:</strong> ${escapeHtml(publicCode)}</p>
-                <p><strong>Property area:</strong> ${escapeHtml(area)}</p>
-                <p><strong>Work:</strong> ${escapeHtml(intelligence.serviceSlug.replace(/-/g, " "))}</p>
-                <p>We can use your private project page to keep the marketplace current. If you hire someone, put the project on hold, or decide not to move forward, you can update it there.</p>
-                <p><a href="${customerStatusUrl}" style="background:#c64e32;color:#fff;text-decoration:none;padding:12px 16px;display:inline-block;font-weight:bold">View or update my project</a></p>
-                <p style="font-size:12px;color:#68737a">Keep this link private. It allows access to your project-status controls.</p>
-              </div>
-            </div>
-          `,
-        });
-        if (customerEmailResult.error) {
-          console.error("Customer confirmation email failed", customerEmailResult.error);
-        } else {
-          await admin.from("lead_events").insert({
-            lead_id: lead.id,
-            event_type: "customer_confirmation_sent",
-          });
-        }
-      }
-
       if (!emailResult.error) {
         await admin
           .from("leads")
@@ -397,7 +341,7 @@ export async function POST(request: Request) {
         } else {
           await admin.from("lead_events").insert({
             lead_id: lead.id,
-            event_type: "customer_project_link_sent",
+            event_type: "customer_confirmation_sent",
           });
         }
       }
