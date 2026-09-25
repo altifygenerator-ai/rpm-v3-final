@@ -30,7 +30,7 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
       <header className="pro-page-head">
         <p className="field-label">{lead.is_test ? "TEST MARKETPLACE LEAD" : "MATCHING OPPORTUNITY"}</p>
         <h1>{lead.service_slug.replace(/-/g, " ")} — {lead.city || lead.area}</h1>
-        <p>{lead.ai_summary || lead.description}</p>
+        <p>{lead.ai_summary || (showFull ? lead.description : "Project details available after unlock.")}</p>
       </header>
 
       {query.purchase === "success" && !unlocked ? (

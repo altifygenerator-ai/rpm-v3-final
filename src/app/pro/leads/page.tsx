@@ -36,7 +36,7 @@ export default async function LeadsPage() {
               </div>
               <strong>{lead.service_slug.replace(/-/g, " ")}</strong>
               <h2>{lead.city || lead.area}</h2>
-              <p>{lead.ai_summary || lead.description}</p>
+              <p>{lead.ai_summary || "Project details available after unlock."}</p>
               <div className="lead-card-meta">
                 {lead.property_size ? <span>{lead.property_size}</span> : null}
                 {lead.timeline ? <span>{lead.timeline}</span> : null}
