@@ -23,6 +23,13 @@ export default async function LeadsPage() {
         </p>
       </header>
 
+      {context.profile.status === "suspended" ? (
+        <div className="pro-notice">
+          New lead previews are hidden while this account is suspended. Previously
+          unlocked leads remain available below.
+        </div>
+      ) : null}
+
       <div className="lead-market-grid">
         {leads.map((lead) => {
           const available = isLeadAvailable(lead);

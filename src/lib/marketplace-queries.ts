@@ -72,6 +72,24 @@ export async function getMarketplaceLeads(context: ContractorContext) {
     return data || [];
   }
 
+  if (context.profile.status !== "active") {
+    const { data: unlocks } = await admin
+      .from("lead_unlocks")
+      .select("lead_id")
+      .eq("contractor_id", context.profile.id);
+
+    const ids = [...new Set((unlocks || []).map((row) => row.lead_id))];
+    if (!ids.length) return [];
+
+    const { data } = await admin
+      .from("leads")
+      .select("*")
+      .in("id", ids)
+      .order("created_at", { ascending: false });
+
+    return data || [];
+  }
+
   const [{ data: matches }, { data: unlocks }, { data: testLeads }] = await Promise.all([
     admin
       .from("lead_matches")

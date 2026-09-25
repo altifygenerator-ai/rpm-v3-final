@@ -126,7 +126,10 @@ export async function POST(request: Request) {
       logo_url: logoUrl ?? null,
       city: city || null,
       zip: zip || null,
-      status: "active",
+      status:
+        context.profile.status === "suspended"
+          ? "suspended"
+          : "active",
       onboarding_completed: true,
     })
     .eq("id", profileId);

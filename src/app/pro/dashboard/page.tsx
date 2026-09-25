@@ -32,8 +32,22 @@ export default async function DashboardPage() {
         <p>Manage your listing, review matching opportunities, and keep track of the leads you unlock.</p>
       </header>
 
+      {context.profile.status === "suspended" ? (
+        <div className="pro-notice">
+          Marketplace access is suspended. You can still review leads you already
+          purchased and update your business information, but new opportunities
+          are not shown until the account is reactivated.
+        </div>
+      ) : null}
+
       <section className="pro-stat-row">
-        <div><span>Matching opportunities</span><strong>{context.profile.access_role === "house_owner" ? leads.filter((lead) => lead.marketplace_status === "available").length : openMatches || 0}</strong></div>
+        <div><span>Matching opportunities</span><strong>{
+          context.profile.access_role === "house_owner"
+            ? leads.filter((lead) => lead.marketplace_status === "available").length
+            : context.profile.status === "active"
+              ? openMatches || 0
+              : 0
+        }</strong></div>
         <div><span>Paid unlocks</span><strong>{paidCount || 0}</strong></div>
         <div><span>Public profile</span><strong>{context.profile.public_profile_enabled ? "Live" : "Hidden"}</strong></div>
       </section>

@@ -23,6 +23,7 @@ export default async function OnboardingPage() {
           websiteUrl: context.profile.website_url || "",
           facebookUrl: context.profile.facebook_url || "",
           description: context.profile.description || "",
+          logoUrl: context.profile.logo_url || "",
           city: context.profile.city || "",
           zip: context.profile.zip || "",
           services: related.services.filter((s) => s.enabled).map((s) => s.service_slug),
