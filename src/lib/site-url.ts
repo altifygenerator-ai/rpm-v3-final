@@ -8,5 +8,5 @@ export function getSiteUrl() {
   const preview = process.env.VERCEL_URL?.trim();
   if (preview) return `https://${preview.replace(/\/$/, "")}`;
 
-  return "http://localhost:3000";
+  return "https://www.arkansaslandpros.com";
 }
