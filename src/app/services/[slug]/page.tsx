@@ -5,16 +5,19 @@ import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import VisualHero from "@/components/visual-hero";
 import JobRequestForm from "@/components/job-request-form";
+import PublicProStrip from "@/components/public-pro-strip";
 import { services, serviceBySlug } from "@/data/services";
 import { areaBySlug } from "@/data/areas";
 import { localLandings } from "@/data/local-landings";
 import { getSiteUrl } from "@/lib/site-url";
+import { getPublicPros } from "@/lib/public-pros";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
 export const dynamicParams = false;
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   return services.map((service) => ({ slug: service.slug }));
@@ -51,6 +54,7 @@ export default async function ServicePage({ params }: PageProps) {
     .filter((landing) => landing.service === service.slug)
     .slice(0, 10);
 
+  const pros = await getPublicPros({ serviceSlug: service.slug, limit: 6 });
   const baseUrl = getSiteUrl();
   const schema = [
     {
@@ -177,6 +181,11 @@ export default async function ServicePage({ params }: PageProps) {
             />
           </aside>
         </section>
+
+        <PublicProStrip
+          title={`Contractors listed for ${service.shortTitle.toLowerCase()}`}
+          pros={pros}
+        />
       </main>
       <SiteFooter />
     </>
