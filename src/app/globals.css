@@ -2315,7 +2315,8 @@ p {
   margin-top: 1.4rem;
 }
 
-.pro-sidebar nav a {
+.pro-sidebar nav a,
+.pro-sidebar nav button {
   border-bottom: 1px solid #343b41;
   font-family: var(--font-heading);
   font-weight: 700;
@@ -2323,7 +2324,20 @@ p {
   text-transform: uppercase;
 }
 
-.pro-sidebar nav a:hover {
+.pro-sidebar nav button {
+  background: transparent;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  color: inherit;
+  cursor: pointer;
+  font-size: inherit;
+  text-align: left;
+  width: 100%;
+}
+
+.pro-sidebar nav a:hover,
+.pro-sidebar nav button:hover {
   color: #f0b4a5;
 }
 
