@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const status = cleanText(body.status, 40);
     const hiredContractorId = cleanText(body.hiredContractorId, 80);
 
-    if (!token || !["still_looking", "paused", "hired", "project_cancelled"].includes(status)) {
+    if (!token || !["still_looking", "on_hold", "hired", "project_cancelled"].includes(status)) {
       return Response.json(
         { success: false, error: "Invalid project update." },
         { status: 400 }

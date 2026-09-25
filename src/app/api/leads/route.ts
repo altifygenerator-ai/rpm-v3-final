@@ -6,7 +6,7 @@ import { createMatchesAndNotify } from "@/lib/lead-matching";
 import { cleanText, DEFAULT_MAX_UNLOCKS } from "@/lib/marketplace";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSiteUrl } from "@/lib/site-url";
-import { hashProjectToken, makeProjectToken } from "@/lib/customer-project";
+import { createHash } from "node:crypto";
 import { verifyTurnstile } from "@/lib/turnstile";
 
 export const runtime = "nodejs";
@@ -247,11 +247,11 @@ export async function POST(request: Request) {
     let customerProjectUrl: string | null = null;
 
     if (email) {
-      const projectToken = makeProjectToken();
-      const projectTokenHash = hashProjectToken(projectToken);
+      const projectToken = `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-/g, "");
+      const projectTokenHash = createHash("sha256").update(projectToken).digest("hex");
 
       const { error: accessError } = await admin
-        .from("lead_customer_access")
+        .from("customer_project_access")
         .upsert({
           lead_id: lead.id,
           token_hash: projectTokenHash,

@@ -70,10 +70,10 @@ export default function ProjectStatusForm({
 
       <button
         type="button"
-        onClick={() => update("paused")}
+        onClick={() => update("on_hold")}
         disabled={Boolean(busy)}
       >
-        {busy === "paused" ? "Updating…" : "Put the project on hold"}
+        {busy === "on_hold" ? "Updating…" : "Put the project on hold"}
       </button>
 
       <div className="project-hired-box">
