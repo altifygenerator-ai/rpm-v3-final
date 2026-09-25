@@ -23,6 +23,10 @@ jobs:
           cache: npm
       - name: Install
         run: npm ci
+      - name: Production dependency audit
+        continue-on-error: true
+        run: npm audit --omit=dev
+
       - name: Lint
         run: npm run lint
       - name: Build
