@@ -26,7 +26,9 @@ export default function ProDashboardShell({
               <Link href="/pro/disputes">Lead reviews</Link>
             </>
           ) : null}
-          <Link href="/pro/logout">Sign out</Link>
+          <form action="/pro/logout" method="post">
+            <button type="submit">Sign out</button>
+          </form>
         </nav>
       </aside>
       <main className="pro-dashboard-main">{children}</main>
