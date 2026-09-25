@@ -12,7 +12,6 @@ import {
   localLandingKey,
   localLandingMap,
 } from "@/data/local-landings";
-import { getSiteUrl } from "@/lib/site-url";
 
 type PageProps = {
   params: Promise<{ area: string; service: string }>;
@@ -55,7 +54,6 @@ export default async function LocalServicePage({ params }: PageProps) {
 
   if (!area || !service || !landing) notFound();
 
-  const baseUrl = getSiteUrl();
   const locationFaq = {
     q: `Can I get help with ${service.shortTitle.toLowerCase()} around ${area.name}?`,
     a: `Yes. Tell us where the property is and what needs done. Availability and the final scope depend on the service provider reviewing the property and project details.`,

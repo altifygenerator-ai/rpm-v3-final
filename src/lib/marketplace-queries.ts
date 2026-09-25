@@ -2,6 +2,48 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import type { ContractorContext } from "@/lib/contractor-auth";
 import { isLeadAvailable } from "@/lib/marketplace";
 
+export type LeadRecord = {
+  id: string;
+  public_code: string;
+  source: string;
+  customer_name: string;
+  customer_phone: string;
+  customer_email: string | null;
+  property_address: string | null;
+  area: string;
+  city: string | null;
+  county: string | null;
+  state: string;
+  zip: string | null;
+  service_slug: string;
+  original_service: string | null;
+  description: string;
+  ai_summary: string | null;
+  timeline: string | null;
+  property_size: string | null;
+  quality_score: number;
+  quality_band: string;
+  lead_price_cents: number;
+  marketplace_status: string;
+  marketplace_enabled: boolean;
+  max_paid_unlocks: number | null;
+  unlimited_unlocks: boolean;
+  paid_unlock_count: number;
+  expires_at: string | null;
+  is_test: boolean;
+  test_enabled: boolean;
+  created_at: string;
+};
+
+export type PurchaseRecord = {
+  id: string;
+  status: string;
+  amount_cents: number;
+  is_test: boolean;
+  paid_at: string | null;
+  created_at: string;
+};
+
 export async function getContractorServicesAndTerritories(contractorId: string) {
   const admin = createAdminClient();
   const [{ data: services }, { data: territories }, { data: preferences }] =
@@ -53,8 +95,8 @@ export async function getMarketplaceLeads(context: ContractorContext) {
     ? await admin.from("leads").select("*").in("id", ids).order("created_at", { ascending: false })
     : { data: [] as Record<string, unknown>[] };
 
-  const byId = new Map<string, any>();
-  [...(matchedLeads || []), ...(testLeads || [])].forEach((lead: any) => byId.set(lead.id, lead));
+  const byId = new Map<string, LeadRecord>();
+  [...((matchedLeads || []) as LeadRecord[]), ...((testLeads || []) as LeadRecord[])].forEach((lead) => byId.set(lead.id, lead));
   return [...byId.values()].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
@@ -66,7 +108,7 @@ export async function getLeadForContractor(context: ContractorContext, leadId: s
   if (!lead) return null;
 
   if (context.profile.access_role === "house_owner") {
-    return { lead, unlocked: true, matched: true, purchases: [] };
+    return { lead: lead as LeadRecord, unlocked: true, matched: true, purchases: [] as PurchaseRecord[] };
   }
 
   const [{ data: unlocks }, { data: match }, { data: purchases }] = await Promise.all([
@@ -94,10 +136,10 @@ export async function getLeadForContractor(context: ContractorContext, leadId: s
   const matched = Boolean(match) || (lead.is_test && lead.test_enabled);
   if (!unlocked && !matched) return null;
 
-  return { lead, unlocked, matched, purchases: purchases || [] };
+  return { lead: lead as LeadRecord, unlocked, matched, purchases: (purchases || []) as PurchaseRecord[] };
 }
 
-export function canBuyLead(lead: any, unlocked: boolean) {
+export function canBuyLead(lead: LeadRecord, unlocked: boolean) {
   if (lead.is_test) return isLeadAvailable(lead);
   if (unlocked) return false;
   return isLeadAvailable(lead);

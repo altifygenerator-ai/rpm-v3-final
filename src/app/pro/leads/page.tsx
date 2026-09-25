@@ -24,7 +24,7 @@ export default async function LeadsPage() {
       </header>
 
       <div className="lead-market-grid">
-        {leads.map((lead:any) => {
+        {leads.map((lead) => {
           const available = isLeadAvailable(lead);
           const max = lead.max_paid_unlocks || 2;
           const remaining = lead.unlimited_unlocks ? null : Math.max(0, max - lead.paid_unlock_count);

@@ -21,7 +21,7 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
   const house = context.profile.access_role === "house_owner";
   const showFull = unlocked || house;
   const canBuy = canBuyLead(lead, unlocked);
-  const latestPaid = purchases.find((p:any) => p.status === "paid");
+  const latestPaid = purchases.find((purchase) => purchase.status === "paid");
 
   return (
     <ProDashboardShell context={context}>

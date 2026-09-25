@@ -33,7 +33,7 @@ export default async function DashboardPage() {
       </header>
 
       <section className="pro-stat-row">
-        <div><span>Matching opportunities</span><strong>{context.profile.access_role === "house_owner" ? leads.filter((l:any)=>l.marketplace_status==="available").length : openMatches || 0}</strong></div>
+        <div><span>Matching opportunities</span><strong>{context.profile.access_role === "house_owner" ? leads.filter((lead) => lead.marketplace_status === "available").length : openMatches || 0}</strong></div>
         <div><span>Paid unlocks</span><strong>{paidCount || 0}</strong></div>
         <div><span>Public profile</span><strong>{context.profile.public_profile_enabled ? "Live" : "Hidden"}</strong></div>
       </section>
