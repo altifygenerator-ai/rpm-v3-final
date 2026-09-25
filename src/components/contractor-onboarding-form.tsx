@@ -17,6 +17,8 @@ type Props = {
     zip?: string;
     services?: string[];
     territories?: string[];
+    maxLeadPriceDollars?: string;
+    emailNotifications?: boolean;
   };
 };
 
@@ -53,6 +55,8 @@ export default function ContractorOnboardingForm({ initial = {} }: Props) {
           zip: data.get("zip"),
           services: selected,
           territories,
+          maxLeadPriceDollars: data.get("maxLeadPriceDollars"),
+          emailNotifications: data.get("emailNotifications") === "on",
         }),
       });
       const result = await response.json();
@@ -127,6 +131,33 @@ export default function ContractorOnboardingForm({ initial = {} }: Props) {
           ))}
         </div>
       </fieldset>
+
+      <div className="pro-lead-preferences">
+        <strong>Lead preferences</strong>
+        <p>Use these to keep the marketplace focused on opportunities that make sense for your business.</p>
+        <div>
+          <label>
+            <span>Maximum lead price <small>optional</small></span>
+            <input
+              name="maxLeadPriceDollars"
+              type="number"
+              min="5"
+              max="500"
+              step="1"
+              defaultValue={initial.maxLeadPriceDollars}
+              placeholder="No limit"
+            />
+          </label>
+          <label className="house-check">
+            <input
+              name="emailNotifications"
+              type="checkbox"
+              defaultChecked={initial.emailNotifications !== false}
+            />
+            <span>Email me when matching leads come in</span>
+          </label>
+        </div>
+      </div>
 
       <label className="pro-territories">
         <span>Service areas</span>

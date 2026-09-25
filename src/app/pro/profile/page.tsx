@@ -28,6 +28,11 @@ export default async function ProfilePage() {
           zip: context.profile.zip || "",
           services: related.services.filter((s) => s.enabled).map((s) => s.service_slug),
           territories: related.territories.map((t) => t.city || t.county || t.zip || "").filter(Boolean),
+          maxLeadPriceDollars:
+            related.preferences?.max_lead_price_cents != null
+              ? String(related.preferences.max_lead_price_cents / 100)
+              : "",
+          emailNotifications: related.preferences?.email_notifications !== false,
         }}
       />
     </ProDashboardShell>

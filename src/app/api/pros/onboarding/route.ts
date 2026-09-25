@@ -19,6 +19,9 @@ export async function POST(request: Request) {
   const logoUrl = cleanText(body.logoUrl, 500);
   const city = cleanText(body.city, 100);
   const zip = cleanText(body.zip, 20);
+  const maxLeadPriceRaw = cleanText(body.maxLeadPriceDollars, 20);
+  const maxLeadPriceDollars = maxLeadPriceRaw ? Number(maxLeadPriceRaw) : null;
+  const emailNotifications = body.emailNotifications !== false;
   const services = Array.isArray(body.services)
     ? body.services.map((v: unknown) => cleanText(v, 80)).filter(Boolean).slice(0, 30)
     : [];
@@ -26,9 +29,27 @@ export async function POST(request: Request) {
     ? body.territories.map((v: unknown) => cleanText(v, 100)).filter(Boolean).slice(0, 30)
     : [];
 
-  if (!businessName || !phone || !description || services.length === 0 || territories.length === 0) {
+  if (
+    !businessName ||
+    !phone ||
+    !description ||
+    services.length === 0 ||
+    territories.length === 0
+  ) {
     return Response.json(
       { success: false, error: "Business name, phone, description, at least one service, and at least one service area are required." },
+      { status: 400 }
+    );
+  }
+
+  if (
+    maxLeadPriceDollars !== null &&
+    (!Number.isFinite(maxLeadPriceDollars) ||
+      maxLeadPriceDollars < 5 ||
+      maxLeadPriceDollars > 500)
+  ) {
+    return Response.json(
+      { success: false, error: "Maximum lead price must be between $5 and $500, or left blank." },
       { status: 400 }
     );
   }
@@ -75,7 +96,11 @@ export async function POST(request: Request) {
 
   await admin.from("contractor_preferences").upsert({
     contractor_id: profileId,
-    email_notifications: true,
+    max_lead_price_cents:
+      maxLeadPriceDollars === null
+        ? null
+        : Math.round(maxLeadPriceDollars * 100),
+    email_notifications: emailNotifications,
     auto_buy_enabled: false,
   });
 

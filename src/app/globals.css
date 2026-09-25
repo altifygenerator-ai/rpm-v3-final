@@ -3256,3 +3256,67 @@ p {
     grid-template-columns: 1fr;
   }
 }
+
+
+.pro-lead-preferences {
+  border-top: 3px solid var(--iron);
+  display: grid;
+  gap: .55rem;
+  margin-top: .5rem;
+  padding-top: 1rem;
+}
+
+.pro-lead-preferences > strong {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  text-transform: uppercase;
+}
+
+.pro-lead-preferences > p {
+  color: var(--soft-ink);
+  font-size: .82rem;
+}
+
+.pro-lead-preferences > div {
+  align-items: end;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(220px, .55fr) minmax(260px, 1fr);
+}
+
+.pro-lead-preferences label {
+  display: grid;
+  gap: .35rem;
+}
+
+.pro-lead-preferences label > span {
+  font-family: var(--font-heading);
+  font-size: .8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.pro-lead-preferences input[type="number"] {
+  background: #f8f9fa;
+  border: 1px solid #aeb7bd;
+  min-height: 46px;
+  padding: .7rem .75rem;
+}
+
+.pro-lead-preferences .house-check {
+  align-items: center;
+  display: flex;
+  gap: .55rem;
+  min-height: 46px;
+}
+
+.pro-lead-preferences .house-check input {
+  min-height: auto;
+  width: auto;
+}
+
+@media (max-width: 680px) {
+  .pro-lead-preferences > div {
+    grid-template-columns: 1fr;
+  }
+}
