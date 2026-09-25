@@ -9,6 +9,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 export const metadata: Metadata = {
   title: "Your Project Status",
   robots: { index: false, follow: false },
+  referrer: "no-referrer",
 };
 
 type Props = { params: Promise<{ token: string }> };

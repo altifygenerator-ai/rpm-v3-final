@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { trackEvent } from "@/lib/tracking";
 
 function cleanLabel(value: string) {
@@ -8,7 +9,10 @@ function cleanLabel(value: string) {
 }
 
 export default function GlobalClickTracker() {
+  const pathname = usePathname();
+
   useEffect(() => {
+    if (pathname.startsWith("/project/")) return;
     function handleClick(event: MouseEvent) {
       const target = event.target;
       if (!(target instanceof Element)) return;
@@ -44,7 +48,7 @@ export default function GlobalClickTracker() {
 
     document.addEventListener("click", handleClick, true);
     return () => document.removeEventListener("click", handleClick, true);
-  }, []);
+  }, [pathname]);
 
   return null;
 }

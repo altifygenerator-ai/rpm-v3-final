@@ -200,7 +200,13 @@ export default function LeadChat() {
     ["Rough size", draft.propertySize],
   ].filter(([, value]) => value);
 
-  if (pathname.startsWith("/pro")) return null;
+  if (
+    pathname.startsWith("/pro") ||
+    pathname.startsWith("/project/") ||
+    pathname.startsWith("/auth/")
+  ) {
+    return null;
+  }
 
   return (
     <div className="lead-chat-shell">

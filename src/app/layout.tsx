@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, IBM_Plex_Sans } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
+import SiteAnalytics from "@/components/site-analytics";
 import "./globals.css";
 import LeadChat from "@/components/lead-chat";
 import GlobalClickTracker from "@/components/global-click-tracker";
@@ -100,7 +100,7 @@ export default function RootLayout({
         {children}
         <LeadChat />
         <GlobalClickTracker />
-        <Analytics />
+        <SiteAnalytics />
       </body>
     </html>
   );
