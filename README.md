@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Arkansas Land Pros staging rebuild
 
-## Getting Started
+This branch rebuilds the former RPM site into **Arkansas Land Pros**, an Arkansas land-service lead and referral property.
 
-First, run the development server:
+## Lead delivery
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+All accepted quote-form and job-intake-chat submissions post to `/api/leads`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The endpoint:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- verifies Cloudflare Turnstile server-side;
+- uses a honeypot, minimum-fill-time check, input validation, spam heuristics, and lightweight per-instance rate limiting;
+- creates a lead reference ID;
+- captures landing page, referrer, and UTM fields;
+- emails the lead through Resend to `LEAD_TO_EMAIL`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Current fallback destination:
 
-## Learn More
+`reddirtpropertyservicesar@gmail.com`
 
-To learn more about Next.js, take a look at the following resources:
+Current fallback sender:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`Arkansas Land Pros <leads@hometownwebservicesar.cc>`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Required staging environment variables
 
-## Deploy on Vercel
+Copy `.env.example` into the environment configuration and set:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `RESEND_API_KEY`
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+- `TURNSTILE_SECRET_KEY`
+- `NEXT_PUBLIC_SITE_URL` when a final/staging canonical URL is known
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## SEO migration
+
+The rebuild intentionally preserves the existing high-value service slugs where possible, including:
+
+- `/services/land-clearing`
+- `/services/tree-work`
+- `/services/drainage-erosion`
+- `/services/retaining-walls`
+- `/services/cleanup`
+- `/services/hauling`
+- `/services/airbnb`
+- `/services/water-features`
+- `/services/outdoor-builds`
+- `/services/general`
+- `/services/welding`
+
+When the new domain is selected, set `NEXT_PUBLIC_SITE_URL`. The old Richards domain can then be pointed to the same deployment and page-for-page redirects/canonical migration can be finalized without changing the core content architecture.
