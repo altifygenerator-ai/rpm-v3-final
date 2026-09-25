@@ -40,15 +40,33 @@ export async function createMatchesAndNotify(lead: Lead) {
   if (!normalProfiles.length) return [];
 
   const ids = normalProfiles.map((p) => p.id);
-  const { data: territories } = await admin
-    .from("contractor_territories")
-    .select("contractor_id,city,county,zip")
-    .in("contractor_id", ids);
+  const [{ data: territories }, { data: preferences }] = await Promise.all([
+    admin
+      .from("contractor_territories")
+      .select("contractor_id,city,county,zip")
+      .in("contractor_id", ids),
+    admin
+      .from("contractor_preferences")
+      .select("contractor_id,max_lead_price_cents,email_notifications")
+      .in("contractor_id", ids),
+  ]);
+
+  const preferenceMap = new Map(
+    (preferences || []).map((preference) => [preference.contractor_id, preference])
+  );
 
   const matches: Array<{ contractorId: string; score: number; reason: string }> = [];
   const leadArea = [lead.area, lead.city, lead.county].filter(Boolean).join(" ").toLowerCase();
 
   for (const profile of normalProfiles) {
+    const preference = preferenceMap.get(profile.id);
+    if (
+      preference?.max_lead_price_cents != null &&
+      lead.lead_price_cents > preference.max_lead_price_cents
+    ) {
+      continue;
+    }
+
     const ownTerritories = (territories || []).filter((t) => t.contractor_id === profile.id);
     let score = 60;
     const reasons = ["service match"];
@@ -97,7 +115,10 @@ export async function createMatchesAndNotify(lead: Lead) {
       const profile = normalProfiles.find((p) => p.id === match.contractorId);
       if (!profile) return;
 
-      await resend.emails.send({
+      const preference = preferenceMap.get(match.contractorId);
+      if (preference?.email_notifications === false) return;
+
+      const emailResult = await resend.emails.send({
         from,
         to: [profile.email],
         subject: `New ${lead.service_slug.replace(/-/g, " ")} opportunity near ${lead.city || lead.area}`,
@@ -120,6 +141,15 @@ export async function createMatchesAndNotify(lead: Lead) {
           </div>
         `,
       });
+
+      if (emailResult.error) {
+        console.error("Lead match notification failed", {
+          contractorId: match.contractorId,
+          leadId: lead.id,
+          error: emailResult.error,
+        });
+        return;
+      }
 
       await admin
         .from("lead_matches")
@@ -259,7 +289,7 @@ export async function refreshMatchesForContractor(contractorId: string) {
     const baseUrl =
       process.env.NEXT_PUBLIC_SITE_URL || "https://www.arkansaslandpros.com";
 
-    await resend.emails.send({
+    const emailResult = await resend.emails.send({
       from,
       to: [profile.email],
       subject: `${newlyMatched.length} matching Arkansas Land Pros ${newlyMatched.length === 1 ? "lead is" : "leads are"} waiting`,
@@ -276,6 +306,13 @@ export async function refreshMatchesForContractor(contractorId: string) {
         </div>
       `,
     });
+
+    if (emailResult.error) {
+      console.error("Contractor match refresh email failed", {
+        contractorId,
+        error: emailResult.error,
+      });
+    }
   }
 
   return { matched: matchedIds.length, newlyMatched: newlyMatched.length };
