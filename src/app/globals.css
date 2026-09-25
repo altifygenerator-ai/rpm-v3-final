@@ -3139,3 +3139,120 @@ p {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Public contractor placements */
+.public-pro-strip {
+  background: #e5eaed;
+  border-top: 1px solid #c8d0d4;
+  padding: 5rem max(1.25rem, calc((100vw - 1460px) / 2 + 1.25rem));
+}
+
+.public-pro-strip-head {
+  align-items: end;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.public-pro-strip-head h2 {
+  font-size: clamp(2.8rem, 4.8vw, 5.2rem);
+  margin-top: .55rem;
+}
+
+.public-pro-strip-head > a {
+  color: var(--clay-dark);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--clay);
+  text-underline-offset: 5px;
+}
+
+.public-pro-grid {
+  background: #b9c2c7;
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 2rem;
+}
+
+.public-pro-grid > a {
+  background: white;
+  display: grid;
+  gap: .6rem;
+  min-height: 240px;
+  padding: 1.25rem;
+}
+
+.public-pro-grid > a:hover {
+  box-shadow: inset 6px 0 0 var(--clay);
+}
+
+.public-pro-grid span {
+  color: var(--clay-dark);
+  font-family: var(--font-heading);
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.public-pro-grid strong {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.public-pro-grid p {
+  color: var(--soft-ink);
+  font-size: .84rem;
+}
+
+.public-pro-grid > a > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.public-pro-grid b {
+  background: #eef1f3;
+  font-size: .68rem;
+  padding: .3rem .45rem;
+}
+
+.public-pro-grid em {
+  align-self: end;
+  color: var(--clay-dark);
+  font-size: .78rem;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.public-pro-strip > small {
+  color: #69747a;
+  display: block;
+  margin-top: 1rem;
+  max-width: 900px;
+}
+
+@media (max-width: 900px) {
+  .public-pro-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .public-pro-strip {
+    padding: 3.5rem 1rem;
+  }
+
+  .public-pro-strip-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .public-pro-grid {
+    grid-template-columns: 1fr;
+  }
+}
