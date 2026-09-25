@@ -39,7 +39,7 @@ export default function PrivacyPage() {
 
           <h2>Marketplace and payment records</h2>
           <p>
-            Arkansas Land Pros records lead matches, purchases, unlocks, outcome updates, and invalid-lead review requests. Stripe processes lead payments and may collect payment, billing, fraud-prevention, and transaction information under Stripe's own privacy practices.
+            Arkansas Land Pros records lead matches, purchases, unlocks, outcome updates, and invalid-lead review requests. Stripe processes lead payments and may collect payment, billing, fraud-prevention, and transaction information under Stripe&apos;s own privacy practices.
           </p>
 
           <h2>Analytics and attribution</h2>
@@ -64,7 +64,7 @@ export default function PrivacyPage() {
 
           <h2>Your choices</h2>
           <p>
-            Do not submit information you do not want included with a project. Contractors can update their public profile and service-area information from their account. Requests to correct or remove information can be sent through the site's contact options, subject to records that must reasonably be retained for payment, fraud-prevention, legal, or accounting purposes.
+            Do not submit information you do not want included with a project. Contractors can update their public profile and service-area information from their account. Requests to correct or remove information can be sent through the site&apos;s contact options, subject to records that must reasonably be retained for payment, fraud-prevention, legal, or accounting purposes.
           </p>
         </article>
       </main>
