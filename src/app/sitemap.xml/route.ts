@@ -7,7 +7,6 @@ import { areaBySlug } from "@/data/areas";
 import { serviceBySlug } from "@/data/services";
 import { imageForRegion, stockImages } from "@/data/stock-images";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
