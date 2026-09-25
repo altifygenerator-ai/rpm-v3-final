@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, IBM_Plex_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
-import LeadChat from "@/components/lead-chat";
+import LeadChat from "@/components/lead-chat";\nimport GlobalClickTracker from "@/components/global-click-tracker";
 import { siteData } from "@/data/site";
 import { getSiteUrl } from "@/lib/site-url";
 
