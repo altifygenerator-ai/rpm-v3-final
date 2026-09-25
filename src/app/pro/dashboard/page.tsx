@@ -4,6 +4,7 @@ import ProDashboardShell from "@/components/pro-dashboard-shell";
 import { getContractorContext } from "@/lib/contractor-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getMarketplaceLeads } from "@/lib/marketplace-queries";
+import { isLeadAvailable } from "@/lib/marketplace";
 
 export default async function DashboardPage() {
   const context = await getContractorContext();
@@ -18,11 +19,15 @@ export default async function DashboardPage() {
     .eq("contractor_id", context.profile.id)
     .eq("status", "paid");
 
-  const { count: openMatches } = await admin
-    .from("lead_matches")
-    .select("id", { count: "exact", head: true })
-    .eq("contractor_id", context.profile.id)
-    .is("hidden_at", null);
+  const { data: unlockedRows } = await admin
+    .from("lead_unlocks")
+    .select("lead_id")
+    .eq("contractor_id", context.profile.id);
+
+  const unlockedIds = new Set((unlockedRows || []).map((row) => row.lead_id));
+  const availableUnpurchased = leads.filter(
+    (lead) => isLeadAvailable(lead) && !unlockedIds.has(lead.id)
+  ).length;
 
   return (
     <ProDashboardShell context={context}>
@@ -45,7 +50,7 @@ export default async function DashboardPage() {
           context.profile.access_role === "house_owner"
             ? leads.filter((lead) => lead.marketplace_status === "available").length
             : context.profile.status === "active"
-              ? openMatches || 0
+              ? availableUnpurchased
               : 0
         }</strong></div>
         <div><span>Paid unlocks</span><strong>{paidCount || 0}</strong></div>

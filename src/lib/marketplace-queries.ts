@@ -102,7 +102,10 @@ export async function getMarketplaceLeads(context: ContractorContext) {
       .eq("contractor_id", context.profile.id),
   ]);
 
-  const ids = [...new Set([...(matches || []).map((r) => r.lead_id), ...(unlocks || []).map((r) => r.lead_id)])];
+  const matchIds = new Set((matches || []).map((row) => row.lead_id));
+  const unlockIds = new Set((unlocks || []).map((row) => row.lead_id));
+  const ids = [...new Set([...matchIds, ...unlockIds])];
+
   const { data: matchedLeads } = ids.length
     ? await admin
         .from("leads")
@@ -113,7 +116,11 @@ export async function getMarketplaceLeads(context: ContractorContext) {
     : { data: [] as Record<string, unknown>[] };
 
   const byId = new Map<string, LeadRecord>();
-  ((matchedLeads || []) as LeadRecord[]).forEach((lead) => byId.set(lead.id, lead));
+  ((matchedLeads || []) as LeadRecord[]).forEach((lead) => {
+    if (unlockIds.has(lead.id) || (matchIds.has(lead.id) && isLeadAvailable(lead))) {
+      byId.set(lead.id, lead);
+    }
+  });
   return [...byId.values()].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
