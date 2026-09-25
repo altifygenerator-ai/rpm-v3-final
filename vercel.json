@@ -1,8 +1,3 @@
 {
-  "crons": [
-    {
-      "path": "/api/cron/expire-leads",
-      "schedule": "17 10 * * *"
-    }
-  ]
+  "$schema": "https://openapi.vercel.sh/vercel.json"
 }
