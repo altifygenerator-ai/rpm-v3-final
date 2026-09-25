@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - arkansas-land-pros-staging
+      - arkansas-land-pros-polish
   pull_request:
 
 permissions:

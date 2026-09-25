@@ -38,23 +38,23 @@ export const guides: Guide[] = [
   {
     slug: "gravel-driveway-washout-arkansas",
     title: "What to Look At Before Fixing a Washed-Out Gravel Driveway",
-    description: "Why repeated washouts are often a water problem first, and what Arkansas property owners should document before requesting driveway repair.",
+    description: "Why repeated washouts are often a water problem first, and what Arkansas property owners should document before asking for driveway repair.",
     eyebrow: "Driveway & Drainage",
     sections: [
       { heading: "Find where the water comes from", body: ["Adding rock can improve the surface, but repeated washouts usually deserve a look at water movement. Watch where runoff enters the driveway, whether it crosses the surface, and where it leaves.", "Photos during or just after heavy rain can show more than dry-weather pictures."] },
-      { heading: "Look at ditches, crowns, and culverts together", body: ["A gravel drive works as a small drainage system. Ditches, cross-drainage, the driveway crown, low spots, culverts, and outlet areas all affect whether water stays controlled or starts moving gravel.", "A good request should describe the whole problem, not only the deepest rut."] },
-      { heading: "Material cannot compensate for bad water flow forever", body: ["Different stone sizes and base materials have different uses, but no gravel choice fixes every drainage issue. If water is concentrated in the wrong place, the repair may need shaping, ditch work, culvert work, or another correction before finish rock is added.", "That is why driveway requests on Arkansas Land Pros ask about drainage as well as surface condition."] },
+      { heading: "Look at ditches, crowns, and culverts together", body: ["A gravel drive works as a small drainage system. Ditches, cross-drainage, the driveway crown, low spots, culverts, and outlet areas all affect whether water stays controlled or starts moving gravel.", "A useful project description should cover the whole problem, not only the deepest rut."] },
+      { heading: "Material cannot compensate for bad water flow forever", body: ["Different stone sizes and base materials have different uses, but no gravel choice fixes every drainage issue. If water is concentrated in the wrong place, the repair may need shaping, ditch work, culvert work, or another correction before finish rock is added.", "That is why it helps to describe the drainage problem as well as the driveway surface."] },
     ],
   },
   {
     slug: "drainage-culvert-property-checklist",
     title: "Drainage & Culvert Checklist for Rural Arkansas Property",
-    description: "A simple way to document standing water, runoff, ditches, culverts, soft access, and erosion before requesting help.",
+    description: "A simple way to document standing water, runoff, ditches, culverts, soft access, and erosion before reaching out for help.",
     eyebrow: "Water Management",
     sections: [
       { heading: "Document the problem when the ground is wet", body: ["Water problems can disappear visually after a few dry days. Take photos or video during rain, shortly after rain, and again after the water has had time to drain.", "Mark where water enters, where it ponds, and where you believe it should go."] },
       { heading: "Check the outlet, not just the inlet", body: ["A ditch or culvert cannot work well if the outlet is buried, blocked, too high, eroded, or sending water into another problem area. The downstream path matters.", "Include both sides of a driveway crossing or culvert when you send project photos."] },
-      { heading: "Keep structures and utilities in the conversation", body: ["Drainage near homes, shops, septic systems, retaining walls, roads, or buried utilities can require more careful planning. Some work may need permits, engineering, or coordination with a road authority.", "A site request is a starting point, not a substitute for an on-site evaluation when the stakes are high."] },
+      { heading: "Keep structures and utilities in the conversation", body: ["Drainage near homes, shops, septic systems, retaining walls, roads, or buried utilities can require more careful planning. Some work may need permits, engineering, or coordination with a road authority.", "Photos and project notes are a starting point, not a substitute for an on-site evaluation when the stakes are high."] },
     ],
   },
   {
@@ -71,12 +71,12 @@ export const guides: Guide[] = [
   {
     slug: "hunting-property-brush-access",
     title: "Clearing Trails, Brush & Access on Hunting Property",
-    description: "A landowner-focused guide to trail access, brush control, fence lines, staging areas, and keeping the request tied to how the property will actually be used.",
+    description: "A landowner-focused guide to trail access, brush control, fence lines, staging areas, and keeping the work tied to how the property will actually be used.",
     eyebrow: "Rural & Hunting Land",
     sections: [
       { heading: "Start with access routes and use areas", body: ["Instead of treating the whole property the same, identify the roads, trails, fence lines, stand access, staging areas, and overgrown edges that matter most. That can keep the project focused.", "Aerial maps are useful for orientation, but ground photos help show brush density, slope, wet areas, and actual equipment access."] },
       { heading: "Decide how open you really want it", body: ["Hunting-property work is not always about making everything look like a lawn. Some owners want travel corridors opened while keeping cover and screening elsewhere.", "Describe the practical goal so the clearing method and finish are not overbuilt for the property."] },
-      { heading: "Plan around season, weather, and ground conditions", body: ["Wet ground can limit equipment access and create unnecessary rutting. Heavy vegetation is also easier to evaluate at some times of year than others.", "If timing is flexible, say so in the request. It can help the provider plan around conditions instead of forcing the job into a bad weather window."] },
+      { heading: "Plan around season, weather, and ground conditions", body: ["Wet ground can limit equipment access and create unnecessary rutting. Heavy vegetation is also easier to evaluate at some times of year than others.", "If timing is flexible, mention it when you reach out. It can help the provider plan around conditions instead of forcing the job into a bad weather window."] },
     ],
   },
 ];

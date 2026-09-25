@@ -212,8 +212,8 @@ export default function LeadChat() {
           <div className="chat-head">
             <div>
               <span>ARKANSAS LAND PROS</span>
-              <strong>Project assistant</strong>
-              <small>Automated job intake</small>
+              <strong>Tell us about the job</strong>
+              <small>Automated project assistant</small>
             </div>
             <button type="button" onClick={() => setOpen(false)} aria-label="Close chat">
               Close
@@ -240,7 +240,7 @@ export default function LeadChat() {
 
             {ready && !leadId && (
               <div className="chat-summary">
-                <strong>Request so far</strong>
+                <strong>Your project details</strong>
                 <div>
                   {summaryRows.map(([label, value]) => (
                     <p key={label}>
@@ -264,7 +264,7 @@ export default function LeadChat() {
                   onClick={submitLead}
                   disabled={sending}
                 >
-                  {sending ? "Sending…" : "Send this request"}
+                  {sending ? "Sending…" : "Send project details"}
                 </button>
                 <small>
                   Want to change something? Just type the correction below before
@@ -275,10 +275,10 @@ export default function LeadChat() {
 
             {leadId && (
               <div className="chat-confirmation">
-                <strong>Request received</strong>
+                <strong>Project details sent</strong>
                 <span>Reference {leadId}</span>
                 <button type="button" onClick={resetChat}>
-                  Start another request
+                  Start another project
                 </button>
               </div>
             )}
@@ -327,8 +327,7 @@ export default function LeadChat() {
 
           <div className="chat-foot">
             <span>
-              This assistant helps collect project details. Final estimates and
-              scheduling come from the service provider.
+              This assistant helps gather the basics so a service provider can understand the job. Final estimates and scheduling come from the provider.
             </span>
           </div>
         </section>

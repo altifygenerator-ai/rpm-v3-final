@@ -40,7 +40,7 @@ export const regions: Region[] = [
     name: "Central Arkansas",
     summary: "Coverage around larger Central Arkansas communities and the rural property surrounding them.",
     areaSlugs: ["benton", "bryant", "little-rock", "conway", "russellville", "searcy", "mountain-view", "sheridan"],
-    focus: "Lot clearing, site preparation, grading, drainage, driveways, rural cleanup, hauling, and land-service requests.",
+    focus: "Lot clearing, site preparation, grading, drainage, driveways, rural cleanup, hauling, and land and property work.",
   },
 ];
 

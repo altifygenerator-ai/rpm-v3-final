@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
-import Breadcrumbs from "@/components/breadcrumbs";
+import VisualHero from "@/components/visual-hero";
 import { guides } from "@/data/guides";
+import { stockImages } from "@/data/stock-images";
 
 export const metadata: Metadata = {
   title: "Arkansas Land & Property Guides",
@@ -17,16 +18,16 @@ export default function GuidesPage() {
     <>
       <SiteHeader />
       <main>
-        <section className="inner-hero">
-          <Breadcrumbs items={[{ href: "/", label: "Home" }, { label: "Property Guides" }]} />
-          <p className="field-label field-label-light">PROPERTY OWNER NOTES</p>
-          <h1>Useful before-and-after-the-rain kind of information.</h1>
-          <p>
-            No filler articles written to hit a word count. These guides are
-            built around the details that make land, driveway, drainage, and
-            clearing conversations easier.
-          </p>
-        </section>
+        <VisualHero
+          breadcrumbs={[{ href: "/", label: "Home" }, { label: "Property Guides" }]}
+          eyebrow="LANDOWNER GUIDES"
+          title="Know what to look for before the equipment shows up."
+          description="Straightforward guides for clearing, driveways, drainage, culverts, site prep, and rural-property work — written to help you describe the job and spot the details that matter."
+          image={stockImages.drivewayRepair.src}
+          imageAlt={stockImages.drivewayRepair.alt}
+          ctaHref="/contact"
+          ctaLabel="Have a project? Tell us about it"
+        />
 
         <section className="index-layout">
           <div className="index-lines">

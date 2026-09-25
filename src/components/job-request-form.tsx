@@ -120,11 +120,11 @@ export default function JobRequestForm({
       onKeyDown={beginIntake}
     >
       <div className="job-form-heading">
-        <span>JOB REQUEST</span>
+        <span>GET PROJECT HELP</span>
         <h2>{heading}</h2>
         <p>
-          A short description is enough to start. We route the request after it
-          comes in.
+          Tell us what needs done and where the property is. A short description
+          is enough to get started.
         </p>
       </div>
 
@@ -234,7 +234,7 @@ export default function JobRequestForm({
 
       {status.kind === "success" && (
         <div className="form-message form-success" role="status">
-          <strong>Request received.</strong>
+          <strong>Got it — your project details were sent.</strong>
           <span>Reference: {status.leadId}</span>
         </div>
       )}
@@ -245,13 +245,13 @@ export default function JobRequestForm({
         disabled={status.kind === "sending"}
         onClick={() => trackEvent("Lead Submit Click", { source })}
       >
-        {status.kind === "sending" ? "Sending request…" : "Send job request"}
+        {status.kind === "sending" ? "Sending…" : "Send project details"}
       </button>
 
       <p className="form-consent">
-        By sending this request, you agree to our{" "}
+        By sending your project details, you agree to our{" "}
         <Link href="/terms">Terms</Link> and <Link href="/privacy">Privacy Policy</Link>{" "}
-        and allow the request to be shared with a service provider that may be
+        and allow the information to be shared with a service provider that may be
         able to help.
       </p>
     </form>

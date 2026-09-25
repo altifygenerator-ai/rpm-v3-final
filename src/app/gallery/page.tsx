@@ -3,25 +3,29 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
-import Breadcrumbs from "@/components/breadcrumbs";
+import VisualHero from "@/components/visual-hero";
 import { stockImages } from "@/data/stock-images";
 
 export const metadata: Metadata = {
-  title: "Arkansas Property Work Types & Visual Reference",
+  title: "Land & Property Work Across Arkansas",
   description:
-    "Visual examples of land clearing, dirt work, grading, driveways, drainage, retaining walls, cleanup, and other property-work categories.",
+    "See common land-clearing, dirt-work, grading, driveway, drainage, retaining-wall, cleanup, hauling, and property-work categories.",
   alternates: { canonical: "/gallery" },
 };
 
 const references = [
-  { image: stockImages.landClearing, title: "Land clearing & overgrowth", href: "/services/land-clearing" },
-  { image: stockImages.drainage, title: "Drainage & earthwork", href: "/services/drainage-erosion" },
-  { image: stockImages.grading, title: "Dirt work & grading", href: "/services/dirt-work" },
+  { image: stockImages.landClearing, title: "Land clearing", href: "/services/land-clearing" },
+  { image: stockImages.forestryMulching, title: "Forestry & wooded clearing", href: "/services/forestry-mulching" },
+  { image: stockImages.brushClearing, title: "Brush clearing", href: "/services/brush-clearing" },
+  { image: stockImages.dirtWork, title: "Dirt work", href: "/services/dirt-work" },
+  { image: stockImages.grading, title: "Grading & leveling", href: "/services/grading-leveling" },
+  { image: stockImages.drivewayRepair, title: "Driveway repair", href: "/services/driveway-repair" },
+  { image: stockImages.culvert, title: "Culvert & drainage work", href: "/services/culvert-installation" },
   { image: stockImages.retaining, title: "Retaining & slope work", href: "/services/retaining-walls" },
-  { image: stockImages.cleanup, title: "Property cleanup & hauling", href: "/services/cleanup" },
-  { image: stockImages.gravelRoad, title: "Gravel driveway work", href: "/services/gravel-driveways" },
-  { image: stockImages.ruralRoad, title: "Rural property access", href: "/services/rural-property-prep" },
-  { image: stockImages.welding, title: "Property welding & fabrication", href: "/services/welding" },
+  { image: stockImages.cleanup, title: "Property cleanup", href: "/services/cleanup" },
+  { image: stockImages.hauling, title: "Hauling", href: "/services/hauling" },
+  { image: stockImages.sitePrep, title: "Site preparation", href: "/services/site-prep" },
+  { image: stockImages.lightDemolition, title: "Light demolition", href: "/services/light-demolition" },
 ];
 
 export default function GalleryPage() {
@@ -29,15 +33,16 @@ export default function GalleryPage() {
     <>
       <SiteHeader />
       <main>
-        <section className="inner-hero">
-          <Breadcrumbs items={[{ href: "/", label: "Home" }, { label: "Work Types" }]} />
-          <p className="field-label field-label-light">VISUAL REFERENCE</p>
-          <h1>The kinds of property work we can help you get started on.</h1>
-          <p>
-            These are stock reference photos showing common job types and property conditions,
-            not a portfolio of completed Arkansas Land Pros projects.
-          </p>
-        </section>
+        <VisualHero
+          breadcrumbs={[{ href: "/", label: "Home" }, { label: "Project Types" }]}
+          eyebrow="COMMON LAND PROJECTS"
+          title="See the kinds of work Arkansas property owners need help with."
+          description="Clearing, earthwork, access, drainage, cleanup, hauling, and the property jobs that often overlap several trades."
+          image={stockImages.outdoorBuilds.src}
+          imageAlt={stockImages.outdoorBuilds.alt}
+          ctaHref="/contact"
+          ctaLabel="Tell us what needs done"
+        />
 
         <section className="index-layout">
           <div className="grid gap-px bg-[#aeb8be] md:grid-cols-2">
@@ -56,11 +61,16 @@ export default function GalleryPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 border-l-[7px] border-[var(--clay)] p-5 text-white">
-                  <strong className="font-[var(--font-heading)] text-3xl uppercase">{item.title}</strong>
+                  <strong className="font-[var(--font-heading)] text-3xl uppercase">
+                    {item.title}
+                  </strong>
                 </div>
               </Link>
             ))}
           </div>
+          <p className="stock-photo-note">
+            Photography is representative stock imagery used to show common project types and property conditions.
+          </p>
         </section>
       </main>
       <SiteFooter />

@@ -15,10 +15,10 @@ export default function SiteFooter() {
       <div className="footer-main">
         <div className="footer-brand">
           <div className="footer-stamp">ARKANSAS LAND PROS</div>
-          <h2>Property work is easier when the request starts clear.</h2>
+          <h2>Have land that needs work? Start with the basics.</h2>
           <p>{siteData.description}</p>
           <Link href="/contact" className="work-button inline-flex">
-            Start a job request
+            Tell us about the job
           </Link>
         </div>
 
@@ -33,7 +33,7 @@ export default function SiteFooter() {
           </div>
 
           <div>
-            <strong>PRIORITY AREAS</strong>
+            <strong>POPULAR AREAS</strong>
             {priorityAreas.slice(0, 8).map((area) => (
               <Link key={area.slug} href={`/areas/${area.slug}`}>
                 {area.name}
@@ -42,8 +42,8 @@ export default function SiteFooter() {
           </div>
 
           <div>
-            <strong>ABOUT THE SITE</strong>
-            <Link href="/about">How requests work</Link>
+            <strong>HELP & INFO</strong>
+            <Link href="/about">How it works</Link>
             <Link href="/guides">Property guides</Link>
             <Link href="/areas">Areas we cover</Link>
             <Link href="/privacy">Privacy</Link>
