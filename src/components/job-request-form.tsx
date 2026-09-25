@@ -43,9 +43,14 @@ export default function JobRequestForm({
     []
   );
 
-  function beginIntake() {\n    if (!startedAt.current) startedAt.current = Date.now();\n  }\n\n  async function submit(event: FormEvent<HTMLFormElement>) {
+  function beginIntake() {
+    if (!startedAt.current) startedAt.current = Date.now();
+  }
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = event.currentTarget;\n    beginIntake();
+    const form = event.currentTarget;
+    beginIntake();
     const data = new FormData(form);
 
     if (!turnstileToken && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
@@ -107,7 +112,13 @@ export default function JobRequestForm({
   }
 
   return (
-    <form\n      className={compact ? "job-form job-form-compact" : "job-form"}\n      onSubmit={submit}\n      onFocusCapture={beginIntake}\n      onPointerDown={beginIntake}\n      onKeyDown={beginIntake}\n    >
+    <form
+      className={compact ? "job-form job-form-compact" : "job-form"}
+      onSubmit={submit}
+      onFocusCapture={beginIntake}
+      onPointerDown={beginIntake}
+      onKeyDown={beginIntake}
+    >
       <div className="job-form-heading">
         <span>JOB REQUEST</span>
         <h2>{heading}</h2>
