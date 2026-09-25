@@ -20,7 +20,11 @@ export default function ProDashboardShell({
           <Link href="/pro/profile">Public profile</Link>
           <Link href={`/pros/${context.profile.slug}`}>View listing</Link>
           {context.profile.access_role === "house_owner" ? (
-            <Link href="/pro/lead-control">Lead control</Link>
+            <>
+              <Link href="/pro/lead-control">Lead control</Link>
+              <Link href="/pro/contractor-control">Contractor control</Link>
+              <Link href="/pro/disputes">Lead reviews</Link>
+            </>
           ) : null}
           <Link href="/pro/logout">Sign out</Link>
         </nav>

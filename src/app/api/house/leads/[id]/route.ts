@@ -22,6 +22,28 @@ export async function POST(request: Request, { params }: Props) {
     await admin.from("leads").update({ marketplace_enabled: true, marketplace_status: "available" }).eq("id", id);
   } else if (action === "cancel") {
     await admin.from("leads").update({ marketplace_enabled: false, marketplace_status: "cancelled" }).eq("id", id);
+  } else if (action === "invalidate") {
+    await admin.from("leads").update({
+      marketplace_enabled: false,
+      marketplace_status: "invalid",
+    }).eq("id", id);
+  } else if (action === "update_settings") {
+    const dollars = Number(body.priceDollars);
+    const maxUnlocks = Number(body.maxUnlocks);
+    const unlimited = Boolean(body.unlimited);
+
+    if (!Number.isFinite(dollars) || dollars < 1 || dollars > 500) {
+      return Response.json({ success: false, error: "Lead price must be between $1 and $500." }, { status: 400 });
+    }
+    if (!unlimited && (!Number.isInteger(maxUnlocks) || maxUnlocks < 1 || maxUnlocks > 20)) {
+      return Response.json({ success: false, error: "Unlock limit must be between 1 and 20." }, { status: 400 });
+    }
+
+    await admin.from("leads").update({
+      lead_price_cents: Math.round(dollars * 100),
+      max_paid_unlocks: unlimited ? null : maxUnlocks,
+      unlimited_unlocks: unlimited,
+    }).eq("id", id);
   } else if (action === "toggle_test") {
     const { data: lead } = await admin.from("leads").select("is_test,test_enabled").eq("id", id).single();
     if (!lead?.is_test) {

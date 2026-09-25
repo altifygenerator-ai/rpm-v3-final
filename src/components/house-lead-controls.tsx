@@ -47,6 +47,9 @@ export default function HouseLeadControls({
       <button type="button" onClick={() => action("cancel")} disabled={Boolean(busy)}>
         Retire lead
       </button>
+      <button type="button" onClick={() => action("invalidate")} disabled={Boolean(busy)}>
+        Mark invalid
+      </button>
       {isTest ? (
         <button type="button" onClick={() => action("toggle_test")} disabled={Boolean(busy)}>
           {testEnabled ? "Turn $1 test lead off" : "Turn $1 test lead on"}

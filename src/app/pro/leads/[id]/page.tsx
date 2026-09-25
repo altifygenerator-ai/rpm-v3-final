@@ -4,6 +4,7 @@ import LeadPurchaseButton from "@/components/lead-purchase-button";
 import LeadOutcomeActions from "@/components/lead-outcome-actions";
 import LeadDisputeForm from "@/components/lead-dispute-form";
 import HouseLeadControls from "@/components/house-lead-controls";
+import HouseLeadSettings from "@/components/house-lead-settings";
 import { getContractorContext } from "@/lib/contractor-auth";
 import { canBuyLead, getLeadForContractor } from "@/lib/marketplace-queries";
 import { formatMoney } from "@/lib/marketplace";
@@ -102,6 +103,7 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
             <p>{lead.unlimited_unlocks ? "Unlimited purchases while test mode is enabled." : `${Math.max(0, (lead.max_paid_unlocks || 2) - lead.paid_unlock_count)} paid unlocks remaining.`}</p>
           </div>
           {house ? (
+            <>
             <HouseLeadControls
               leadId={lead.id}
               status={lead.marketplace_status}
@@ -109,6 +111,13 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
               isTest={lead.is_test}
               testEnabled={lead.test_enabled}
             />
+            <HouseLeadSettings
+              leadId={lead.id}
+              priceCents={lead.lead_price_cents}
+              maxUnlocks={lead.max_paid_unlocks}
+              unlimited={lead.unlimited_unlocks}
+            />
+            </>
           ) : null}
           {latestPaid ? <small>Latest paid unlock: {latestPaid.paid_at ? new Date(latestPaid.paid_at).toLocaleString() : "processing"}</small> : null}
         </aside>

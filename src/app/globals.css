@@ -3005,3 +3005,137 @@ p {
     padding: 3.5rem 1rem;
   }
 }
+
+
+.house-contractor-list,
+.house-dispute-list {
+  border-top: 3px solid var(--iron);
+}
+
+.house-contractor-list article,
+.house-dispute-list article {
+  align-items: start;
+  border-bottom: 1px solid #b8c1c6;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr minmax(260px, .75fr);
+  padding: 1rem 0;
+}
+
+.house-contractor-list article > div:first-child,
+.house-dispute-list article > div:first-child {
+  display: grid;
+  gap: .3rem;
+}
+
+.house-contractor-list span,
+.house-contractor-list small,
+.house-dispute-list span,
+.house-dispute-list small {
+  color: var(--steel);
+  font-size: .72rem;
+}
+
+.house-contractor-list strong,
+.house-dispute-list strong {
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  text-transform: uppercase;
+}
+
+.house-contractor-list p,
+.house-dispute-list p {
+  color: var(--soft-ink);
+  font-size: .82rem;
+}
+
+.house-contractor-list a {
+  color: var(--clay-dark);
+  font-size: .78rem;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.house-contractor-controls,
+.house-dispute-controls {
+  display: grid;
+  gap: .45rem;
+}
+
+.house-contractor-controls button,
+.house-dispute-controls button,
+.house-lead-settings button {
+  background: white;
+  border: 1px solid #aeb8be;
+  cursor: pointer;
+  font-size: .78rem;
+  font-weight: 700;
+  padding: .6rem;
+}
+
+.house-contractor-controls button:hover,
+.house-dispute-controls button:hover,
+.house-lead-settings button:hover {
+  border-color: var(--clay);
+}
+
+.house-dispute-controls small {
+  color: #8a2f22;
+}
+
+.dispute-final-status {
+  color: var(--steel);
+  font-size: 1rem !important;
+  text-align: right;
+}
+
+.house-lead-settings {
+  background: white;
+  border-top: 4px solid var(--iron);
+  display: grid;
+  gap: .65rem;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.house-lead-settings > strong {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  text-transform: uppercase;
+}
+
+.house-lead-settings label {
+  display: grid;
+  gap: .25rem;
+}
+
+.house-lead-settings label > span {
+  color: var(--steel);
+  font-family: var(--font-heading);
+  font-size: .7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.house-lead-settings input[type="number"] {
+  border: 1px solid #aeb8be;
+  border-radius: 0;
+  padding: .55rem;
+}
+
+.house-check {
+  align-items: center;
+  display: flex !important;
+  gap: .45rem;
+}
+
+.house-check input {
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .house-contractor-list article,
+  .house-dispute-list article {
+    grid-template-columns: 1fr;
+  }
+}
