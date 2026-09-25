@@ -1,13 +1,26 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
+import { getSiteUrl } from "@/lib/site-url";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://www.richardslandmanagementllc.com";
+  const siteUrl = getSiteUrl();
+  const isPreview = process.env.VERCEL_ENV === "preview";
+
+  if (isPreview) {
+    return {
+      rules: {
+        userAgent: "*",
+        disallow: "/",
+      },
+    };
+  }
 
   return {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/api/"],
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${siteUrl}/sitemap.xml`,
+    host: siteUrl,
   };
 }

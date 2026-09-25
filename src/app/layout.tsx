@@ -1,62 +1,53 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata, Viewport } from "next";
+import { Barlow_Condensed, IBM_Plex_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import "./globals.css";
+import LeadChat from "@/components/lead-chat";
+import GlobalClickTracker from "@/components/global-click-tracker";
 import { siteData } from "@/data/site";
+import { stockImages } from "@/data/stock-images";
+import { getSiteUrl } from "@/lib/site-url";
 
-const siteUrl = "https://www.richardslandmanagementllc.com";
+const headingFont = Barlow_Condensed({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  weight: ["500", "600", "700", "800"],
+});
+
+const bodyFont = IBM_Plex_Sans({
+  subsets: ["latin"],
+  variable: "--font-body",
+  weight: ["400", "500", "600", "700"],
+});
+
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default:
-      "Land Clearing, Drainage & Tree Work in Greers Ferry, AR | Richards Property Management, LLC",
-    template: "%s | Richards Property Management, LLC",
+    default: "Arkansas Land Pros | Land Clearing, Dirt Work & Property Service Requests",
+    template: "%s | Arkansas Land Pros",
   },
-  description:
-    "Land clearing, tree work, drainage solutions, erosion control, retaining walls, hauling, welding, water features, and property maintenance around Greers Ferry Lake and Central Arkansas.",
+  description: siteData.description,
   keywords: [
-    "land clearing Greers Ferry AR",
-    "tree work Greers Ferry AR",
-    "tree removal Greers Ferry Lake",
-    "drainage contractor Greers Ferry AR",
-    "erosion control Central Arkansas",
-    "retaining walls Greers Ferry Lake",
-    "property services Greers Ferry Lake",
-    "brush clearing Heber Springs AR",
-    "property cleanup Fairfield Bay AR",
-    "hauling services Central Arkansas",
-    "driveway washout repair Arkansas",
-    "Airbnb property maintenance Greers Ferry",
+    "Arkansas land clearing",
+    "land clearing Arkansas",
+    "Arkansas dirt work",
+    "Arkansas forestry mulching",
+    "Arkansas drainage contractor",
+    "gravel driveway repair Arkansas",
+    "culvert installation Arkansas",
+    "property cleanup Arkansas",
+    "Hot Springs land clearing",
+    "Glenwood Arkansas land clearing",
+    "Greers Ferry land clearing",
+    "Arkadelphia dirt work",
   ],
   authors: [{ name: siteData.name }],
   creator: siteData.name,
   publisher: siteData.name,
-  alternates: {
-    canonical: siteUrl,
-  },
-  openGraph: {
-    title: "Land Clearing & Property Services in Greers Ferry Lake, AR",
-    description:
-      "Land clearing, drainage repair, erosion control, tree work, retaining walls, hauling, welding, and rural property services across the Greers Ferry Lake area.",
-    url: siteUrl,
-    siteName: siteData.name,
-    locale: "en_US",
-    type: "website",
-    images: [
-      {
-        url: "/images/og-cover.png",
-        width: 1200,
-        height: 630,
-        alt: "Richards Property Management land clearing and property work in Central Arkansas",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Land Clearing & Property Services in Greers Ferry Lake, AR",
-    description:
-      "Land clearing, tree work, drainage, erosion control, and property services around Greers Ferry Lake and Central Arkansas.",
-    images: ["/images/og-cover.png"],
+  verification: {
+    google: "PhJvLBTc9Ua1cIcvYKE8xSNWCwdT3Znwd82hMoOEcVI",
   },
   robots: {
     index: true,
@@ -69,17 +60,46 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+  openGraph: {
+    title: "Arkansas Land Pros",
+    description: siteData.description,
+    url: siteUrl,
+    siteName: siteData.name,
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: stockImages.hero.src,
+        width: 1200,
+        height: 630,
+        alt: "Arkansas land and property work",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Arkansas Land Pros",
+    description: siteData.description,
+    images: [stockImages.hero.src],
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#171a1d",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
-      <body>
+      <body className={`${headingFont.variable} ${bodyFont.variable}`}>
         {children}
+        <LeadChat />
+        <GlobalClickTracker />
         <Analytics />
       </body>
     </html>
