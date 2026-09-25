@@ -52,6 +52,7 @@ export default function LeadChat() {
   const startedAt = useRef(0);
 
   function openChat() {
+    if (!startedAt.current) startedAt.current = Date.now();
     setOpen(true);
     trackEvent("Lead Chat Open", { source: "floating-chat" });
   }
