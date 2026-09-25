@@ -49,7 +49,7 @@ export default function LeadChat() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [leadId, setLeadId] = useState("");
-  const startedAt = useRef(Date.now());
+  const startedAt = useRef(0);
 
   function openChat() {
     setOpen(true);
@@ -110,7 +110,7 @@ export default function LeadChat() {
     setError("");
     setLeadId("");
     setToken("");
-    startedAt.current = Date.now();
+    startedAt.current = 0;
     setResetKey((value) => value + 1);
   }
 

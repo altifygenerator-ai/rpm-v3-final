@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { leadDestinationEmail, resendFrom, siteData } from "@/data/site";
+import { leadDestinationEmail, resendFrom } from "@/data/site";
 
 export const runtime = "nodejs";
 

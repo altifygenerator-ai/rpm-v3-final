@@ -147,7 +147,7 @@ export default function Home() {
           </div>
 
           <div className="ledger-list">
-            {featuredServices.map((service, index) => (
+            {featuredServices.map((service) => (
               <Link
                 href={`/services/${service.slug}`}
                 className="ledger-row"

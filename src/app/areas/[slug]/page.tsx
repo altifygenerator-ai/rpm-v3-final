@@ -6,7 +6,7 @@ import SiteFooter from "@/components/site-footer";
 import Breadcrumbs from "@/components/breadcrumbs";
 import JobRequestForm from "@/components/job-request-form";
 import { areas, areaBySlug } from "@/data/areas";
-import { services, coreServiceSlugs, serviceBySlug } from "@/data/services";
+import { coreServiceSlugs, serviceBySlug } from "@/data/services";
 import { localLandings } from "@/data/local-landings";
 import { getSiteUrl } from "@/lib/site-url";
 

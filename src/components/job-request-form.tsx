@@ -28,7 +28,7 @@ export default function JobRequestForm({
   serviceDefault = "",
   areaDefault = "",
 }: Props) {
-  const startedAt = useRef(Date.now());
+  const startedAt = useRef(0);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [resetKey, setResetKey] = useState(0);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
@@ -43,9 +43,9 @@ export default function JobRequestForm({
     []
   );
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  function beginIntake() {\n    if (!startedAt.current) startedAt.current = Date.now();\n  }\n\n  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = event.currentTarget;
+    const form = event.currentTarget;\n    beginIntake();
     const data = new FormData(form);
 
     if (!turnstileToken && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
@@ -92,7 +92,7 @@ export default function JobRequestForm({
       });
 
       form.reset();
-      startedAt.current = Date.now();
+      startedAt.current = 0;
       setResetKey((value) => value + 1);
       setStatus({ kind: "success", leadId: result.leadId || "received" });
     } catch (error) {
@@ -107,7 +107,7 @@ export default function JobRequestForm({
   }
 
   return (
-    <form className={compact ? "job-form job-form-compact" : "job-form"} onSubmit={submit}>
+    <form\n      className={compact ? "job-form job-form-compact" : "job-form"}\n      onSubmit={submit}\n      onFocusCapture={beginIntake}\n      onPointerDown={beginIntake}\n      onKeyDown={beginIntake}\n    >
       <div className="job-form-heading">
         <span>JOB REQUEST</span>
         <h2>{heading}</h2>
