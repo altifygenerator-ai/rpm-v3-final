@@ -46,23 +46,23 @@ export default function Home() {
       mainEntity: [
         {
           "@type": "Question",
-          name: "What kind of work can I request through Arkansas Land Pros?",
+          name: "What kinds of land work can Arkansas Land Pros help with?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Property owners can submit requests for land clearing, forestry mulching, brush clearing, dirt work, grading, driveways, culverts, drainage, cleanup, hauling, site preparation, and related Arkansas land work.",
+            text: "Arkansas Land Pros can help connect property owners with pros for land clearing, forestry mulching, brush clearing, dirt work, grading, driveways, culverts, drainage, cleanup, hauling, site preparation, and related land work.",
           },
         },
         {
           "@type": "Question",
-          name: "What parts of Arkansas are targeted first?",
+          name: "Where is Arkansas Land Pros available?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Requests are welcome statewide, with detailed coverage across Southwest Arkansas, the Hot Springs area, the Ouachitas, Greers Ferry Lake, and Central Arkansas.",
+            text: "Property owners can reach out from anywhere in Arkansas, with detailed coverage around Southwest Arkansas, Hot Springs, the Ouachitas, Greers Ferry Lake, and Central Arkansas.",
           },
         },
         {
           "@type": "Question",
-          name: "Is Arkansas Land Pros the contractor performing every job?",
+          name: "Who handles the actual work?",
           acceptedAnswer: {
             "@type": "Answer",
             text: "No. Arkansas Land Pros is a lead and referral service. Requests may be shared with an independent service provider that may be able to help with the project.",
@@ -100,26 +100,27 @@ export default function Home() {
           </div>
 
           <div className="hero-copy-panel">
-            <p className="field-label">PROPERTY WORK REQUESTS ACROSS ARKANSAS</p>
+            <p className="field-label">LAND CLEARING • DIRT WORK • DRAINAGE • DRIVEWAYS</p>
             <h1>
-              Got land that
-              <span>needs work?</span>
-              Start here.
+              Land work
+              <span>without the runaround.</span>
+              Across Arkansas.
             </h1>
             <p className="hero-lede">
-              Land clearing, dirt work, drainage, driveways, brush, cleanup, and
-              the rough property jobs that are hard to explain in one phone call.
+              Tell us what needs cleared, graded, drained, repaired, hauled, or
+              cleaned up. We’ll help get the job in front of a land-service pro
+              who can take a look.
             </p>
             <div className="hero-links">
               <Link href="#request" className="work-button">
-                Send the job details
+                Tell us about the job
               </Link>
               <Link href="/areas" className="plain-link">
-                Check your area →
+                See areas we cover →
               </Link>
             </div>
             <div className="coverage-note">
-              <strong>COMMON REQUEST AREAS</strong>
+              <strong>SERVING PROPERTY OWNERS ACROSS ARKANSAS</strong>
               <span>
                 Amity / Glenwood / Hot Springs / Mount Ida / Arkadelphia /
                 Malvern / Murfreesboro — plus Greers Ferry Lake and communities
@@ -135,15 +136,14 @@ export default function Home() {
 
         <section className="service-ledger" aria-labelledby="work-heading">
           <div className="ledger-intro">
-            <p className="field-label">WHAT PEOPLE COME HERE FOR</p>
+            <p className="field-label">COMMON LAND PROJECTS</p>
             <h2 id="work-heading">
-              Start with the property problem, not the perfect service name.
+              Clearing, dirt, drainage, driveways — and the jobs in between.
             </h2>
             <p>
-              The site is built around the way landowners actually describe a
-              job: the drive keeps washing out, the lot has grown in, the brush
-              is taking over, or the property needs cleaned up before something
-              else can happen.
+              You do not need to know the trade name for the work. Tell us the
+              driveway keeps washing out, the lot has grown in, the brush is
+              taking over, or the property needs cleaned up before the next step.
             </p>
           </div>
 
@@ -176,17 +176,17 @@ export default function Home() {
           </div>
 
           <div className="ledger-foot">
-            <Link href="/services">See every service request category →</Link>
+            <Link href="/services">See all land & property services →</Link>
           </div>
         </section>
 
         <section className="route-board">
           <div className="route-board-heading">
             <p className="field-label field-label-light">AREAS WE COVER</p>
-            <h2>Land and property requests from across Arkansas.</h2>
+            <h2>Land & property help across Arkansas.</h2>
             <p>
               Browse the regions and communities we cover in more detail, or
-              send a request from anywhere in Arkansas.
+              tell us about a project from anywhere in Arkansas.
             </p>
           </div>
 
@@ -207,7 +207,7 @@ export default function Home() {
         <section className="routing-story">
           <div className="routing-label">HOW IT WORKS</div>
           <div className="routing-copy">
-            <h2>No directory maze. No ten-company quote form.</h2>
+            <h2>Tell us what’s going on. We’ll help move the job forward.</h2>
             <p>
               Tell us where the property is, what needs done, and anything you
               already know about the size, access, or timing. We review the
@@ -220,7 +220,7 @@ export default function Home() {
               <strong>START SIMPLE</strong>
               <p>
                 A phone number, town, work type, and short description are enough
-                to open the request.
+                to get started.
               </p>
             </div>
             <div>
@@ -234,7 +234,7 @@ export default function Home() {
               <strong>ONE REQUEST IS ENOUGH</strong>
               <p>
                 If the job touches clearing, dirt, drainage, hauling, or another
-                category, put it all in one request. We can sort out the details.
+                category, put it all in one message. We can sort out the details.
               </p>
             </div>
           </div>
@@ -242,7 +242,7 @@ export default function Home() {
 
         <section className="guide-yard">
           <div className="guide-yard-head">
-            <p className="field-label">PROPERTY OWNER NOTES</p>
+            <p className="field-label">LANDOWNER GUIDES</p>
             <h2>Useful information before the equipment ever shows up.</h2>
           </div>
 
@@ -257,14 +257,14 @@ export default function Home() {
           </div>
 
           <Link href="/guides" className="plain-link dark-link">
-            Browse the full property guide →
+            Browse all property guides →
           </Link>
         </section>
 
         <section className="home-faq">
           <div className="faq-label">
             <span>STRAIGHT ANSWERS</span>
-            <h2>Before you send the job.</h2>
+            <h2>What property owners usually want to know.</h2>
           </div>
 
           <div className="faq-list">
@@ -273,11 +273,11 @@ export default function Home() {
               <p>{siteData.disclosure}</p>
             </details>
             <details>
-              <summary>Can I request work outside the highlighted towns?</summary>
+              <summary>Can I get help outside the highlighted towns?</summary>
               <p>
-                Yes. Requests can come from anywhere in Arkansas. The highlighted
+                Yes. You can reach out from anywhere in Arkansas. The highlighted
                 areas are communities we cover in more detail, but they are not
-                the only places you can submit a project.
+                the only places you can tell us about a project.
               </p>
             </details>
             <details>
@@ -301,11 +301,11 @@ export default function Home() {
 
         <section className="final-request">
           <div>
-            <p className="field-label field-label-light">READY WHEN THE PROPERTY IS</p>
-            <h2>Send the rough details. We can sort out the category after.</h2>
+            <p className="field-label field-label-light">HAVE LAND THAT NEEDS WORK?</p>
+            <h2>Tell us what you’re dealing with and where the property is.</h2>
           </div>
           <Link href="/contact" className="work-button light-button">
-            Start a job request
+            Tell us about the job
           </Link>
         </section>
       </main>

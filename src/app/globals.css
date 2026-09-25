@@ -1788,3 +1788,120 @@ p {
     max-height: 52vh;
   }
 }
+
+
+/* Split image hero used across service and location pages */
+.visual-hero {
+  background: var(--iron);
+  color: white;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+  min-height: 470px;
+  overflow: hidden;
+}
+
+.visual-hero-copy {
+  align-self: center;
+  padding: 4.5rem 3rem 4.5rem max(1.25rem, calc((100vw - 1460px) / 2 + 1.25rem));
+  position: relative;
+  z-index: 2;
+}
+
+.visual-hero-copy .breadcrumbs {
+  color: #9eabb2;
+  margin-bottom: 2.2rem;
+}
+
+.visual-hero-copy .breadcrumbs strong {
+  color: white;
+}
+
+.visual-hero-copy h1 {
+  font-size: clamp(3.7rem, 6vw, 7rem);
+  margin-top: 0.65rem;
+  max-width: 900px;
+}
+
+.visual-hero-lede {
+  color: #cbd2d6;
+  font-size: 1.06rem;
+  margin-top: 1.25rem;
+  max-width: 720px;
+}
+
+.visual-hero-cta {
+  margin-top: 1.7rem;
+}
+
+.visual-hero-media {
+  min-height: 470px;
+  position: relative;
+}
+
+.visual-hero-shade {
+  background:
+    linear-gradient(90deg, rgba(23, 26, 29, 0.72), rgba(23, 26, 29, 0.06) 48%),
+    linear-gradient(0deg, rgba(23, 26, 29, 0.18), transparent 45%);
+  inset: 0;
+  position: absolute;
+}
+
+.index-lines > a.has-thumb {
+  align-items: center;
+  grid-template-columns: 112px 0.45fr 0.9fr 1.35fr 26px;
+}
+
+.index-thumb {
+  height: 82px;
+  overflow: hidden;
+  position: relative;
+}
+
+.stock-photo-note {
+  color: #667179;
+  font-size: 0.72rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 1000px) {
+  .visual-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .visual-hero-copy {
+    padding: 3.5rem 1.25rem 2.8rem;
+  }
+
+  .visual-hero-media {
+    min-height: 320px;
+  }
+
+  .visual-hero-shade {
+    background: linear-gradient(0deg, rgba(23, 26, 29, 0.32), transparent 55%);
+  }
+}
+
+@media (max-width: 760px) {
+  .visual-hero-copy h1 {
+    font-size: clamp(3.3rem, 15vw, 5.4rem);
+  }
+
+  .visual-hero-media {
+    min-height: 260px;
+  }
+
+  .index-lines > a.has-thumb {
+    grid-template-columns: 92px 1fr 24px;
+  }
+
+  .index-lines > a.has-thumb small,
+  .index-lines > a.has-thumb p {
+    grid-column: 1 / -1;
+  }
+
+  .index-lines > a.has-thumb .index-thumb {
+    grid-column: 1;
+    grid-row: 1;
+    height: 70px;
+  }
+}
