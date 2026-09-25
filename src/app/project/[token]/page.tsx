@@ -29,7 +29,7 @@ export default async function ProjectStatusPage({ params }: Props) {
 
   if (!access) notFound();
 
-  const [{ data: lead }, { data: outcome }, { data: unlockRows }, { data: houseRows }] =
+  const [{ data: lead }, { data: outcome }, { data: unlockRows }, { data: houseActions }] =
     await Promise.all([
       admin
         .from("leads")
@@ -43,26 +43,39 @@ export default async function ProjectStatusPage({ params }: Props) {
         .maybeSingle(),
       admin.from("lead_unlocks").select("contractor_id").eq("lead_id", access.lead_id),
       admin
-        .from("contractor_profiles")
-        .select("id,business_name")
-        .eq("access_role", "house_owner")
-        .eq("status", "active")
-        .eq("public_profile_enabled", true),
+        .from("house_lead_actions")
+        .select("contractor_id,action")
+        .eq("lead_id", access.lead_id)
+        .in("action", ["contacted", "estimate", "won"]),
     ]);
 
   if (!lead) notFound();
 
   const unlockIds = [...new Set((unlockRows || []).map((row) => row.contractor_id))];
-  const { data: unlockedPros } = unlockIds.length
-    ? await admin
-        .from("contractor_profiles")
-        .select("id,business_name")
-        .in("id", unlockIds)
-        .eq("status", "active")
-    : { data: [] as Array<{ id: string; business_name: string }> };
+  const houseIds = [...new Set((houseActions || []).map((row) => row.contractor_id))];
+
+  const [{ data: unlockedPros }, { data: connectedHousePros }] = await Promise.all([
+    unlockIds.length
+      ? admin
+          .from("contractor_profiles")
+          .select("id,business_name")
+          .in("id", unlockIds)
+          .eq("access_role", "normal")
+          .eq("status", "active")
+      : Promise.resolve({ data: [] as Array<{ id: string; business_name: string }> }),
+    houseIds.length
+      ? admin
+          .from("contractor_profiles")
+          .select("id,business_name")
+          .in("id", houseIds)
+          .eq("access_role", "house_owner")
+          .eq("status", "active")
+          .eq("public_profile_enabled", true)
+      : Promise.resolve({ data: [] as Array<{ id: string; business_name: string }> }),
+  ]);
 
   const contractorMap = new Map<string, { id: string; business_name: string }>();
-  [...(houseRows || []), ...(unlockedPros || [])].forEach((pro) =>
+  [...(connectedHousePros || []), ...(unlockedPros || [])].forEach((pro) =>
     contractorMap.set(pro.id, pro)
   );
 
