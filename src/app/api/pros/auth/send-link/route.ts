@@ -135,7 +135,7 @@ export async function POST(request: Request) {
       return Response.json({ success: false, error: "Account email delivery is not configured yet." }, { status: 503 });
     }
 
-    await resend.emails.send({
+    const emailResult = await resend.emails.send({
       from:
         process.env.ACCOUNTS_FROM_EMAIL ||
         "Arkansas Land Pros <accounts@arkansaslandpros.com>",
@@ -155,6 +155,14 @@ export async function POST(request: Request) {
         </div>
       `,
     });
+
+    if (emailResult.error) {
+      console.error("Contractor auth email failed", emailResult.error);
+      return Response.json(
+        { success: false, error: "We could not deliver the sign-in email. Please try again." },
+        { status: 502 }
+      );
+    }
 
     return Response.json({ success: true });
   } catch (error) {
