@@ -5,6 +5,10 @@ import { Analytics } from "@vercel/analytics/react";
 
 export default function SiteAnalytics() {
   const pathname = usePathname();
-  if (pathname.startsWith("/project/")) return null;
+
+  if (pathname.startsWith("/project/")) {
+    return null;
+  }
+
   return <Analytics />;
 }

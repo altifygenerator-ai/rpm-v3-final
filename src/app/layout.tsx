@@ -4,6 +4,7 @@ import SiteAnalytics from "@/components/site-analytics";
 import "./globals.css";
 import LeadChat from "@/components/lead-chat";
 import GlobalClickTracker from "@/components/global-click-tracker";
+import SiteAnalytics from "@/components/site-analytics";
 import { siteData } from "@/data/site";
 import { stockImages } from "@/data/stock-images";
 import { getSiteUrl } from "@/lib/site-url";
