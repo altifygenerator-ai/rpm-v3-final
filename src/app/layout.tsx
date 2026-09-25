@@ -5,6 +5,7 @@ import "./globals.css";
 import LeadChat from "@/components/lead-chat";
 import GlobalClickTracker from "@/components/global-click-tracker";
 import { siteData } from "@/data/site";
+import { stockImages } from "@/data/stock-images";
 import { getSiteUrl } from "@/lib/site-url";
 
 const headingFont = Barlow_Condensed({
@@ -65,7 +66,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/hero/hero.jpg",
+        url: stockImages.hero.src,
         width: 1200,
         height: 630,
         alt: "Arkansas land and property work",
@@ -76,7 +77,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Arkansas Land Pros",
     description: siteData.description,
-    images: ["/images/hero/hero.jpg"],
+    images: [stockImages.hero.src],
   },
 };
 

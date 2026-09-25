@@ -7,6 +7,7 @@ import { services } from "@/data/services";
 import { regions } from "@/data/regions";
 import { guides } from "@/data/guides";
 import { siteData } from "@/data/site";
+import { stockImages } from "@/data/stock-images";
 import { getSiteUrl } from "@/lib/site-url";
 
 const featuredServiceSlugs = [
@@ -84,7 +85,7 @@ export default function Home() {
         <section className="hero-yard">
           <div className="hero-image-wrap">
             <Image
-              src="/images/hero/hero.jpg"
+              src={stockImages.hero.src}
               alt="Arkansas land and property work"
               fill
               priority
