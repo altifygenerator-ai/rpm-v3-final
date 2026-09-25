@@ -3497,3 +3497,31 @@ p {
   line-height: 1.35;
   padding: .6rem;
 }
+
+
+.pro-auth-consent {
+  align-items: flex-start !important;
+  display: flex !important;
+  gap: .6rem !important;
+}
+
+.pro-auth-consent input {
+  margin-top: .2rem;
+  min-height: auto !important;
+  width: auto !important;
+}
+
+.pro-auth-consent span {
+  color: var(--soft-ink);
+  font-family: var(--font-body) !important;
+  font-size: .76rem !important;
+  font-weight: 400 !important;
+  line-height: 1.45;
+  text-transform: none !important;
+}
+
+.pro-auth-consent a {
+  color: var(--clay-dark);
+  font-weight: 700;
+  text-decoration: underline;
+}

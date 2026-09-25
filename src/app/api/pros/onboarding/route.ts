@@ -133,33 +133,51 @@ export async function POST(request: Request) {
 
   if (profileError) throw profileError;
 
-  await admin.from("contractor_services").delete().eq("contractor_id", profileId);
-  await admin.from("contractor_territories").delete().eq("contractor_id", profileId);
+  const { error: serviceDeleteError } = await admin
+    .from("contractor_services")
+    .delete()
+    .eq("contractor_id", profileId);
+  if (serviceDeleteError) throw serviceDeleteError;
 
-  await admin.from("contractor_services").insert(
-    services.map((serviceSlug: string) => ({
+  const { error: territoryDeleteError } = await admin
+    .from("contractor_territories")
+    .delete()
+    .eq("contractor_id", profileId);
+  if (territoryDeleteError) throw territoryDeleteError;
+
+  const { error: serviceInsertError } = await admin
+    .from("contractor_services")
+    .insert(
+      services.map((serviceSlug: string) => ({
+        contractor_id: profileId,
+        service_slug: serviceSlug,
+        enabled: true,
+      }))
+    );
+  if (serviceInsertError) throw serviceInsertError;
+
+  const { error: territoryInsertError } = await admin
+    .from("contractor_territories")
+    .insert(
+      territories.map((territory: string) => ({
+        contractor_id: profileId,
+        city: territory,
+      }))
+    );
+  if (territoryInsertError) throw territoryInsertError;
+
+  const { error: preferenceError } = await admin
+    .from("contractor_preferences")
+    .upsert({
       contractor_id: profileId,
-      service_slug: serviceSlug,
-      enabled: true,
-    }))
-  );
-
-  await admin.from("contractor_territories").insert(
-    territories.map((territory: string) => ({
-      contractor_id: profileId,
-      city: territory,
-    }))
-  );
-
-  await admin.from("contractor_preferences").upsert({
-    contractor_id: profileId,
-    max_lead_price_cents:
-      maxLeadPriceDollars === null
-        ? null
-        : Math.round(maxLeadPriceDollars * 100),
-    email_notifications: emailNotifications,
-    auto_buy_enabled: false,
-  });
+      max_lead_price_cents:
+        maxLeadPriceDollars === null
+          ? null
+          : Math.round(maxLeadPriceDollars * 100),
+      email_notifications: emailNotifications,
+      auto_buy_enabled: false,
+    });
+  if (preferenceError) throw preferenceError;
 
   try {
     await refreshMatchesForContractor(profileId);

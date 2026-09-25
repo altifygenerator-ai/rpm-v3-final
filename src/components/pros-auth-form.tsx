@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useRef, useState } from "react";
+import Link from "next/link";
 import TurnstileWidget from "@/components/turnstile-widget";
 
 export default function ProsAuthForm({ mode }: { mode: "join" | "signin" }) {
@@ -12,8 +13,14 @@ export default function ProsAuthForm({ mode }: { mode: "join" | "signin" }) {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    setStatus("sending");
     setError("");
+
+    if (!token && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+      setError("Please complete the verification before continuing.");
+      return;
+    }
+
+    setStatus("sending");
 
     try {
       const response = await fetch("/api/pros/auth/send-link", {
@@ -25,6 +32,7 @@ export default function ProsAuthForm({ mode }: { mode: "join" | "signin" }) {
           businessName: data.get("businessName"),
           contactName: data.get("contactName"),
           turnstileToken: token,
+          termsAccepted: data.get("termsAccepted") === "on",
         }),
       });
       const result = await response.json();
@@ -64,6 +72,16 @@ export default function ProsAuthForm({ mode }: { mode: "join" | "signin" }) {
         <span>Business email</span>
         <input name="email" type="email" autoComplete="email" required maxLength={160} />
       </label>
+      {mode === "join" ? (
+        <label className="pro-auth-consent">
+          <input name="termsAccepted" type="checkbox" required />
+          <span>
+            I agree to the Arkansas Land Pros <Link href="/terms">Terms</Link> and{" "}
+            <Link href="/privacy">Privacy Policy</Link>, including the contractor
+            profile and paid lead marketplace terms.
+          </span>
+        </label>
+      ) : null}
       <TurnstileWidget onToken={setToken} />
       {error ? <p className="form-message form-error">{error}</p> : null}
       <button className="work-button" type="submit" disabled={status === "sending"}>

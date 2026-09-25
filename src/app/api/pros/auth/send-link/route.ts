@@ -41,6 +41,7 @@ export async function POST(request: Request) {
     const contactName = cleanText(body.contactName, 100);
     const mode = body.mode === "join" ? "join" : "signin";
     const turnstileToken = cleanText(body.turnstileToken, 3000);
+    const termsAccepted = body.termsAccepted === true;
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return Response.json({ success: false, error: "Enter a valid email address." }, { status: 400 });
@@ -49,11 +50,24 @@ export async function POST(request: Request) {
       return Response.json({ success: false, error: "Business name is required." }, { status: 400 });
     }
 
-    if (process.env.TURNSTILE_SECRET_KEY) {
-      const verification = await verifyTurnstile(turnstileToken, ip);
-      if (!verification.ok) {
-        return Response.json({ success: false, error: "Verification failed. Please try again." }, { status: 400 });
-      }
+    if (mode === "join" && !termsAccepted) {
+      return Response.json(
+        { success: false, error: "Please agree to the marketplace terms before joining." },
+        { status: 400 }
+      );
+    }
+
+    const verification = await verifyTurnstile(turnstileToken, ip);
+    if (!verification.ok) {
+      return Response.json(
+        {
+          success: false,
+          error: verification.configurationError
+            ? "Account verification is not configured yet."
+            : "Verification failed. Please try again.",
+        },
+        { status: verification.configurationError ? 503 : 400 }
+      );
     }
 
     const admin = createAdminClient();

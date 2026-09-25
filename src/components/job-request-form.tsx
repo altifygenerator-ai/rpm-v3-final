@@ -153,15 +153,19 @@ export default function JobRequestForm({
 
         <label>
           <span>Town / property area</span>
-          <select name="area" defaultValue={areaDefault} required>
-            <option value="">Choose an area</option>
+          <input
+            name="area"
+            list="arkansas-land-pros-area-options"
+            defaultValue={areaDefault}
+            required
+            maxLength={120}
+            placeholder="Example: Glenwood, Hot Springs, Mena"
+          />
+          <datalist id="arkansas-land-pros-area-options">
             {areas.map((area) => (
-              <option key={area.slug} value={area.name}>
-                {area.name}
-              </option>
+              <option key={area.slug} value={area.name} />
             ))}
-            <option value="Elsewhere in Arkansas">Elsewhere in Arkansas</option>
-          </select>
+          </datalist>
         </label>
 
         <label className="form-span">
