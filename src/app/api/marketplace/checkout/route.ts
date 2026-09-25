@@ -108,12 +108,14 @@ export async function POST(request: Request) {
 
     if (reserveError || !purchaseId) {
       const reason = reserveError?.message || "This opportunity could not be reserved.";
-      const soldOut = /sold_out|not_available|already_unlocked/i.test(reason);
+      const soldOut = /sold_out|not_available|already_unlocked|already_reserved/i.test(reason);
       return Response.json(
         {
           success: false,
           error: soldOut
-            ? "This opportunity is no longer available for purchase."
+            ? /already_reserved/i.test(reason)
+              ? "You already have a checkout open for this lead. Cancel it or wait for it to expire before trying again."
+              : "This opportunity is no longer available for purchase."
             : "The lead could not be reserved. Please try again.",
         },
         { status: soldOut ? 409 : 500 }
@@ -127,7 +129,7 @@ export async function POST(request: Request) {
       mode: "payment",
       customer: stripeCustomerId,
       success_url: `${baseUrl}/pro/leads/${lead.id}?purchase=success`,
-      cancel_url: `${baseUrl}/pro/leads/${lead.id}?purchase=cancelled`,
+      cancel_url: `${baseUrl}/pro/leads/${lead.id}?purchase=cancelled&purchaseId=${purchaseId}`,
       client_reference_id: purchaseId,
       line_items: [
         {

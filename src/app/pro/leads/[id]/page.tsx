@@ -5,11 +5,15 @@ import LeadOutcomeActions from "@/components/lead-outcome-actions";
 import LeadDisputeForm from "@/components/lead-dispute-form";
 import HouseLeadControls from "@/components/house-lead-controls";
 import HouseLeadSettings from "@/components/house-lead-settings";
+import CheckoutCancelCleanup from "@/components/checkout-cancel-cleanup";
 import { getContractorContext } from "@/lib/contractor-auth";
 import { canBuyLead, getLeadForContractor } from "@/lib/marketplace-queries";
 import { formatMoney } from "@/lib/marketplace";
 
-type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ purchase?: string }> };
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ purchase?: string; purchaseId?: string }>;
+};
 
 export default async function LeadDetailPage({ params, searchParams }: Props) {
   const context = await getContractorContext();
@@ -35,6 +39,12 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
 
       {query.purchase === "success" && !unlocked ? (
         <div className="pro-notice">Payment returned successfully. Stripe may take a moment to confirm the webhook; refresh shortly if the full lead is still locked.</div>
+      ) : null}
+
+      {query.purchase === "cancelled" && query.purchaseId ? (
+        <CheckoutCancelCleanup purchaseId={query.purchaseId} />
+      ) : query.purchase === "cancelled" ? (
+        <div className="pro-notice">Checkout was cancelled.</div>
       ) : null}
 
       <section className="lead-detail-grid">
