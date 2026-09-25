@@ -15,21 +15,21 @@ export const metadata: Metadata = {
 
 const sections = [
   {
-    title: "Priority lead area",
+    title: "Southwest Arkansas & Hot Springs",
     description:
-      "The heaviest launch focus is the Southwest Arkansas / Hot Springs / Ouachita corridor, where useful leads can be handled locally first.",
+      "Coverage around Amity, Glenwood, Arkadelphia, Hot Springs, Mount Ida, Malvern, Murfreesboro, and nearby rural communities.",
     priorities: ["red-dirt"],
   },
   {
-    title: "Established Greers Ferry search area",
+    title: "Greers Ferry Lake area",
     description:
-      "These pages preserve the former Richards site’s strongest geographic continuity while expanding the content into the Arkansas Land Pros model.",
+      "Land and property requests around Greers Ferry, Heber Springs, Fairfield Bay, Clinton, Quitman, and nearby lake communities.",
     priorities: ["legacy"],
   },
   {
-    title: "Expansion markets",
+    title: "Central & wider Arkansas",
     description:
-      "These are real search targets, but the site is building them as a second ring rather than pretending every Arkansas town is equally local on day one.",
+      "Additional coverage around Benton, Bryant, Little Rock, Conway, Russellville, Searcy, Mountain View, Sheridan, Gurdon, Mena, and surrounding areas.",
     priorities: ["expansion"],
   },
 ] as const;
@@ -44,9 +44,8 @@ export default function AreasPage() {
           <p className="field-label field-label-light">ARKANSAS COVERAGE</p>
           <h1>Local pages with an actual reason to exist.</h1>
           <p>
-            Arkansas Land Pros is broad enough to grow statewide, but the SEO
-            starts in defined regional clusters instead of copy-pasting every
-            city in the state.
+            Browse the communities we cover in detail, or send a project request
+            from anywhere in Arkansas.
           </p>
         </section>
 
@@ -83,8 +82,8 @@ export default function AreasPage() {
             <div>
               <h2>Browse by Arkansas region.</h2>
               <p>
-                Regional pages tie related towns and services together so the
-                search structure reflects how the market actually works.
+                Use the regional pages to find nearby communities and the kinds
+                of land and property work commonly requested there.
               </p>
             </div>
           </div>

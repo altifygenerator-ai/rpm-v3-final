@@ -57,7 +57,7 @@ export default function Home() {
           name: "What parts of Arkansas are targeted first?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "The heaviest launch focus is Southwest Arkansas, the Hot Springs area, the Ouachitas, and the existing Greers Ferry Lake search cluster, with additional Central Arkansas expansion pages.",
+            text: "Requests are welcome statewide, with detailed coverage across Southwest Arkansas, the Hot Springs area, the Ouachitas, Greers Ferry Lake, and Central Arkansas.",
           },
         },
         {
@@ -119,11 +119,11 @@ export default function Home() {
               </Link>
             </div>
             <div className="coverage-note">
-              <strong>HEAVIEST LAUNCH FOCUS</strong>
+              <strong>COMMON REQUEST AREAS</strong>
               <span>
                 Amity / Glenwood / Hot Springs / Mount Ida / Arkadelphia /
-                Malvern / Murfreesboro — plus the established Greers Ferry Lake
-                search area.
+                Malvern / Murfreesboro — plus Greers Ferry Lake and communities
+                across Central Arkansas.
               </span>
             </div>
           </div>
@@ -182,12 +182,11 @@ export default function Home() {
 
         <section className="route-board">
           <div className="route-board-heading">
-            <p className="field-label field-label-light">TARGET MARKETS</p>
-            <h2>Built statewide. Focused where the leads are useful first.</h2>
+            <p className="field-label field-label-light">AREAS WE COVER</p>
+            <h2>Land and property requests from across Arkansas.</h2>
             <p>
-              We are not trying to fake a hundred identical city pages. The
-              launch starts with distinct regional clusters and grows outward
-              from there.
+              Browse the regions and communities we cover in more detail, or
+              send a request from anywhere in Arkansas.
             </p>
           </div>
 
@@ -206,14 +205,14 @@ export default function Home() {
         </section>
 
         <section className="routing-story">
-          <div className="routing-label">HOW A REQUEST MOVES</div>
+          <div className="routing-label">HOW IT WORKS</div>
           <div className="routing-copy">
             <h2>No directory maze. No ten-company quote form.</h2>
             <p>
-              You send the property area, the kind of work, and a plain-English
-              description. The request is reviewed and routed to a service
-              provider that may be able to help. Southwest Arkansas is the
-              priority routing area at launch.
+              Tell us where the property is, what needs done, and anything you
+              already know about the size, access, or timing. We review the
+              request and connect it with a service provider that may be able to
+              help.
             </p>
           </div>
           <div className="routing-details">
@@ -225,17 +224,17 @@ export default function Home() {
               </p>
             </div>
             <div>
-              <strong>KEEP THE SOURCE</strong>
+              <strong>ADD WHAT YOU KNOW</strong>
               <p>
-                Landing page, referrer, and campaign tags stay with the lead so
-                we can see what actually creates useful work.
+                Acreage, driveway length, photos, access issues, timing, or a
+                simple description can all help someone understand the job.
               </p>
             </div>
             <div>
-              <strong>CUT THE SPAM</strong>
+              <strong>ONE REQUEST IS ENOUGH</strong>
               <p>
-                Turnstile, form traps, validation, timing checks, and rate limits
-                are built into the intake instead of being added later.
+                If the job touches clearing, dirt, drainage, hauling, or another
+                category, put it all in one request. We can sort out the details.
               </p>
             </div>
           </div>
@@ -277,8 +276,8 @@ export default function Home() {
               <summary>Can I request work outside the highlighted towns?</summary>
               <p>
                 Yes. Requests can come from anywhere in Arkansas. The highlighted
-                areas are simply where the site is putting the most SEO and lead
-                routing effort first.
+                areas are communities we cover in more detail, but they are not
+                the only places you can submit a project.
               </p>
             </details>
             <details>

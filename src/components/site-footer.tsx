@@ -45,7 +45,7 @@ export default function SiteFooter() {
             <strong>ABOUT THE SITE</strong>
             <Link href="/about">How requests work</Link>
             <Link href="/guides">Property guides</Link>
-            <Link href="/areas">All target areas</Link>
+            <Link href="/areas">Areas we cover</Link>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
           </div>

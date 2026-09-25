@@ -1,70 +1,127 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import TurnstileWidget from "@/components/turnstile-widget";
 import { getAttribution, trackEvent } from "@/lib/tracking";
 
-const quickServices = [
-  "Land clearing",
-  "Dirt work",
-  "Driveway work",
-  "Drainage",
-  "Brush clearing",
-  "Property cleanup",
-];
+type Message = {
+  role: "user" | "assistant";
+  content: string;
+};
 
-const timingOptions = [
-  "As soon as practical",
-  "Within a month",
-  "1–3 months",
-  "Planning ahead",
-];
-
-type ChatData = {
-  service: string;
-  area: string;
-  timeline: string;
-  message: string;
+type LeadDraft = {
   name: string;
   phone: string;
   email: string;
+  area: string;
+  service: string;
+  timeline: string;
+  propertySize: string;
+  message: string;
 };
 
-const emptyData: ChatData = {
-  service: "",
-  area: "",
-  timeline: "",
-  message: "",
+const emptyLead: LeadDraft = {
   name: "",
   phone: "",
   email: "",
+  area: "",
+  service: "",
+  timeline: "",
+  propertySize: "",
+  message: "",
 };
+
+const welcome =
+  "Hey — tell me a little about the property and what you're trying to get done. If you're not sure what to call the job, that's fine.";
 
 export default function LeadChat() {
   const [open, setOpen] = useState(false);
-  const [stage, setStage] = useState<"service" | "area" | "timing" | "details" | "contact" | "sent">("service");
-  const [data, setData] = useState<ChatData>(emptyData);
-  const [token, setToken] = useState("");
-  const [resetKey, setResetKey] = useState(0);
+  const [messages, setMessages] = useState<Message[]>([
+    { role: "assistant", content: welcome },
+  ]);
+  const [draft, setDraft] = useState<LeadDraft>(emptyLead);
+  const [input, setInput] = useState("");
+  const [quickReplies, setQuickReplies] = useState<string[]>([
+    "I need land cleared",
+    "My driveway is washing out",
+    "I need dirt or grading work",
+  ]);
+  const [ready, setReady] = useState(false);
+  const [thinking, setThinking] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [leadId, setLeadId] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [resetKey, setResetKey] = useState(0);
   const startedAt = useRef(0);
+  const transcriptRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const element = transcriptRef.current;
+    if (element) element.scrollTop = element.scrollHeight;
+  }, [messages, open, ready, thinking]);
 
   function openChat() {
     if (!startedAt.current) startedAt.current = Date.now();
     setOpen(true);
-    trackEvent("Lead Chat Open", { source: "floating-chat" });
+    trackEvent("Lead Chat Open", { source: "ai-project-assistant" });
   }
 
-  async function submit(event: FormEvent) {
-    event.preventDefault();
-    if (!data.name.trim() || !data.phone.trim()) {
-      setError("Name and phone are required.");
-      return;
+  async function sendMessage(text: string) {
+    const cleanText = text.trim();
+    if (!cleanText || thinking || leadId) return;
+
+    const nextMessages: Message[] = [
+      ...messages,
+      { role: "user", content: cleanText.slice(0, 1800) },
+    ];
+
+    setMessages(nextMessages);
+    setInput("");
+    setThinking(true);
+    setError("");
+    setQuickReplies([]);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: nextMessages, lead: draft }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "The assistant could not respond.");
+      }
+
+      setDraft(result.lead);
+      setReady(Boolean(result.readyToSubmit));
+      setQuickReplies(Array.isArray(result.quickReplies) ? result.quickReplies : []);
+      setMessages((current) => [
+        ...current,
+        { role: "assistant", content: result.reply },
+      ]);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "The assistant could not respond. Please try again."
+      );
+    } finally {
+      setThinking(false);
     }
-    if (!token && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
-      setError("Please complete the verification.");
+  }
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    await sendMessage(input);
+  }
+
+  async function submitLead() {
+    if (sending || !ready || leadId) return;
+    if (!turnstileToken && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+      setError("Please complete the verification before sending the request.");
       return;
     }
 
@@ -76,11 +133,11 @@ export default function LeadChat() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...data,
-          source: "chat",
+          ...draft,
+          source: "ai-chat",
           companyWebsite: "",
-          startedAt: startedAt.current,
-          turnstileToken: token,
+          startedAt: startedAt.current || Date.now() - 2000,
+          turnstileToken,
           ...getAttribution(),
         }),
       });
@@ -90,30 +147,56 @@ export default function LeadChat() {
         throw new Error(result.error || "The request could not be sent.");
       }
 
-      trackEvent("Lead Submitted", {
-        source: "chat",
-        service: data.service || "not-set",
-      });
-
       setLeadId(result.leadId || "received");
-      setStage("sent");
-      setResetKey((value) => value + 1);
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          content:
+            "Got it — the request has been sent for review. If it's a fit, someone can follow up using the contact information you provided.",
+        },
+      ]);
+      trackEvent("Lead Submitted", {
+        source: "ai-chat",
+        service: draft.service || "not-set",
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "The request could not be sent.");
+      setError(
+        err instanceof Error ? err.message : "The request could not be sent."
+      );
     } finally {
       setSending(false);
     }
   }
 
-  function reset() {
-    setData(emptyData);
-    setStage("service");
+  function resetChat() {
+    setMessages([{ role: "assistant", content: welcome }]);
+    setDraft(emptyLead);
+    setInput("");
+    setQuickReplies([
+      "I need land cleared",
+      "My driveway is washing out",
+      "I need dirt or grading work",
+    ]);
+    setReady(false);
+    setThinking(false);
+    setSending(false);
     setError("");
     setLeadId("");
-    setToken("");
-    startedAt.current = 0;
+    setTurnstileToken("");
+    startedAt.current = Date.now();
     setResetKey((value) => value + 1);
   }
+
+  const summaryRows = [
+    ["Name", draft.name],
+    ["Phone", draft.phone],
+    ["Email", draft.email],
+    ["Property area", draft.area],
+    ["Work", draft.service],
+    ["Timing", draft.timeline],
+    ["Rough size", draft.propertySize],
+  ].filter(([, value]) => value);
 
   return (
     <div className="lead-chat-shell">
@@ -125,185 +208,129 @@ export default function LeadChat() {
       )}
 
       {open && (
-        <section className="lead-chat" aria-label="Job request chat">
+        <section className="lead-chat" aria-label="Arkansas Land Pros project assistant">
           <div className="chat-head">
             <div>
               <span>ARKANSAS LAND PROS</span>
-              <strong>Job intake</strong>
+              <strong>Project assistant</strong>
+              <small>Automated job intake</small>
             </div>
             <button type="button" onClick={() => setOpen(false)} aria-label="Close chat">
               Close
             </button>
           </div>
 
-          <div className="chat-body">
-            {stage === "service" && (
-              <>
-                <p className="chat-prompt">What kind of property work are you looking at?</p>
-                <div className="chat-options">
-                  {quickServices.map((service) => (
-                    <button
-                      key={service}
-                      type="button"
-                      onClick={() => {
-                        setData((current) => ({ ...current, service }));
-                        setStage("area");
-                      }}
-                    >
-                      {service}
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setData((current) => ({ ...current, service: "Not sure" }));
-                      setStage("area");
-                    }}
-                  >
-                    Not sure yet
-                  </button>
-                </div>
-              </>
-            )}
-
-            {stage === "area" && (
-              <form
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  if (data.area.trim()) setStage("timing");
-                }}
+          <div className="chat-transcript" ref={transcriptRef}>
+            {messages.map((message, index) => (
+              <div
+                className={`chat-message ${message.role}`}
+                key={`${message.role}-${index}-${message.content.slice(0, 20)}`}
               >
-                <p className="chat-prompt">Where is the property?</p>
-                <input
-                  value={data.area}
-                  onChange={(event) =>
-                    setData((current) => ({ ...current, area: event.target.value }))
-                  }
-                  placeholder="Town or property area"
-                  maxLength={100}
-                  required
-                />
-                <button className="chat-next" type="submit">Keep going</button>
-              </form>
+                <span>{message.role === "assistant" ? "ALP" : "You"}</span>
+                <p>{message.content}</p>
+              </div>
+            ))}
+
+            {thinking && (
+              <div className="chat-message assistant">
+                <span>ALP</span>
+                <p className="chat-typing">Putting that together…</p>
+              </div>
             )}
 
-            {stage === "timing" && (
-              <>
-                <p className="chat-prompt">When are you hoping to get it handled?</p>
-                <div className="chat-options">
-                  {timingOptions.map((timeline) => (
-                    <button
-                      key={timeline}
-                      type="button"
-                      onClick={() => {
-                        setData((current) => ({ ...current, timeline }));
-                        setStage("details");
-                      }}
-                    >
-                      {timeline}
-                    </button>
+            {ready && !leadId && (
+              <div className="chat-summary">
+                <strong>Request so far</strong>
+                <div>
+                  {summaryRows.map(([label, value]) => (
+                    <p key={label}>
+                      <span>{label}</span>
+                      {value}
+                    </p>
                   ))}
                 </div>
-              </>
-            )}
+                {draft.message && (
+                  <p className="chat-summary-notes">
+                    <span>Project</span>
+                    {draft.message}
+                  </p>
+                )}
 
-            {stage === "details" && (
-              <form
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  if (data.message.trim().length >= 10) setStage("contact");
-                }}
-              >
-                <p className="chat-prompt">Give us the short version of what needs done.</p>
-                <textarea
-                  value={data.message}
-                  onChange={(event) =>
-                    setData((current) => ({ ...current, message: event.target.value }))
-                  }
-                  rows={5}
-                  minLength={10}
-                  maxLength={1800}
-                  placeholder="What does the property look like now, and what do you want changed?"
-                  required
-                />
-                <button className="chat-next" type="submit">Add contact info</button>
-              </form>
-            )}
+                <TurnstileWidget onToken={setTurnstileToken} resetKey={resetKey} />
 
-            {stage === "contact" && (
-              <form onSubmit={submit}>
-                <p className="chat-prompt">Where should we send the request back to?</p>
-                <div className="chat-contact-fields">
-                  <input
-                    value={data.name}
-                    onChange={(event) =>
-                      setData((current) => ({ ...current, name: event.target.value }))
-                    }
-                    placeholder="Name"
-                    autoComplete="name"
-                    required
-                  />
-                  <input
-                    value={data.phone}
-                    onChange={(event) =>
-                      setData((current) => ({ ...current, phone: event.target.value }))
-                    }
-                    placeholder="Phone"
-                    type="tel"
-                    autoComplete="tel"
-                    required
-                  />
-                  <input
-                    value={data.email}
-                    onChange={(event) =>
-                      setData((current) => ({ ...current, email: event.target.value }))
-                    }
-                    placeholder="Email (optional)"
-                    type="email"
-                    autoComplete="email"
-                  />
-                </div>
-
-                <TurnstileWidget onToken={setToken} resetKey={resetKey} />
-
-                {error && <p className="chat-error">{error}</p>}
-
-                <button className="chat-next" type="submit" disabled={sending}>
-                  {sending ? "Sending…" : "Send the request"}
+                <button
+                  className="chat-send-request"
+                  type="button"
+                  onClick={submitLead}
+                  disabled={sending}
+                >
+                  {sending ? "Sending…" : "Send this request"}
                 </button>
-              </form>
+                <small>
+                  Want to change something? Just type the correction below before
+                  you send it.
+                </small>
+              </div>
             )}
 
-            {stage === "sent" && (
-              <div className="chat-sent">
-                <strong>That’s in.</strong>
-                <p>
-                  Your request was sent for review. Reference: {leadId}
-                </p>
-                <button type="button" onClick={reset}>Start another request</button>
+            {leadId && (
+              <div className="chat-confirmation">
+                <strong>Request received</strong>
+                <span>Reference {leadId}</span>
+                <button type="button" onClick={resetChat}>
+                  Start another request
+                </button>
               </div>
             )}
           </div>
 
-          {stage !== "service" && stage !== "sent" && (
-            <div className="chat-foot">
-              <button
-                type="button"
-                onClick={() => {
-                  const back = {
-                    area: "service",
-                    timing: "area",
-                    details: "timing",
-                    contact: "details",
-                  } as const;
-                  setStage(back[stage as keyof typeof back]);
-                }}
-              >
-                Back
-              </button>
-              <span>No sales script. Just the job details.</span>
-            </div>
+          {!leadId && (
+            <>
+              {quickReplies.length > 0 && (
+                <div className="chat-quick-replies">
+                  {quickReplies.map((reply) => (
+                    <button
+                      key={reply}
+                      type="button"
+                      onClick={() => sendMessage(reply)}
+                      disabled={thinking}
+                    >
+                      {reply}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <form className="chat-compose" onSubmit={handleSubmit}>
+                <textarea
+                  value={input}
+                  onChange={(event) => setInput(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && !event.shiftKey) {
+                      event.preventDefault();
+                      if (input.trim()) void sendMessage(input);
+                    }
+                  }}
+                  rows={2}
+                  maxLength={1800}
+                  placeholder="Type what you need done…"
+                  disabled={thinking}
+                />
+                <button type="submit" disabled={thinking || !input.trim()}>
+                  Send
+                </button>
+              </form>
+            </>
           )}
+
+          {error && <p className="chat-error">{error}</p>}
+
+          <div className="chat-foot">
+            <span>
+              This assistant helps collect project details. Final estimates and
+              scheduling come from the service provider.
+            </span>
+          </div>
         </section>
       )}
     </div>

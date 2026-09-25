@@ -8,7 +8,7 @@ import { siteData } from "@/data/site";
 export const metadata: Metadata = {
   title: "How Arkansas Land Pros Works",
   description:
-    "Learn how Arkansas Land Pros collects and routes Arkansas land-service requests, which regions are targeted first, and what the site does and does not promise.",
+    "Learn how Arkansas Land Pros helps property owners describe land-service projects and connect with an independent service provider that may be able to help.",
   alternates: { canonical: "/about" },
 };
 
@@ -19,70 +19,73 @@ export default function AboutPage() {
       <main>
         <section className="inner-hero">
           <Breadcrumbs items={[{ href: "/", label: "Home" }, { label: "How It Works" }]} />
-          <p className="field-label field-label-light">THE OPERATION</p>
-          <h1>A better front door for Arkansas land work.</h1>
+          <p className="field-label field-label-light">HOW IT WORKS</p>
+          <h1>A simple place to start when the property needs work.</h1>
           <p>
-            Arkansas Land Pros is being built as a focused lead property: useful
-            search pages for landowners, clean job intake, and routing that
-            starts where the work can actually be handled.
+            You do not need to know the exact service name before you reach out.
+            Tell us what the property looks like now, what you want changed, and
+            where it is.
           </p>
         </section>
 
         <section className="article-shell">
           <section>
-            <h2>What Arkansas Land Pros is</h2>
+            <h2>What Arkansas Land Pros does</h2>
             <p>{siteData.description}</p>
             <p>
-              It is not presented as one statewide crew pretending to be local
-              in every town. It is a lead and referral service built around
-              specific Arkansas property-service searches and a clear intake
-              system.
+              The goal is to make the first conversation easier for property
+              owners who need clearing, dirt work, drainage, driveway work,
+              cleanup, hauling, or a mix of several things.
             </p>
           </section>
 
           <section>
-            <h2>Why the launch is regional instead of fake-statewide</h2>
+            <h2>Start with the problem, not contractor terminology</h2>
             <p>
-              The strongest new focus is Southwest Arkansas, Hot Springs, and
-              the Ouachita corridor because those are useful lead markets close
-              to the initial service network. The Greers Ferry Lake cluster is
-              also retained because the previous site already had search
-              relevance around that region.
-            </p>
-            <p>
-              Central Arkansas pages form the next expansion ring. The goal is
-              to add depth where there is a real reason for the page instead of
-              creating hundreds of identical town pages.
+              A description like “the driveway keeps washing out,” “the lot has
+              grown in,” or “I need this area cleared before a mobile home goes
+              in” is enough to get started. Acreage, measurements, photos, and
+              timing help when you have them, but you do not need a finished
+              scope of work.
             </p>
           </section>
 
           <section>
-            <h2>What happens to a lead</h2>
+            <h2>Where requests can come from</h2>
             <p>
-              The intake captures the project basics plus where the lead came
-              from. At launch, requests are delivered for local review and can
-              be followed up by a service provider that may be able to handle
-              the job. The site itself does not issue the contractor&apos;s
-              estimate or guarantee availability.
+              Requests are welcome from anywhere in Arkansas. The site has
+              especially detailed area pages for Southwest Arkansas, Hot
+              Springs, the Ouachitas, Greers Ferry Lake, and several Central
+              Arkansas communities.
             </p>
           </section>
 
           <section>
-            <h2>What the site deliberately does not claim</h2>
+            <h2>What happens after you send it</h2>
             <p>
-              Arkansas Land Pros does not invent crew size, years in business,
-              equipment ownership, licenses, insurance status, customer reviews,
-              project counts, or completed-job totals. Those facts belong to the
-              contractor that ultimately performs the work.
+              Your request is reviewed and may be shared with an independent
+              service provider that may be able to help. If the project looks
+              like a fit, the provider can follow up about the property, an
+              estimate, scheduling, and any other details needed before work
+              begins.
             </p>
           </section>
 
           <section>
-            <h2>Start with a real property problem</h2>
+            <h2>What Arkansas Land Pros does not promise</h2>
             <p>
-              Land clearing, drainage, gravel access, dirt work, brush, storm
-              cleanup, culverts, and rural property jobs usually make more sense
-              once the location and site conditions are known.
+              Sending a request does not guarantee that a contractor will accept
+              the job, a particular price, or a particular schedule. The
+              contractor performing the work is responsible for its own
+              estimates, licensing, insurance, permits, scheduling, and completed
+              work.
+            </p>
+          </section>
+
+          <section>
+            <h2>Have a property project in mind?</h2>
+            <p>
+              Send the rough details and we can start from there.
             </p>
             <Link href="/contact" className="work-button mt-5">
               Start a job request

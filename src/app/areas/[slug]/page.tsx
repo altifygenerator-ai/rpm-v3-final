@@ -87,7 +87,7 @@ export default async function AreaPage({ params }: PageProps) {
 
         <section className="page-grid">
           <article className="page-copy">
-            <h2>Why {area.name} is in the target footprint</h2>
+            <h2>Property work around {area.name}</h2>
             <p>{area.localNote}</p>
             <p>
               Arkansas Land Pros accepts requests from property owners who need

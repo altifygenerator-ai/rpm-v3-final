@@ -84,7 +84,7 @@ export default async function RegionPage({ params }: PageProps) {
               interchangeable location pages.
             </p>
 
-            <h2>Target communities</h2>
+            <h2>Communities in this region</h2>
             <div className="link-board">
               {regionAreas.map((area) => (
                 <Link href={`/areas/${area.slug}`} key={area.slug}>

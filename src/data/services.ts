@@ -312,23 +312,23 @@ export const services: Service[] = [
     shortTitle: "Cabin & Rental Property",
     summary: "Exterior cleanup, access, drainage, brush, hauling, and practical property work for rentals and cabins.",
     description:
-      "This preserved service page now accepts exterior property requests from cabin and short-term-rental owners who need help with access, cleanup, drainage, brush, storm debris, driveway issues, or related outdoor work.",
+      "Cabin and short-term-rental owners can request exterior property help with access, cleanup, drainage, brush, storm debris, driveway issues, and related outdoor work.",
     image: stockImages.ruralRoad.src,
     requests: ["Exterior cleanup", "Driveway and access issues", "Storm cleanup", "Brush work", "Drainage concerns"],
     related: ["cleanup", "driveway-repair", "drainage-erosion", "tree-work"],
     faqs: [
       { q: "Can an out-of-town owner submit a request?", a: "Yes. Include the property address or area, your contact information, and any photos you have." },
       { q: "Can I request several exterior tasks at once?", a: "Yes. Describe the property as a whole and what needs attention." },
-      { q: "Do you handle interior turnover cleaning?", a: "Arkansas Land Pros is focused on land and exterior property-service leads. Interior cleaning is not the core category for this site." },
+      { q: "Do you handle interior turnover cleaning?", a: "Arkansas Land Pros focuses on land and exterior property work. Interior turnover cleaning is not one of the main services handled through this request system." },
     ],
   },
   {
     slug: "water-features",
     title: "Pond, Water Feature & Property Water-Work Requests",
     shortTitle: "Pond & Water Features",
-    summary: "A preserved request category for property projects involving ponds, rock, water movement, and outdoor water features.",
+    summary: "For property projects involving ponds, rock, water movement, and outdoor water features.",
     description:
-      "Property owners can submit requests involving small ponds, outdoor water features, rock placement, drainage-aware water projects, and related site work for review and routing.",
+      "Property owners can request help with small ponds, outdoor water features, rock placement, drainage-aware water projects, and related site work.",
     image: stockImages.pondWall.src,
     requests: ["Small pond concepts", "Outdoor water features", "Rock placement", "Water-flow improvements", "Site preparation around water features"],
     related: ["drainage-erosion", "retaining-walls", "dirt-work"],
@@ -344,7 +344,7 @@ export const services: Service[] = [
     shortTitle: "Outdoor Property Projects",
     summary: "For practical outdoor builds tied to land, access, grade, rock, steps, and rural property use.",
     description:
-      "This preserved category accepts requests for practical outdoor property work that may combine grade, rock, steps, small gathering areas, access improvements, or other land-related outdoor projects.",
+      "Request practical outdoor property work that may combine grade, rock, steps, small gathering areas, access improvements, or other land-related outdoor projects.",
     image: stockImages.ruralRoad.src,
     requests: ["Outdoor steps", "Rock features", "Property access improvements", "Small gathering areas", "Terrain-based outdoor work"],
     related: ["retaining-walls", "rural-property-prep", "grading-leveling"],
@@ -367,14 +367,14 @@ export const services: Service[] = [
     faqs: [
       { q: "What if I am not sure which service I need?", a: "Use General Property Work and describe the problem in plain language. The request can be sorted after it is reviewed." },
       { q: "Can multiple problems go in one request?", a: "Yes. That is often more useful than splitting one property project into several forms." },
-      { q: "Can I request work outside the listed towns?", a: "Yes. Arkansas Land Pros accepts requests statewide, with heavier SEO and routing focus in the regions listed on the site." },
+      { q: "Can I request work outside the listed towns?", a: "Yes. Arkansas Land Pros accepts requests from anywhere in Arkansas." },
     ],
   },
   {
     slug: "welding",
     title: "Property Welding & Fabrication Requests",
     shortTitle: "Property Welding",
-    summary: "A preserved request category for gates, brackets, repairs, and property-related metal work.",
+    summary: "For gates, brackets, repairs, and property-related metal work.",
     description:
       "Submit property-related welding and fabrication requests for review when metal repair, gates, brackets, small fabrication, or similar work is part of a land or outdoor property project.",
     image: stockImages.welding.src,
