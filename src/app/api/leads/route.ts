@@ -1,27 +1,17 @@
 import { Resend } from "resend";
 import { leadDestinationEmail, resendFrom } from "@/data/site";
+import { analyzeLead } from "@/lib/lead-intelligence";
+import { createMatchesAndNotify } from "@/lib/lead-matching";
+import { cleanText, DEFAULT_MAX_UNLOCKS } from "@/lib/marketplace";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export const runtime = "nodejs";
 
-const resend = process.env.RESEND_API_KEY
-  ? new Resend(process.env.RESEND_API_KEY)
-  : null;
-
-type RateBucket = {
-  count: number;
-  resetAt: number;
-};
-
+type RateBucket = { count: number; resetAt: number };
 const rateBuckets = new Map<string, RateBucket>();
 const RATE_WINDOW_MS = 15 * 60 * 1000;
 const RATE_MAX = 5;
-
-function clean(value: unknown, max = 500) {
-  return String(value ?? "")
-    .replace(/\u0000/g, "")
-    .trim()
-    .slice(0, max);
-}
 
 function escapeHtml(value: string) {
   return value
@@ -33,11 +23,10 @@ function escapeHtml(value: string) {
 }
 
 function getClientIp(request: Request) {
-  const headers = request.headers;
   return (
-    headers.get("cf-connecting-ip") ||
-    headers.get("x-vercel-forwarded-for") ||
-    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-vercel-forwarded-for") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     "unknown"
   );
 }
@@ -45,81 +34,41 @@ function getClientIp(request: Request) {
 function rateLimited(ip: string) {
   const now = Date.now();
   const current = rateBuckets.get(ip);
-
   if (!current || current.resetAt <= now) {
     rateBuckets.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
     return false;
   }
-
   current.count += 1;
-  rateBuckets.set(ip, current);
   return current.count > RATE_MAX;
 }
 
 function suspiciousText(values: string[]) {
   const text = values.join(" ").toLowerCase();
   const urlCount = (text.match(/https?:\/\//g) || []).length;
-  const repeated = /(.)\1{11,}/.test(text);
-  const commonSpam =
-    /(crypto investment|guest post|seo package|backlinks for sale|casino traffic|telegram promotion)/i.test(
-      text
-    );
-
-  return urlCount > 2 || repeated || commonSpam;
+  return (
+    urlCount > 2 ||
+    /(.)\1{11,}/.test(text) ||
+    /(crypto investment|guest post|seo package|backlinks for sale|casino traffic|telegram promotion)/i.test(text)
+  );
 }
 
-async function verifyTurnstile(token: string, ip: string) {
-  const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) {
-    return {
-      ok: false,
-      configurationError: true,
-      errors: ["TURNSTILE_SECRET_KEY missing"],
-    };
-  }
+function leadExpiry(timeline: string) {
+  const days = /as soon|soon|week/i.test(timeline)
+    ? 7
+    : /planning|3 month|1.?3/i.test(timeline)
+      ? 21
+      : 14;
+  return new Date(Date.now() + days * 86400000).toISOString();
+}
 
-  if (!token) {
-    return { ok: false, configurationError: false, errors: ["missing-input-response"] };
-  }
-
-  const form = new FormData();
-  form.set("secret", secret);
-  form.set("response", token);
-  if (ip !== "unknown") form.set("remoteip", ip);
-
-  try {
-    const response = await fetch(
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      {
-        method: "POST",
-        body: form,
-        cache: "no-store",
-      }
-    );
-
-    const result = (await response.json()) as {
-      success?: boolean;
-      "error-codes"?: string[];
-    };
-
-    return {
-      ok: Boolean(result.success),
-      configurationError: false,
-      errors: result["error-codes"] || [],
-    };
-  } catch {
-    return {
-      ok: false,
-      configurationError: false,
-      errors: ["verification-request-failed"],
-    };
-  }
+function extractCity(area: string) {
+  if (/elsewhere in arkansas/i.test(area)) return null;
+  return area.split(",")[0]?.trim().slice(0, 100) || null;
 }
 
 export async function POST(request: Request) {
   try {
     const ip = getClientIp(request);
-
     if (rateLimited(ip)) {
       return Response.json(
         { success: false, error: "Too many requests. Please try again later." },
@@ -128,8 +77,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-
-    const companyWebsite = clean(body.companyWebsite, 200);
+    const companyWebsite = cleanText(body.companyWebsite, 200);
     if (companyWebsite) {
       return Response.json({ success: true, leadId: "received" });
     }
@@ -143,204 +91,209 @@ export async function POST(request: Request) {
       );
     }
 
-    const name = clean(body.name, 80);
-    const phone = clean(body.phone, 30);
-    const email = clean(body.email, 120);
-    const area = clean(body.area, 120);
-    const service = clean(body.service, 120);
-    const timeline = clean(body.timeline, 100);
-    const propertySize = clean(body.propertySize, 100);
-    const message = clean(body.message, 1800);
-    const source = clean(body.source, 40) || "form";
-    const landingPage = clean(body.landingPage, 500);
-    const referrer = clean(body.referrer, 500);
-    const utmSource = clean(body.utmSource, 120);
-    const utmMedium = clean(body.utmMedium, 120);
-    const utmCampaign = clean(body.utmCampaign, 160);
-    const utmTerm = clean(body.utmTerm, 160);
-    const utmContent = clean(body.utmContent, 160);
-    const turnstileToken = clean(body.turnstileToken, 3000);
+    const name = cleanText(body.name, 80);
+    const phone = cleanText(body.phone, 30);
+    const email = cleanText(body.email, 120);
+    const area = cleanText(body.area, 120);
+    const service = cleanText(body.service, 120);
+    const timeline = cleanText(body.timeline, 100);
+    const propertySize = cleanText(body.propertySize, 100);
+    const message = cleanText(body.message, 1800);
+    const source = cleanText(body.source, 40) || "form";
+    const landingPage = cleanText(body.landingPage, 500);
+    const referrer = cleanText(body.referrer, 500);
+    const utmSource = cleanText(body.utmSource, 120);
+    const utmMedium = cleanText(body.utmMedium, 120);
+    const utmCampaign = cleanText(body.utmCampaign, 160);
+    const utmTerm = cleanText(body.utmTerm, 160);
+    const utmContent = cleanText(body.utmContent, 160);
+    const turnstileToken = cleanText(body.turnstileToken, 3000);
 
     if (!name || !phone || !area || !service || message.length < 10) {
       return Response.json(
-        {
-          success: false,
-          error: "Name, phone, property area, work type, and job details are required.",
-        },
+        { success: false, error: "Name, phone, property area, work type, and job details are required." },
         { status: 400 }
       );
     }
 
     const phoneDigits = phone.replace(/\D/g, "");
     if (phoneDigits.length < 7 || phoneDigits.length > 15) {
-      return Response.json(
-        { success: false, error: "Please enter a valid phone number." },
-        { status: 400 }
-      );
+      return Response.json({ success: false, error: "Please enter a valid phone number." }, { status: 400 });
     }
-
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return Response.json(
-        { success: false, error: "Please enter a valid email address." },
-        { status: 400 }
-      );
+      return Response.json({ success: false, error: "Please enter a valid email address." }, { status: 400 });
     }
-
-    if (
-      suspiciousText([
-        name,
-        email,
-        area,
-        service,
-        timeline,
-        propertySize,
-        message,
-      ])
-    ) {
-      return Response.json(
-        { success: false, error: "The request could not be accepted." },
-        { status: 400 }
-      );
+    if (suspiciousText([name, email, area, service, timeline, propertySize, message])) {
+      return Response.json({ success: false, error: "The request could not be accepted." }, { status: 400 });
     }
 
     const turnstile = await verifyTurnstile(turnstileToken, ip);
-
     if (!turnstile.ok) {
-      if (turnstile.configurationError) {
-        console.error("Turnstile configuration error", turnstile.errors);
-        return Response.json(
-          {
-            success: false,
-            error: "Verification is not configured on this environment yet.",
-          },
-          { status: 503 }
-        );
-      }
-
       return Response.json(
         {
           success: false,
-          error: "Verification failed. Please try again.",
+          error: turnstile.configurationError
+            ? "Verification is not configured on this environment yet."
+            : "Verification failed. Please try again.",
         },
-        { status: 400 }
+        { status: turnstile.configurationError ? 503 : 400 }
       );
     }
 
-    if (!resend) {
-      console.error("RESEND_API_KEY is missing; lead email was not sent.");
-      return Response.json(
-        {
-          success: false,
-          error: "Lead delivery is not configured on this environment yet.",
-        },
-        { status: 503 }
-      );
-    }
+    const intelligence = await analyzeLead({
+      service,
+      message,
+      area,
+      timeline,
+      propertySize,
+      email,
+    });
 
-    const leadId =
+    const publicCode =
       "ALP-" +
       Date.now().toString(36).toUpperCase() +
       "-" +
-      crypto.randomUUID().slice(0, 4).toUpperCase();
+      crypto.randomUUID().slice(0, 5).toUpperCase();
 
-    const attributionRows = [
-      ["Landing page", landingPage],
-      ["Referrer", referrer],
-      ["UTM source", utmSource],
-      ["UTM medium", utmMedium],
-      ["UTM campaign", utmCampaign],
-      ["UTM term", utmTerm],
-      ["UTM content", utmContent],
-    ].filter(([, value]) => value);
+    const attribution = {
+      landingPage,
+      referrer,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+      utmTerm,
+      utmContent,
+      source,
+    };
 
-    const html = `
-      <div style="font-family:Arial,sans-serif;color:#171a1d;max-width:720px;margin:0 auto">
-        <div style="background:#171a1d;color:#fff;padding:22px 26px;border-top:7px solid #c64e32">
-          <div style="font-size:12px;letter-spacing:.14em;color:#cbd1d5">ARKANSAS LAND PROS</div>
-          <h1 style="font-size:24px;margin:7px 0 0">New land-service lead</h1>
-        </div>
-        <div style="border:1px solid #d7dce0;border-top:0;padding:26px">
-          <p><strong>Lead ID:</strong> ${escapeHtml(leadId)}</p>
-          <p><strong>Source:</strong> ${escapeHtml(source)}</p>
-          <hr style="border:0;border-top:1px solid #d7dce0;margin:22px 0" />
-          <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-          <p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
-          ${email ? `<p><strong>Email:</strong> ${escapeHtml(email)}</p>` : ""}
-          <p><strong>Property area:</strong> ${escapeHtml(area)}</p>
-          <p><strong>Work requested:</strong> ${escapeHtml(service)}</p>
-          ${timeline ? `<p><strong>Timing:</strong> ${escapeHtml(timeline)}</p>` : ""}
-          ${propertySize ? `<p><strong>Rough size:</strong> ${escapeHtml(propertySize)}</p>` : ""}
-          <p><strong>Job details:</strong></p>
-          <div style="background:#f2f4f5;border-left:4px solid #c64e32;padding:14px 16px;white-space:pre-wrap">${escapeHtml(message)}</div>
-          ${
-            attributionRows.length
-              ? `<hr style="border:0;border-top:1px solid #d7dce0;margin:22px 0" />
-                 <p style="font-size:12px;letter-spacing:.1em;color:#66727c"><strong>ATTRIBUTION</strong></p>
-                 ${attributionRows
-                   .map(
-                     ([label, value]) =>
-                       `<p style="font-size:13px"><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</p>`
-                   )
-                   .join("")}`
-              : ""
-          }
-        </div>
-      </div>
-    `;
+    const admin = createAdminClient();
+    const { data: lead, error: insertError } = await admin
+      .from("leads")
+      .insert({
+        public_code: publicCode,
+        source,
+        customer_name: name,
+        customer_phone: phone,
+        customer_email: email || null,
+        area,
+        city: extractCity(area),
+        state: "Arkansas",
+        service_slug: intelligence.serviceSlug,
+        original_service: service,
+        description: message,
+        ai_summary: intelligence.summary,
+        timeline: timeline || null,
+        property_size: propertySize || null,
+        quality_score: intelligence.qualityScore,
+        quality_band: intelligence.qualityBand,
+        lead_price_cents: intelligence.leadPriceCents,
+        marketplace_status: "available",
+        marketplace_enabled: true,
+        max_paid_unlocks: DEFAULT_MAX_UNLOCKS,
+        unlimited_unlocks: false,
+        expires_at: leadExpiry(timeline),
+        ai_metadata: intelligence.aiMetadata,
+        attribution,
+      })
+      .select("id,public_code,area,city,county,service_slug,ai_summary,timeline,property_size,quality_band,lead_price_cents,is_test")
+      .single();
 
-    const result = await resend.emails.send({
-      from: resendFrom,
-      to: [leadDestinationEmail],
-      ...(email ? { replyTo: email } : {}),
-      subject: `[Arkansas Land Pros] ${service} lead — ${area} — ${name}`,
-      html,
-      text: [
-        `Arkansas Land Pros lead ${leadId}`,
-        `Source: ${source}`,
-        `Name: ${name}`,
-        `Phone: ${phone}`,
-        email ? `Email: ${email}` : "",
-        `Area: ${area}`,
-        `Work: ${service}`,
-        timeline ? `Timing: ${timeline}` : "",
-        propertySize ? `Rough size: ${propertySize}` : "",
-        "",
-        message,
-        "",
-        landingPage ? `Landing page: ${landingPage}` : "",
-        referrer ? `Referrer: ${referrer}` : "",
-        utmSource ? `UTM source: ${utmSource}` : "",
-        utmMedium ? `UTM medium: ${utmMedium}` : "",
-        utmCampaign ? `UTM campaign: ${utmCampaign}` : "",
-      ]
-        .filter(Boolean)
-        .join("\n"),
-      headers: {
-        "X-Entity-Ref-ID": leadId,
-      },
-    });
-
-    if (result.error) {
-      console.error("Resend lead delivery error", result.error);
+    if (insertError || !lead) {
+      console.error("Lead database insert failed", insertError);
       return Response.json(
-        { success: false, error: "The request could not be delivered." },
-        { status: 502 }
+        { success: false, error: "We could not save the project details. Please try again." },
+        { status: 500 }
       );
     }
 
-    console.info("Arkansas Land Pros lead delivered", {
-      leadId,
-      source,
-      service,
-      area,
+    await admin.from("lead_events").insert({
+      lead_id: lead.id,
+      event_type: "lead_created",
+      metadata: {
+        source,
+        quality_score: intelligence.qualityScore,
+        quality_band: intelligence.qualityBand,
+        lead_price_cents: intelligence.leadPriceCents,
+        service_slug: intelligence.serviceSlug,
+      },
     });
 
-    return Response.json({ success: true, leadId });
+    const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+    if (resend) {
+      const attributionRows = [
+        ["Landing page", landingPage],
+        ["Referrer", referrer],
+        ["UTM source", utmSource],
+        ["UTM medium", utmMedium],
+        ["UTM campaign", utmCampaign],
+      ].filter(([, value]) => value);
+
+      const html = `
+        <div style="font-family:Arial,sans-serif;color:#171a1d;max-width:720px;margin:0 auto">
+          <div style="background:#171a1d;color:#fff;padding:22px 26px;border-top:7px solid #c64e32">
+            <div style="font-size:12px;letter-spacing:.14em;color:#cbd1d5">ARKANSAS LAND PROS</div>
+            <h1 style="font-size:24px;margin:7px 0 0">New property lead</h1>
+          </div>
+          <div style="border:1px solid #d7dce0;border-top:0;padding:26px">
+            <p><strong>Lead ID:</strong> ${escapeHtml(publicCode)}</p>
+            <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+            <p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
+            ${email ? `<p><strong>Email:</strong> ${escapeHtml(email)}</p>` : ""}
+            <p><strong>Area:</strong> ${escapeHtml(area)}</p>
+            <p><strong>Classified as:</strong> ${escapeHtml(intelligence.serviceSlug.replace(/-/g, " "))}</p>
+            ${timeline ? `<p><strong>Timing:</strong> ${escapeHtml(timeline)}</p>` : ""}
+            ${propertySize ? `<p><strong>Rough size:</strong> ${escapeHtml(propertySize)}</p>` : ""}
+            <p><strong>AI summary:</strong> ${escapeHtml(intelligence.summary)}</p>
+            <p><strong>Quality:</strong> ${intelligence.qualityBand} (${intelligence.qualityScore}/100)</p>
+            <p><strong>Marketplace price:</strong> $${(intelligence.leadPriceCents / 100).toFixed(2)}</p>
+            <p><strong>Full homeowner notes:</strong></p>
+            <div style="background:#f2f4f5;border-left:4px solid #c64e32;padding:14px 16px;white-space:pre-wrap">${escapeHtml(message)}</div>
+            ${
+              attributionRows.length
+                ? `<hr style="border:0;border-top:1px solid #d7dce0;margin:22px 0" />
+                   ${attributionRows
+                     .map(([label, value]) => `<p style="font-size:13px"><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</p>`)
+                     .join("")}`
+                : ""
+            }
+          </div>
+        </div>
+      `;
+
+      const emailResult = await resend.emails.send({
+        from: resendFrom,
+        to: [leadDestinationEmail],
+        ...(email ? { replyTo: email } : {}),
+        subject: `[ALP] ${intelligence.serviceSlug.replace(/-/g, " ")} — ${area} — ${name}`,
+        html,
+        headers: { "X-Entity-Ref-ID": publicCode },
+      });
+
+      if (!emailResult.error) {
+        await admin
+          .from("leads")
+          .update({ red_dirt_copy_sent_at: new Date().toISOString() })
+          .eq("id", lead.id);
+        await admin.from("lead_events").insert({
+          lead_id: lead.id,
+          event_type: "red_dirt_email_sent",
+        });
+      } else {
+        console.error("Red Dirt lead email failed", emailResult.error);
+      }
+    } else {
+      console.error("RESEND_API_KEY missing; lead stored but Red Dirt copy not emailed.");
+    }
+
+    try {
+      await createMatchesAndNotify(lead);
+    } catch (matchError) {
+      console.error("Lead matching/notification failed", matchError);
+    }
+
+    return Response.json({ success: true, leadId: publicCode });
   } catch (error) {
     console.error("Lead intake error", error);
-    return Response.json(
-      { success: false, error: "The request could not be sent." },
-      { status: 500 }
-    );
+    return Response.json({ success: false, error: "The request could not be sent." }, { status: 500 });
   }
 }

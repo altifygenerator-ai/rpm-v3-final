@@ -27,4 +27,4 @@ export const leadDestinationEmail =
 
 export const resendFrom =
   process.env.RESEND_FROM_EMAIL ||
-  "Arkansas Land Pros <leads@hometownwebservicesar.cc>";
+  "Arkansas Land Pros <leads@arkansaslandpros.com>";
