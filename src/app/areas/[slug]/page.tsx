@@ -5,17 +5,20 @@ import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import VisualHero from "@/components/visual-hero";
 import JobRequestForm from "@/components/job-request-form";
+import PublicProStrip from "@/components/public-pro-strip";
 import { areas, areaBySlug } from "@/data/areas";
 import { coreServiceSlugs, serviceBySlug } from "@/data/services";
 import { localLandings } from "@/data/local-landings";
 import { imageForRegion } from "@/data/stock-images";
 import { getSiteUrl } from "@/lib/site-url";
+import { getPublicPros } from "@/lib/public-pros";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
 export const dynamicParams = false;
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   return areas.map((area) => ({ slug: area.slug }));
@@ -43,6 +46,7 @@ export default async function AreaPage({ params }: PageProps) {
     .map((serviceSlug) => serviceBySlug.get(serviceSlug))
     .filter((service): service is NonNullable<typeof service> => Boolean(service));
   const localPages = localLandings.filter((landing) => landing.area === area.slug);
+  const pros = await getPublicPros({ areaName: area.name, limit: 6 });
   const baseUrl = getSiteUrl();
 
   const schema = {
@@ -136,6 +140,11 @@ export default async function AreaPage({ params }: PageProps) {
             />
           </aside>
         </section>
+
+        <PublicProStrip
+          title={`Contractors serving ${area.name}`}
+          pros={pros}
+        />
       </main>
       <SiteFooter />
     </>
