@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import Stripe from "stripe";
 import { cleanText } from "@/lib/marketplace";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -53,6 +54,44 @@ export async function POST(request: Request) {
         { success: false, error: "The project could not be updated." },
         { status: 400 }
       );
+    }
+
+    if (status !== "still_looking") {
+      const leadId = data[0].lead_id;
+      const { data: pendingPurchases } = await admin
+        .from("lead_purchases")
+        .select("id,stripe_checkout_session_id,status")
+        .eq("lead_id", leadId)
+        .in("status", ["created", "checkout_open"]);
+
+      const stripe = process.env.STRIPE_SECRET_KEY
+        ? new Stripe(process.env.STRIPE_SECRET_KEY)
+        : null;
+
+      for (const purchase of pendingPurchases || []) {
+        if (stripe && purchase.stripe_checkout_session_id) {
+          try {
+            await stripe.checkout.sessions.expire(
+              purchase.stripe_checkout_session_id
+            );
+          } catch (stripeError) {
+            // A session can already be completing while the customer updates
+            // project status. The DB fulfillment guard and webhook refund path
+            // handle that race safely.
+            console.warn(
+              "Could not expire project-status Checkout session",
+              purchase.stripe_checkout_session_id,
+              stripeError
+            );
+          }
+        }
+
+        await admin
+          .from("lead_purchases")
+          .update({ status: "cancelled" })
+          .eq("id", purchase.id)
+          .neq("status", "paid");
+      }
     }
 
     return Response.json({

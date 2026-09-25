@@ -52,6 +52,77 @@ export async function POST(request: Request) {
       });
 
       if (error) {
+        const message = error.message || "";
+        const latePayment =
+          /purchase_not_fulfillable|lead_not_available/i.test(message);
+
+        if (latePayment && paymentIntentId) {
+          const { data: purchase } = await admin
+            .from("lead_purchases")
+            .select("id,lead_id,contractor_id,status")
+            .eq("id", purchaseId)
+            .maybeSingle();
+
+          try {
+            const refund = await stripe.refunds.create(
+              {
+                payment_intent: paymentIntentId,
+                metadata: {
+                  alp_reason: "late_payment_after_lead_retired",
+                  alp_purchase_id: purchaseId,
+                  ...(purchase?.lead_id
+                    ? { alp_lead_id: purchase.lead_id }
+                    : {}),
+                },
+              },
+              {
+                idempotencyKey: `alp-late-payment-refund-${purchaseId}`,
+              }
+            );
+
+            await admin
+              .from("lead_purchases")
+              .update({
+                status: "refunded",
+                stripe_checkout_session_id: session.id,
+                stripe_payment_intent_id: paymentIntentId,
+                refunded_at: new Date().toISOString(),
+              })
+              .eq("id", purchaseId);
+
+            if (purchase?.lead_id) {
+              await admin.from("lead_events").insert({
+                lead_id: purchase.lead_id,
+                contractor_id: purchase.contractor_id,
+                event_type: "late_payment_refunded",
+                metadata: {
+                  purchase_id: purchaseId,
+                  checkout_session_id: session.id,
+                  refund_id: refund.id,
+                  reason: message,
+                },
+              });
+            }
+
+            console.warn("Late marketplace payment refunded", {
+              purchaseId,
+              refundId: refund.id,
+              reason: message,
+            });
+
+            return Response.json({
+              received: true,
+              refunded: true,
+            });
+          } catch (refundError) {
+            console.error("Late marketplace payment refund failed", {
+              purchaseId,
+              error: refundError,
+            });
+            return new Response("Late payment refund failed", { status: 500 });
+          }
+        }
+
         console.error("Marketplace purchase fulfillment failed", error);
         return new Response("Fulfillment failed", { status: 500 });
       }
