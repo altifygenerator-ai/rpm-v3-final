@@ -61,8 +61,6 @@ export async function GET() {
     { path: "/pros/join", priority: 0.58, changefreq: "monthly" },
     { path: "/privacy", priority: 0.3, changefreq: "monthly" },
     { path: "/terms", priority: 0.3, changefreq: "monthly" },
-    { path: "/pros", priority: 0.78, changefreq: "weekly" },
-    { path: "/pros/join", priority: 0.55, changefreq: "monthly" },
     ...services.map((service) => ({
       path: `/services/${service.slug}`,
       priority: 0.88,
@@ -110,7 +108,6 @@ export async function GET() {
       priority: 0.7,
       changefreq: "monthly" as const,
     })),
-    ...contractorEntries,
   ];
 
   const body = entries
