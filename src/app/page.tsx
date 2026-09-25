@@ -134,6 +134,27 @@ export default function Home() {
           </aside>
         </section>
 
+        <section className="contractor-callout" aria-labelledby="contractor-heading">
+          <div className="contractor-callout-mark">PRO</div>
+          <div className="contractor-callout-copy">
+            <p className="field-label field-label-light">OWN A LAND OR PROPERTY SERVICE BUSINESS?</p>
+            <h2 id="contractor-heading">Get your business listed. See the leads that fit.</h2>
+            <p>
+              Arkansas Land Pros gives contractors a free public business profile
+              and shows matching property opportunities based on the work and
+              areas you choose. Preview the job first, then pay only when you
+              decide a lead is worth unlocking.
+            </p>
+          </div>
+          <div className="contractor-callout-actions">
+            <Link href="/pros/join" className="work-button light-button">
+              Join free
+            </Link>
+            <Link href="/pros/sign-in">Pro login →</Link>
+            <Link href="/pros">How it works →</Link>
+          </div>
+        </section>
+
         <section className="service-ledger" aria-labelledby="work-heading">
           <div className="ledger-intro">
             <p className="field-label">COMMON LAND PROJECTS</p>
