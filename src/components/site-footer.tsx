@@ -46,6 +46,7 @@ export default function SiteFooter() {
             <Link href="/about">How it works</Link>
             <Link href="/guides">Property guides</Link>
             <Link href="/areas">Areas we cover</Link>
+            <Link href="/pros">For contractors</Link>
             <Link href="/privacy">Privacy</Link>
             <Link href="/pros">For contractors</Link>
             <Link href="/pros/sign-in">Contractor sign in</Link>
