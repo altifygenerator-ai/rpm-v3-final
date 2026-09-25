@@ -7,7 +7,7 @@ export const siteData = {
   coverageLine:
     "Serving property owners across Arkansas, with detailed coverage around Southwest Arkansas, Hot Springs, the Ouachitas, Greers Ferry Lake, and Central Arkansas.",
   disclosure:
-    "Arkansas Land Pros is a lead and referral service. Requests may be shared with an independent service provider that may be able to help with the project. The contractor performing the work is responsible for estimates, licensing, insurance, scheduling, and completed work.",
+    "Arkansas Land Pros helps property owners connect with independent service providers. Project details may be shared with a provider that may be able to help. The contractor performing the work is responsible for estimates, licensing, insurance, permits, scheduling, and completed work.",
   primaryServices: [
     "Land clearing",
     "Forestry mulching",

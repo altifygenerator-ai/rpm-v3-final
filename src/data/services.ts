@@ -29,9 +29,9 @@ export const services: Service[] = [
     requests: ["Acreage clearing", "Homesite preparation", "Fence-line clearing", "Trail and access clearing", "Overgrown lot cleanup"],
     related: ["forestry-mulching", "brush-clearing", "site-prep", "hauling"],
     faqs: [
-      { q: "Can I request land clearing for rural property?", a: "Yes. The request form is built for rural acreage, residential lots, lake property, hunting land, access routes, and similar Arkansas properties." },
+      { q: "Can I get land clearing help for rural property?", a: "Yes. Rural acreage, residential lots, lake property, hunting land, access routes, and similar Arkansas properties can all be a fit." },
       { q: "Do I need to know the exact acreage?", a: "No. An estimate is helpful, but photos, the property location, and a short description are enough to start." },
-      { q: "Can I send photos with the request?", a: "Yes. The site is designed around quick project details. If photo upload is not available on the form you use, mention that you have photos and the follow-up can collect them." },
+      { q: "Can I send photos of the property?", a: "Yes. Photos of the work area, property entrance, slope, brush, driveway, or drainage can make the first conversation much more useful." },
     ],
   },
   {
@@ -46,8 +46,8 @@ export const services: Service[] = [
     related: ["land-clearing", "brush-clearing", "rural-property-prep"],
     faqs: [
       { q: "Is forestry mulching the same as full land clearing?", a: "Not always. Mulching is often used for vegetation and smaller growth, while full clearing may involve heavier removal, hauling, grading, or site preparation." },
-      { q: "Can I request forestry mulching for hunting land?", a: "Yes. Hunting property, trails, access lanes, and overgrown acreage are common reasons people submit a request." },
-      { q: "What should I include in the request?", a: "Send the property area, a rough size, what is growing there, what you want the land used for, and how soon you want to start." },
+      { q: "Can forestry mulching work for hunting land?", a: "Yes. Hunting property, trails, access lanes, and overgrown acreage are common forestry-mulching projects." },
+      { q: "What should I include when I reach out?", a: "Send the property area, a rough size, what is growing there, what you want the land used for, and how soon you want to start." },
     ],
   },
   {
@@ -61,9 +61,9 @@ export const services: Service[] = [
     requests: ["Briar and vine removal", "Fence-line cleanup", "Field-edge clearing", "Trail clearing", "Overgrown yard or lot cleanup"],
     related: ["land-clearing", "forestry-mulching", "cleanup"],
     faqs: [
-      { q: "Can brush clearing be requested without full land clearing?", a: "Yes. Many jobs only need overgrowth cut back or access reopened rather than the property fully cleared." },
-      { q: "Can I request brush clearing around a cabin or lake property?", a: "Yes. Cabin, lake-lot, driveway-edge, and rural residential requests are welcome." },
-      { q: "Will the request include hauling?", a: "Tell us whether material needs to stay on site, be piled, mulched, or hauled. That helps route the job correctly." },
+      { q: "Can I get brush clearing without fully clearing the land?", a: "Yes. Many jobs only need overgrowth cut back or access reopened rather than the property fully cleared." },
+      { q: "Can you help with brush around a cabin or lake property?", a: "Yes. Cabin, lake-lot, driveway-edge, and rural residential requests are welcome." },
+      { q: "Can hauling be part of the job?", a: "Tell us whether material should stay on site, be piled, mulched, or hauled so the project can be understood correctly." },
     ],
   },
   {
@@ -77,9 +77,9 @@ export const services: Service[] = [
     requests: ["Residential lots", "Cabin lots", "Lake lots", "Future homesites", "Property-sale cleanup"],
     related: ["land-clearing", "site-prep", "cleanup", "grading-leveling"],
     faqs: [
-      { q: "Can I request lot clearing before a home or cabin project?", a: "Yes. Tell us what the property is being prepared for so the request can be routed with the right context." },
+      { q: "Can lot clearing be done before a home or cabin project?", a: "Yes. Tell us what the property is being prepared for so the clearing can be planned around the next step." },
       { q: "Can debris removal be included?", a: "Yes. Mention any old material, storm debris, brush piles, or haul-off needs in the project notes." },
-      { q: "Do you accept small lot requests?", a: "Yes. The form can be used for small residential lots as well as larger rural property." },
+      { q: "Can I get help with a smaller lot?", a: "Yes. Small residential lots and larger rural properties can both be submitted." },
     ],
   },
   {
@@ -94,8 +94,8 @@ export const services: Service[] = [
     related: ["grading-leveling", "driveway-repair", "culvert-installation", "drainage-erosion"],
     faqs: [
       { q: "What counts as dirt work?", a: "The category can include rough grading, small excavation, driveway shaping, ditches, washout repair, pad work, and similar earth-moving jobs." },
-      { q: "Can I request dirt or rock to be brought in?", a: "Yes. Mention any material needs in the request so the provider can account for hauling and material costs." },
-      { q: "Should I send measurements?", a: "Approximate length, width, slope, or area is useful, but you can still start a request without exact measurements." },
+      { q: "Can dirt or rock be brought in as part of the job?", a: "Yes. Mention any material needs so the provider can account for hauling and material costs." },
+      { q: "Should I send measurements?", a: "Approximate length, width, slope, or area is useful, but exact measurements are not required to get started." },
     ],
   },
   {
@@ -110,8 +110,8 @@ export const services: Service[] = [
     related: ["dirt-work", "drainage-erosion", "driveway-repair", "site-prep"],
     faqs: [
       { q: "Can grading help with drainage?", a: "Sometimes. Grade and drainage are closely related, but the right solution depends on where water enters, where it needs to go, soil conditions, and the surrounding property." },
-      { q: "Can I request leveling for a mobile-home or building area?", a: "Yes. Include the approximate footprint, current ground condition, and whether fill or rock may be needed." },
-      { q: "Do I need a survey before submitting?", a: "Not to submit a request. Some projects may later require professional layout, engineering, or permits depending on the scope." },
+      { q: "Can I get an area leveled for a mobile home or building?", a: "Yes. Include the approximate footprint, current ground condition, and whether fill or rock may be needed." },
+      { q: "Do I need a survey before submitting?", a: "Not to get started. Some projects may later require professional layout, engineering, or permits depending on the scope." },
     ],
   },
   {
@@ -125,8 +125,8 @@ export const services: Service[] = [
     requests: ["Washout repair", "Ruts and potholes", "Regrading", "Drainage along driveways", "Gravel refresh"],
     related: ["gravel-driveways", "dirt-work", "culvert-installation", "drainage-erosion"],
     faqs: [
-      { q: "Can I request help for a washed-out gravel driveway?", a: "Yes. Include photos after rain if possible and describe where water crosses or runs alongside the driveway." },
-      { q: "Can rock be added as part of the job?", a: "That can be included in a request. Material type, quantity, delivery access, and local pricing will affect the estimate." },
+      { q: "Can you help with a washed-out gravel driveway?", a: "Yes. Include photos after rain if possible and describe where water crosses or runs alongside the driveway." },
+      { q: "Can rock be added as part of the job?", a: "Yes. Material type, quantity, delivery access, and local pricing will affect the estimate." },
       { q: "What if the driveway problem is really drainage?", a: "That is common. Describe the water path and the provider can determine whether grading, ditch work, a culvert, or another drainage correction should be considered." },
     ],
   },
@@ -141,7 +141,7 @@ export const services: Service[] = [
     requests: ["Gravel refresh", "New rural access", "Driveway shaping", "Parking areas", "Cabin and lake-property drives"],
     related: ["driveway-repair", "grading-leveling", "culvert-installation", "hauling"],
     faqs: [
-      { q: "Can I request both gravel and grading?", a: "Yes. Most gravel-driveway requests should explain the current surface, drainage issues, desired finish, and whether material needs to be delivered." },
+      { q: "Can gravel and grading be handled together?", a: "Yes. Explain the current surface, drainage issues, desired finish, and whether material needs to be delivered." },
       { q: "Do I need to choose a gravel size first?", a: "No. You can describe how the driveway is used and the provider can discuss suitable material options." },
       { q: "Can rural access roads be submitted?", a: "Yes. Include approximate length, width, slope, and any soft or washed-out areas." },
     ],
@@ -157,7 +157,7 @@ export const services: Service[] = [
     requests: ["New culvert installation", "Culvert replacement", "Driveway entrance drainage", "Ditch tie-ins", "Washout repair around culverts"],
     related: ["drainage-erosion", "driveway-repair", "dirt-work"],
     faqs: [
-      { q: "Can I request a new driveway culvert?", a: "Yes. Include the road or property location and describe where water normally flows." },
+      { q: "Can I get a new driveway culvert installed?", a: "Yes. Include the road or property location and describe where water normally flows." },
       { q: "Do culverts require permits?", a: "Requirements vary by road, county, city, drainage authority, and project. The contractor or property owner should verify any permit or right-of-way requirements before work begins." },
       { q: "Can grading around the culvert be included?", a: "Yes. Culvert work often involves ditch shaping, entrance grading, fill, rock, or washout repair." },
     ],
@@ -173,7 +173,7 @@ export const services: Service[] = [
     requests: ["Runoff correction", "Standing-water problems", "Ditch shaping", "Erosion repair", "Driveway drainage"],
     related: ["culvert-installation", "grading-leveling", "driveway-repair", "retaining-walls"],
     faqs: [
-      { q: "Can I submit a drainage request after a storm?", a: "Yes. Photos taken while water is flowing or shortly after rain can be especially useful for understanding the problem." },
+      { q: "Should I send drainage photos after a storm?", a: "Yes. Photos taken while water is flowing or shortly after rain can be especially useful for understanding the problem." },
       { q: "Can drainage work include grading?", a: "Yes. Many drainage problems involve grade, ditches, culverts, surface shaping, rock, or erosion protection." },
       { q: "Can you guarantee a drainage fix from photos?", a: "No. Photos help start the conversation, but many drainage problems need an on-site look before a responsible solution can be proposed." },
     ],
@@ -189,9 +189,9 @@ export const services: Service[] = [
     requests: ["Small-tree clearing", "Limb cleanup", "Storm debris", "Wooded-edge cleanup", "Access clearing"],
     related: ["brush-clearing", "storm-cleanup", "land-clearing", "cleanup"],
     faqs: [
-      { q: "Can I request hazardous tree removal?", a: "You can describe the job, but dangerous trees near structures, power lines, or tight hazards should only be handled by a properly equipped and insured tree professional." },
+      { q: "What about hazardous tree removal?", a: "You can describe the job, but dangerous trees near structures, power lines, or tight hazards should only be handled by a properly equipped and insured tree professional." },
       { q: "Can brush and tree cleanup be combined?", a: "Yes. Many rural-property requests involve a mix of limbs, small trees, brush, and debris." },
-      { q: "Can I submit storm-damaged tree work?", a: "Yes. Mention whether access is blocked or structures/utilities are involved so the request can be treated appropriately." },
+      { q: "Can storm-damaged tree work be included?", a: "Yes. Mention whether access is blocked or structures/utilities are involved so the request can be treated appropriately." },
     ],
   },
   {
@@ -205,8 +205,8 @@ export const services: Service[] = [
     requests: ["Limb and brush cleanup", "Blocked-access cleanup", "Storm debris hauling", "Property cleanup after wind", "Rural cleanup"],
     related: ["tree-work", "cleanup", "hauling"],
     faqs: [
-      { q: "Can I request storm cleanup even if I am not at the property?", a: "Yes. Give the property location, your contact information, and any photos or information you have." },
-      { q: "Can storm debris be hauled away?", a: "Include haul-off needs in the request. Disposal and travel may affect the estimate." },
+      { q: "Can I arrange storm cleanup if I am not at the property?", a: "Yes. Give the property location, your contact information, and any photos or information you have." },
+      { q: "Can storm debris be hauled away?", a: "Mention any haul-off needs. Disposal and travel may affect the estimate." },
       { q: "What if power lines are involved?", a: "Stay clear and contact the utility or emergency services as appropriate. Do not approach or move material near downed or damaged power lines." },
     ],
   },
@@ -221,9 +221,9 @@ export const services: Service[] = [
     requests: ["Rural property cleanup", "Brush piles", "Old materials", "Cabin and rental exterior cleanup", "Neglected lots"],
     related: ["hauling", "brush-clearing", "storm-cleanup", "light-demolition"],
     faqs: [
-      { q: "Can one request include several cleanup needs?", a: "Yes. Describe the whole property issue instead of trying to split it into separate jobs." },
+      { q: "Can one project include several cleanup needs?", a: "Yes. Describe the whole property issue instead of trying to split it into separate jobs." },
       { q: "Can cleanup include hauling?", a: "Yes. Mention what needs removed and, if possible, include photos showing the volume." },
-      { q: "Can inherited or vacant properties be submitted?", a: "Yes. Property owners, families, landlords, real-estate professionals, and managers can use the request form." },
+      { q: "Can inherited or vacant properties be submitted?", a: "Yes. Property owners, families, landlords, real-estate professionals, and managers can all reach out about vacant or inherited property." },
     ],
   },
   {
@@ -237,7 +237,7 @@ export const services: Service[] = [
     requests: ["Debris haul-off", "Brush hauling", "Material delivery", "Rock and gravel hauling", "Jobsite cleanup"],
     related: ["cleanup", "gravel-driveways", "land-clearing", "dirt-work"],
     faqs: [
-      { q: "Can I request rock or gravel delivery?", a: "Yes. Include the delivery location, approximate quantity if known, and what the material will be used for." },
+      { q: "Can rock or gravel delivery be included?", a: "Yes. Include the delivery location, approximate quantity if known, and what the material will be used for." },
       { q: "Can hauling be part of another land job?", a: "Yes. Many clearing, cleanup, driveway, and dirt-work projects need material hauled in or debris hauled out." },
       { q: "Do dump fees affect pricing?", a: "They can. Disposal type, load size, travel distance, and local facility fees are common cost factors." },
     ],
@@ -270,7 +270,7 @@ export const services: Service[] = [
     related: ["drainage-erosion", "grading-leveling", "outdoor-builds"],
     faqs: [
       { q: "Does a retaining wall need drainage?", a: "Proper drainage is an important part of many retaining-wall systems. The final design depends on wall height, soil, slope, water, and local requirements." },
-      { q: "Can rock work be requested with a retaining wall?", a: "Yes. Describe the desired function and appearance in the project notes." },
+      { q: "Can rock work be included with a retaining wall?", a: "Yes. Describe the desired function and appearance in the project notes." },
       { q: "Do larger walls require engineering or permits?", a: "They may. Requirements vary by location and project. The property owner and contractor should verify applicable codes, permits, and engineering needs." },
     ],
   },
@@ -285,7 +285,7 @@ export const services: Service[] = [
     requests: ["Homesite preparation", "Cabin-site preparation", "Shop-site cleanup", "Access preparation", "Pre-construction clearing"],
     related: ["land-clearing", "grading-leveling", "dirt-work", "drainage-erosion"],
     faqs: [
-      { q: "Can I request site prep before I have a final builder?", a: "Yes. Explain the project stage and what needs to happen first. Some work may need to wait for plans, layout, permits, or builder requirements." },
+      { q: "Can site prep start before I have a final builder?", a: "Yes. Explain the project stage and what needs to happen first. Some work may need to wait for plans, layout, permits, or builder requirements." },
       { q: "Can site prep include clearing and grading?", a: "Yes. Those are common parts of early site work." },
       { q: "Should utilities be marked first?", a: "Before excavation or digging begins, underground utilities should be located through the appropriate service and any private utilities should also be identified." },
     ],
@@ -303,7 +303,7 @@ export const services: Service[] = [
     faqs: [
       { q: "What does light demolition mean here?", a: "The category is intended for smaller property tear-out and cleanup rather than major structural demolition." },
       { q: "Can debris removal be included?", a: "Yes. Include photos and describe access so haul-off needs can be considered." },
-      { q: "What about utilities or hazardous materials?", a: "Those require extra care and may need specialists, permits, or testing. Include any known concerns in the request." },
+      { q: "What about utilities or hazardous materials?", a: "Those require extra care and may need specialists, permits, or testing. Mention any known concerns before work is scheduled." },
     ],
   },
   {
@@ -317,9 +317,9 @@ export const services: Service[] = [
     requests: ["Exterior cleanup", "Driveway and access issues", "Storm cleanup", "Brush work", "Drainage concerns"],
     related: ["cleanup", "driveway-repair", "drainage-erosion", "tree-work"],
     faqs: [
-      { q: "Can an out-of-town owner submit a request?", a: "Yes. Include the property address or area, your contact information, and any photos you have." },
-      { q: "Can I request several exterior tasks at once?", a: "Yes. Describe the property as a whole and what needs attention." },
-      { q: "Do you handle interior turnover cleaning?", a: "Arkansas Land Pros focuses on land and exterior property work. Interior turnover cleaning is not one of the main services handled through this request system." },
+      { q: "Can an out-of-town owner arrange property work?", a: "Yes. Include the property address or area, your contact information, and any photos you have." },
+      { q: "Can several exterior tasks be handled together?", a: "Yes. Describe the property as a whole and what needs attention." },
+      { q: "Do you handle interior turnover cleaning?", a: "Arkansas Land Pros focuses on land and exterior property work. Interior turnover cleaning is not one of the main services covered here." },
     ],
   },
   {
@@ -333,7 +333,7 @@ export const services: Service[] = [
     requests: ["Small pond concepts", "Outdoor water features", "Rock placement", "Water-flow improvements", "Site preparation around water features"],
     related: ["drainage-erosion", "retaining-walls", "dirt-work"],
     faqs: [
-      { q: "Can I submit a pond request?", a: "Yes. Describe the property, intended use, approximate area, access, and any known drainage or soil concerns." },
+      { q: "Can I get help with a pond or water feature project?", a: "Yes. Describe the property, intended use, approximate area, access, and any known drainage or soil concerns." },
       { q: "Are permits sometimes required?", a: "Yes. Water-related excavation can be subject to local, state, federal, drainage, or environmental requirements depending on the project." },
       { q: "Can rock and grading be part of the request?", a: "Yes. Include the full project goal so related work can be considered together." },
     ],
@@ -365,9 +365,9 @@ export const services: Service[] = [
     requests: ["Mixed-scope rural work", "Access improvement", "Cleanup plus dirt work", "Property problem solving", "Small equipment work"],
     related: ["rural-property-prep", "dirt-work", "cleanup", "hauling"],
     faqs: [
-      { q: "What if I am not sure which service I need?", a: "Use General Property Work and describe the problem in plain language. The request can be sorted after it is reviewed." },
-      { q: "Can multiple problems go in one request?", a: "Yes. That is often more useful than splitting one property project into several forms." },
-      { q: "Can I request work outside the listed towns?", a: "Yes. Arkansas Land Pros accepts requests from anywhere in Arkansas." },
+      { q: "What if I am not sure which service I need?", a: "Choose General Property Work and describe the problem in plain language. The details can be sorted out after someone reviews the project." },
+      { q: "Can I include several property problems together?", a: "Yes. That is often more useful than splitting one property project into several forms." },
+      { q: "Can I get help outside the listed towns?", a: "Yes. Property owners can reach out from anywhere in Arkansas." },
     ],
   },
   {
@@ -382,8 +382,8 @@ export const services: Service[] = [
     related: ["general", "outdoor-builds", "rural-property-prep"],
     faqs: [
       { q: "Can I submit a small welding repair?", a: "Yes. Add photos and dimensions when possible." },
-      { q: "Is automotive welding the focus?", a: "No. This page is intended for property, gate, outdoor, and land-project related welding requests." },
-      { q: "Can welding be part of a larger property request?", a: "Yes. Mention the other work so the whole job can be reviewed together." },
+      { q: "Is automotive welding the focus?", a: "No. This service is focused on property, gate, outdoor, and land-project related welding." },
+      { q: "Can welding be part of a larger property project?", a: "Yes. Mention the other work so the whole job can be reviewed together." },
     ],
   },
 ];

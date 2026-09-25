@@ -211,8 +211,8 @@ export default function Home() {
             <p>
               Tell us where the property is, what needs done, and anything you
               already know about the size, access, or timing. We review the
-              request and connect it with a service provider that may be able to
-              help.
+              details and connect the project with a service provider that may be
+              able to help.
             </p>
           </div>
           <div className="routing-details">
@@ -231,7 +231,7 @@ export default function Home() {
               </p>
             </div>
             <div>
-              <strong>ONE REQUEST IS ENOUGH</strong>
+              <strong>ONE MESSAGE IS ENOUGH</strong>
               <p>
                 If the job touches clearing, dirt, drainage, hauling, or another
                 category, put it all in one message. We can sort out the details.
@@ -293,7 +293,7 @@ export default function Home() {
               <p>
                 Land work is heavily affected by travel, access, terrain,
                 disposal, materials, and equipment logistics. Location is one of
-                the first details needed to decide whether a request is a fit.
+                the first details needed to decide whether a project is a fit.
               </p>
             </details>
           </div>
